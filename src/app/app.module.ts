@@ -8,6 +8,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
+import { MatRadioModule } from '@angular/material/radio';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // components
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -21,6 +23,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 // service
 import { AuthService } from './shared/services/auth.service';
+import { RadioButtonComponent } from './components/utils/radio-button/radio-button.component';
 
 
 @NgModule({
@@ -31,6 +34,7 @@ import { AuthService } from './shared/services/auth.service';
     SignUpComponent,
     ForgotPasswordComponent,
     VerifyEmailComponent,
+    RadioButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,9 +44,11 @@ import { AuthService } from './shared/services/auth.service';
     AngularFireStorageModule,
     AngularFireDatabaseModule,
     AppRoutingModule,
+    MatRadioModule,
+    BrowserAnimationsModule,
   ],
   providers: [AuthService],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent,RadioButtonComponent],
 })
 
 export class AppModule {}
