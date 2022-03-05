@@ -10,6 +10,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 import { MatRadioModule } from '@angular/material/radio';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 // components
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -46,6 +47,7 @@ import { RadioButtonComponent } from './components/utils/radio-button/radio-butt
     AppRoutingModule,
     MatRadioModule,
     BrowserAnimationsModule,
+    FormsModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent,RadioButtonComponent],

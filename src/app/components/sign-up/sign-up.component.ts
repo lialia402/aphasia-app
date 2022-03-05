@@ -6,8 +6,15 @@ import { AuthService } from "../../shared/services/auth.service";
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
+  userType: string = "";
+
   constructor(
     public authService: AuthService
   ) { }
   ngOnInit() { }
+
+  userTypeChangedHandler(value : string)
+  {
+    this.userType = value;
+  }
 }

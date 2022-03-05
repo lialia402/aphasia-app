@@ -1,4 +1,5 @@
 <div class="formGroup">
-    <input type="radio" name="user" value="patient" > Patient
-    <input type="radio" name="user" value="admin" > Admin
+    <input type="radio" [(ngModel)]="userType" name="user" value="patient" (change)="onItemChange(userType)" /> Patient
+    <input type="radio" [(ngModel)]="userType" name="user" value="admin" (change)="onItemChange(userType)"/> Admin
 </div>
+

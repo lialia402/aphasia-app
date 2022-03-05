@@ -20,13 +20,13 @@
             required
           />
         </div>
-        <app-radio-button></app-radio-button>
+        <app-radio-button (userTypeChanged)="userTypeChangedHandler($event)"></app-radio-button>
         <div class="formGroup">
           <input
             type="button"
             class="btn btnPrimary"
             value="Sign Up"
-            (click)="authService.SignUp(userEmail.value, userPwd.value)"
+            (click)="authService.SignUp(userEmail.value, userPwd.value, this.userType)"
           />
         </div>
 
