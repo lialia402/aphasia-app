@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
+import { from } from 'rxjs';
+import { CategoryClass } from '../models/category-class.model';
+import { WordClass } from '../models/word-class.model';
+import { ErrorInfra } from './error-infra.service';
+import { FirebaseInfraService } from './firebase-infra.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WordInfraService {
 
-  phrases: any;
+  words: any;
   categoryName: any;
 
-  constructor(public firebaseProvider: FirebaseProvider, public error: ErrorProvider) {
+  constructor(public firebaseProvider: FirebaseInfraService, public error: ErrorInfra) {
   }
 
   //first,calling import of all category's phrases.
@@ -16,11 +21,11 @@ export class WordInfraService {
   //Promise return to an async function that handle with him.
   //subscribe listen to the db while the app is alive.
   //note that there is no relation between Promise object to  method. 
-  public getPhrases(category: Category): Promise<Phrase[]> {
-    this.firebaseProvider.importPhrases(category);
+  public getPhrases(category: CategoryClass): Promise<WordClass[]> {
+    this.firebaseProvider.importwords(category);
     return new Promise((resolve, reject) => {
-      this.firebaseProvider.getPhrasesObservable.subscribe(arrayOfPhrases => {
-        resolve(arrayOfPhrases);
+      this.firebaseProvider.getwordsObservable.subscribe(arrayOfWords => {
+        resolve(arrayOfWords);
       })
     })
   }
@@ -31,10 +36,10 @@ export class WordInfraService {
   * @param n name of phrase
   * @returns Promise object
   */
-  public getPhraseByName(n: string): Promise<Phrase> {
+  public getPhraseByName(n: string): Promise<WordClass> {
     return new Promise((resolve, reject) => {
       try {
-        let temp = this.phrases.find(phrs => phrs.name == n);
+        let temp = this.words.find((words: { name: string; }) => words.name == n);
         resolve(temp)
       }
       catch (e) {
@@ -50,8 +55,8 @@ export class WordInfraService {
    *  or you are going to have a bad time
    */
   public arrangePhrasesByOrder() {
-    for (var i = 0; i < this.phrases.length; i++) {
-      this.setOrder(this.phrases[i], i);
+    for (var i = 0; i < this.words.length; i++) {
+      this.setOrder(this.words[i], i);
     }
   }
 
@@ -61,10 +66,10 @@ export class WordInfraService {
    * @param n name of phrase
    * @returns Promise object
    */
-  public getPhraseById(id: string): Promise<Phrase> {
+  public getPhraseById(id: string): Promise<WordClass> {
     return new Promise((resolve, reject) => {
       try {
-        let temp = this.phrases.find(phrs => phrs.id === id)
+        let temp = this.words.find((word: { id: string; }) => word.id === id)
         resolve(temp)
       }
       catch (e) {
@@ -77,10 +82,10 @@ export class WordInfraService {
    * add phrase, update DB and arrange by order.
    * if addPhrase called from App-Builder don't arrange by order.
    */
-  public addPhrase(phrase: Phrase, callFromAppBuilder = false) : Promise<any> {
+  public addPhrase(word: WordClass, callFromAppBuilder = false) : Promise<any> {
     return new Promise((resolve, reject) => {
-      this.firebaseProvider.addPhrase(phrase).then(() => {
-        resolve(phrase);
+      this.firebaseProvider.addWord(word)?.then(() => {
+        resolve(word);
       });
     })
     //if (callFromAppBuilder == false)
@@ -91,49 +96,49 @@ export class WordInfraService {
  * remove phrase, update DB and arrange by order.
  * 
  */
-  public removePhrase(phrase: Phrase) {
+  public removePhrase(phrase: WordClass) {
     this.firebaseProvider.removePhrase(phrase);
-    let favoriteProvider = new FavoriteProvider(HomePage.favClass);
-    favoriteProvider.remove_fav_phrases(phrase);
-    favoriteProvider.remove_from_commom_phrases(phrase);
+    // let favoriteProvider = new FavoriteProvider(HomePage.favClass);
+    // favoriteProvider.remove_fav_phrases(phrase);
+    // favoriteProvider.remove_from_commom_phrases(phrase);
     //this.arrangePhrasesByOrder();
   }
 
   //SETTERS
-  public setName(phrase: Phrase, newName: string) {
-    phrase.name = newName;
-    this.firebaseProvider.updatePhrase(phrase)
+  public setName(word: WordClass, newName: string) {
+    word.name = newName;
+    this.firebaseProvider.updateWord(word)
   }
-  public setImageUrl(phrase: Phrase, newURL: string) {
+  public setImageUrl(phrase: WordClass, newURL: string) {
     phrase.imageURL = newURL;
-    this.firebaseProvider.updatePhrase(phrase)
+    this.firebaseProvider.updateWord(phrase)
   }
-  public setAudioUrl(phrase: Phrase, newURL: string) {
+  public setAudioUrl(phrase: WordClass, newURL: string) {
     phrase.audio = newURL;
-    this.firebaseProvider.updatePhrase(phrase)
+    this.firebaseProvider.updateWord(phrase)
   }
-  public setCategoryID(phrase: Phrase, newCategoryParent: string) {
+  public setCategoryID(phrase: WordClass, newCategoryParent: string) {
     phrase.categoryID = newCategoryParent;
-    this.firebaseProvider.updatePhrase(phrase)
+    this.firebaseProvider.updateWord(phrase)
   }
-  public setIsFav(phrase: Phrase, isFav: boolean) {
+  public setIsFav(phrase: WordClass, isFav: boolean) {
     phrase.isFav = isFav;
-    this.firebaseProvider.updatePhrase(phrase);
+    this.firebaseProvider.updateWord(phrase);
   }
   //each time a category has chosen, her views increase by 1.
-  public increaseViews(phrase: Phrase) {
+  public increaseViews(phrase: WordClass) {
     phrase.views++;
-    this.firebaseProvider.updatePhrase(phrase)
+    this.firebaseProvider.updateWord(phrase)
   }
-  public setOrder(phrase: Phrase, order: number) {
+  public setOrder(phrase: WordClass, order: number) {
     phrase.order = order;
-    this.firebaseProvider.updatePhrase(phrase);
+    this.firebaseProvider.updateWord(phrase);
   }
-  public updatePhrase(phrase: Phrase) {
-    this.firebaseProvider.updatePhrase(phrase)
+  public updateWord(phrase: WordClass) {
+    this.firebaseProvider.updateWord(phrase)
   }
-  public changeVisibility(phrase: Phrase) {
+  public changeVisibility(phrase: WordClass) {
     phrase.visibility = !phrase.visibility;
-    this.firebaseProvider.updatePhrase(phrase);
+    this.firebaseProvider.updateWord(phrase);
   }
 }

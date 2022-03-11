@@ -1,34 +1,45 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable, OperatorFunction, pipe } from 'rxjs';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/map'
+import { map } from "rxjs/operators"; 
+import { CategoryClass } from '../models/category-class.model';
+import { WordClass } from '../models/word-class.model';
+import { AuthService } from './auth.service';
+import { ErrorInfra } from './error-infra.service';
+import { User } from './user';
+import { UserClass } from '../models/user-class.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseInfraService {
 
-  usersCollection: AngularFirestoreCollection<User>;
+  usersCollection: AngularFirestoreCollection<User> | undefined;
   users: Observable<User[]> = new Observable<User[]>()
 
-  categoriesCollection: AngularFirestoreCollection<Category>;
-  categories: Observable<Category[]> = new Observable<Category[]>()
+  categoriesCollection: AngularFirestoreCollection<CategoryClass> | undefined;
+  categories: Observable<CategoryClass[]> = new Observable<CategoryClass[]>()
 
-  phrasesCollection: AngularFirestoreCollection<Phrase>;
-  phrases: Observable<Phrase[]> = new Observable<Phrase[]>()
+  wordsCollection: AngularFirestoreCollection<WordClass> | undefined;
+  words: Observable<WordClass[]> = new Observable<WordClass[]>()
 
-  constructor(public afs: AngularFirestore, public authentication: AutenticationProvider, public error: ErrorProvider) {
+  constructor(public afs: AngularFirestore, public authentication: AuthService, public error: ErrorInfra) {
     //first import the users collection , mainly to get the current users's attrs.
     this.importUsers()
   }
 
    //import all users from DB to Observable object
-  public importUsers(){
+   public importUsers(){
     try{
       this.usersCollection = this.afs.collection<User>('users', ref => ref.orderBy('email', 'desc'));
-      this.users = this.usersCollection.snapshotChanges().map(result => {
+      this.users = this.usersCollection.snapshotChanges().pipe(map((result:any[]) => {
       return result.map(a => {
           let temp = a.payload.doc.data() as User;
           return temp;
         });
-      });
+      }));
     }
     catch(e){
       this.error.simpleToast("Connection error");
@@ -44,14 +55,14 @@ export class FirebaseInfraService {
   {
     //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
     try{
-      this.categoriesCollection = this.afs.collection<Category>('categories', ref => ref.orderBy('order','asc').where('userEmail', '==', this.authentication.user.email));
-      this.categories = this.categoriesCollection.snapshotChanges().map(result => {
+      this.categoriesCollection = this.afs.collection<CategoryClass>('categories', ref => ref.orderBy('order','asc').where('userEmail', '==', this.authentication.userData.email));
+      this.categories = this.categoriesCollection.snapshotChanges().pipe(map((result:any[]) => {
         return result.map(a => {
-          let temp = a.payload.doc.data() as Category;
+          let temp = a.payload.doc.data() as CategoryClass;
           temp.id = a.payload.doc.id;
           return temp;
         });
-      });
+      }));
     }
     catch(e){
       this.error.simpleToast("Connection error");
@@ -60,23 +71,23 @@ export class FirebaseInfraService {
 
 
  /**
-   * import all phrases from DB to observable object.
-   * @returns the phrases array
+   * import all words from DB to observable object.
+   * @returns the words array
    */
 
-  public importPhrases(category: Category)
+  public importwords(category: CategoryClass)
   {
     try{
-      //Creating the phrases collection of specific category of current user
-      this.phrasesCollection = this.afs.collection<Phrase>('phrases', ref => ref.orderBy('order','asc').where('categoryID','==',category.id));
-      //this.phrasesCollection = this.afs.collection<Phrase>('phrases', ref => ref.orderBy('name', 'asc'));
-      this.phrases = this.phrasesCollection.snapshotChanges().map(result => {
+      //Creating the words collection of specific category of current user
+      this.wordsCollection = this.afs.collection<WordClass>('words', ref => ref.orderBy('order','asc').where('categoryID','==',category.id));
+      //this.wordsCollection = this.afs.collection<Phrase>('words', ref => ref.orderBy('name', 'asc'));
+      this.words = this.wordsCollection.snapshotChanges().pipe(map((result:any[]) => {
         return result.map(a => {
-          let temp = a.payload.doc.data() as Phrase;
+          let temp = a.payload.doc.data() as WordClass;
           temp.id = a.payload.doc.id;
           return temp;
         });
-      });
+      }));
     }
       catch(e){
         this.error.simpleToast("Connection error");
@@ -89,41 +100,41 @@ export class FirebaseInfraService {
   }
 
   addUser(user: User) {
-    return this.usersCollection.add(User.toObject(user));
+    return this.usersCollection?.add(UserClass.toObject(user));
   }
 
   get getCategoriesObservable() {
     return this.categories;
   }
 
-  addCategory(category: Category) {    
-    return this.categoriesCollection.add(Category.toObject(category)).then(function(){
-    }).catch(function(e){
+  addCategory(category: CategoryClass) {    
+    return this.categoriesCollection?.add(CategoryClass.toObject(category)).then(function(){
+    }).catch((e) =>{
       this.error.simpleToast("הוספה נכשלה");
     })
   }
 
-  removeCategory(category: Category){
-    this.categoriesCollection.doc(category.id ).delete().then(function() {
-  }).catch(function(e) {
+  removeCategory(category: CategoryClass){
+    this.categoriesCollection?.doc(category.id ).delete().then(function() {
+  }).catch((e) => {
       this.error.simpleToast("מחיקה נכשלה");
   });
   }
 
-  get getPhrasesObservable() {
-    return this.phrases;
+  get getwordsObservable() {
+    return this.words;
   }
 
-  addPhrase(phrase: Phrase) {
-    return this.phrasesCollection.add(Phrase.toObject(phrase)).then(function(){
-    }).catch(function(e){
+  addWord(word: WordClass) {
+    return this.wordsCollection?.add(WordClass.toObject(word)).then(function(){
+    }).catch((e) =>{
       this.error.simpleToast("הוספה נכשלה");
     })
   }
 
-  removePhrase(phrase: Phrase){
-    this.phrasesCollection.doc(phrase.id).delete().then(function() {
-  }).catch(function(e) {
+  removePhrase(phrase: WordClass){
+    this.wordsCollection?.doc(phrase.id).delete().then(function() {
+  }).catch((e) => {
       this.error.simpleToast("מחיקה נכשלה");
   });
   }
@@ -132,15 +143,17 @@ export class FirebaseInfraService {
    * Update fields of a document without overwriting the entire document.
    * @param phrase, the updated local phrase, to update the db
    */
-  updatePhrase(phrase: Phrase){
-    this.afs.doc('phrases/' + phrase.id).update(phrase);
+  updateWord(word: WordClass){
+    this.afs.doc('words/' + word.id).update(word);
   }
 
     /**
    * Update fields of a document without overwriting the entire document.
    * @param category, the updated local category, to update the db
    */
-  updateCategory(category: Category){
+  updateCategory(category: CategoryClass){
     this.afs.doc('categories/' + category.id).update(category);
   }
 }
+
+
