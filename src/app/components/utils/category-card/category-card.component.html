@@ -1,0 +1,16 @@
+<mat-card id="category" (click)="categoryOnClick($event)">
+    <mat-card-header>
+        <table>
+            <tr>
+                <th class="imag">
+                    <img src={{category?.imageURL}} />
+                </th>
+                <th class="title">
+                    <mat-card-title text-wrap>
+                        {{category?.name}}
+                    </mat-card-title>
+                </th>
+            </tr>
+        </table>
+    </mat-card-header>
+</mat-card>

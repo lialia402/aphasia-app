@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { CategoryClass } from '../models/category-class.model';
 import { WordClass } from '../models/word-class.model';
 import { AuthService } from './auth.service';
+import { CategoryInfraService } from './category-infra.service';
+import { WordInfraService } from './word-infra.service';
 
 const DEFAULT_NUMBER = 372;
 
@@ -10,16 +12,18 @@ const DEFAULT_NUMBER = 372;
 })
 export class AppInitService {
   public userEmail;
-  public loading:any;
+  //public loading:any;
   public load_counter = 0;
   phraseCounter = 0;
+  private time: number
+
 
   constructor(
-    // public categoryProvider: CategoryServiceProvider,
-    // public phraseProvider: PhrasesProvider,
+  public categoryInfra: CategoryInfraService,public wordInfra: WordInfraService,
     // public loadingCtrl: LoadingController,
     public authentication: AuthService,
   ) {
+    this.time = 5000;
     this.userEmail = authentication.userData.email;
   }
 
@@ -32,31 +36,59 @@ export class AppInitService {
    * @param subFlag true if the category is a sub category and there is need to use "findSubCategoryByID".
    * @returns the ID of the added category in the DB.
    */
-   add_new_cat_to_db(category: CategoryClass, words: WordClass[], subCat: CategoryClass[], subPhrases: WordClass[][], subFlag: boolean) {
-    let catId: string;
-    let promise;
-    this.categoryProvider.addCategory(category, true).then(() => {
-      if (subFlag)
-        promise = this.categoryProvider.getSubCategoryByName(category.parentCategoryID, category.name);
-      else
-        promise = this.categoryProvider.getCategoryByName(category.name);
-      promise.then((data) => {
-        catId = data.id;
-        for (let i = 0; i < words.length; i++) {
-          words[i].order = i;
-          words[i].categoryID = catId;
+  //  add_new_cat_to_db(category: CategoryClass, words: WordClass[], subCat: CategoryClass[], subPhrases: WordClass[][], subFlag: boolean) {
+  //   let catId: string;
+  //   let promise;
+  //   this.categoryInfra.addCategory(category, true)?.then(() => {
+  //     if (subFlag)
+  //       promise = this.categoryInfra.getSubCategoryByName(category.parentCategoryID, category.name);
+  //     else
+  //       promise = this.categoryInfra.getCategoryByName(category.name);
+  //     promise.then((data) => {
+  //       catId = data.id;
+  //       for (let i = 0; i < words.length; i++) {
+  //         words[i].order = i;
+  //         words[i].categoryID = catId;
 
-          let pro = this.phraseProvider.addPhrase(words[i], true);
-          pro.then((data) => {
-            this.phraseCounter++;
-            //close the loading window after all the phrases was added
-            if (this.phraseCounter == DEFAULT_NUMBER) {
-              this.phraseCounter = 0;
-              setTimeout(() => {
-                this.loading.dismiss();
-              }, 3000);
-            }
-          })
+  //         let pro = this.wordInfra.addPhrase(words[i], true);
+  //         pro.then((data) => {
+  //           this.phraseCounter++;
+  //           //close the loading window after all the phrases was added
+  //           if (this.phraseCounter == DEFAULT_NUMBER) {
+  //             this.phraseCounter = 0;
+  //             setTimeout(() => {
+  //               //this.loading.dismiss();
+  //             }, 3000);
+  //           }
+  //         })
+  //       }
+  //       for (let i = 0; i < subCat.length; i++) {
+  //         subCat[i].order = i;
+  //         subCat[i].parentCategoryID = catId;
+  //         this.add_new_cat_to_db(subCat[i], subPhrases[i], [], [], true)
+  //       }
+  //     })
+  //   })
+  // }
+  add_new_cat_to_db(category: CategoryClass, phrases: WordClass[], subCat: CategoryClass[], subPhrases: WordClass[][], subFlag: boolean) {
+    let catId: string;
+    this.categoryInfra.addCategory(category);
+    let promise;
+    setTimeout(() => {
+      debugger;
+      if (subFlag) {
+        promise = this.categoryInfra.getSubCategoryByName(category.parentCategoryID, category.name)
+      }
+      else
+        promise = this.categoryInfra.getCategoryByName(category.name);
+      promise.then((data) => {
+        let cat = data;
+        cat as CategoryClass;
+        catId = cat.id;
+        for (let i = 0; i < phrases.length; i++) {
+          phrases[i].order = i;
+          phrases[i].categoryID = catId;
+          this.wordInfra.addPhrase(phrases[i]);
         }
         for (let i = 0; i < subCat.length; i++) {
           subCat[i].order = i;
@@ -64,18 +96,20 @@ export class AppInitService {
           this.add_new_cat_to_db(subCat[i], subPhrases[i], [], [], true)
         }
       })
-    })
+    }, this.time);
+
   }
+
 
   //===================================
 
   /**this method fill the DB for the user with the default categories&phrases
   */
   fillDB() {
-    this.loading = this.loadingCtrl.create({
-      content: 'רק רגע, אנחנו מייצרים עבורך את המאגר'
-    });
-    this.loading.present();
+    // this.loading = this.loadingCtrl.create({
+    //   content: 'רק רגע, אנחנו מייצרים עבורך את המאגר'
+    // });
+    //this.loading.present();
     let cat;
     let words:WordClass[];
     let subCats;
@@ -83,7 +117,7 @@ export class AppInitService {
 
     //AboutMe, this category has its own tab
     cat = new CategoryClass("about me", "", "", this.userEmail, "", 0, false, 0, true)
-
+    debugger;
     words = [
       new WordClass("", "קוראים לי", "", "", 0, "", false, 0, true),
       new WordClass("", "טלפון", "", "", 0, "", false, 0, true),
@@ -240,7 +274,7 @@ export class AppInitService {
     this.add_new_cat_to_db(cat, words, subCats, subPhrases, false);
 
     //PLACES CATEGORY  
-    cat = new CategoryClass("מקומות", "", "", this.userEmail, "", 0, false, 2, true)
+    cat = new CategoryClass("מקומות", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/places.png?alt=media&token=97113d17-28ab-43b0-beb6-bbb43c3792a0", this.userEmail, "", 0, false, 2, true)
     words = [];
     subCats = [
       new CategoryClass("בילויים", "", "", this.userEmail, "", 0, false, 0, true),
@@ -532,7 +566,7 @@ export class AppInitService {
     this.add_new_cat_to_db(cat, words, [], [], false)
 
     //PERSONAL STUFF CATEGORY
-    cat = new CategoryClass("חפצים אישיים", "", "", this.userEmail, "", 0, false, 4, true)
+    cat = new CategoryClass("חפצים אישיים", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/things.png?alt=media&token=01ce4854-103a-45b2-b9f6-f120d34411ca", this.userEmail, "", 0, false, 4, true)
 
     words = [
       new WordClass("", "פלאפון", "", "", 0, "", false, 0, true),
