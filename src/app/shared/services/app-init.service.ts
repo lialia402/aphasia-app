@@ -274,7 +274,7 @@ export class AppInitService {
     this.add_new_cat_to_db(cat, words, subCats, subPhrases, false);
 
     //PLACES CATEGORY  
-    cat = new CategoryClass("מקומות", "", "", this.userEmail, "", 0, false, 2, true)
+    cat = new CategoryClass("מקומות", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/places.png?alt=media&token=97113d17-28ab-43b0-beb6-bbb43c3792a0", this.userEmail, "", 0, false, 2, true)
     words = [];
     subCats = [
       new CategoryClass("בילויים", "", "", this.userEmail, "", 0, false, 0, true),
@@ -566,7 +566,7 @@ export class AppInitService {
     this.add_new_cat_to_db(cat, words, [], [], false)
 
     //PERSONAL STUFF CATEGORY
-    cat = new CategoryClass("חפצים אישיים", "", "", this.userEmail, "", 0, false, 4, true)
+    cat = new CategoryClass("חפצים אישיים", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/things.png?alt=media&token=01ce4854-103a-45b2-b9f6-f120d34411ca", this.userEmail, "", 0, false, 4, true)
 
     words = [
       new WordClass("", "פלאפון", "", "", 0, "", false, 0, true),

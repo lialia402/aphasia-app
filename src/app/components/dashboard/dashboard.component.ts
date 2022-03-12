@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {}
   public showCategories(){
     this.appBuilderProvider?.fillDB();
-    this.router.navigate(['sign-in']);
+    this.router.navigate(['category-page']);
 
   }
 }

@@ -9,6 +9,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 import { MatRadioModule } from '@angular/material/radio';
+import {MatCardModule} from '@angular/material/card';
+import {MatListModule} from '@angular/material/list';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
@@ -25,6 +27,8 @@ import { AppRoutingModule } from './app-routing.module';
 // service
 import { AuthService } from './shared/services/auth.service';
 import { RadioButtonComponent } from './components/utils/radio-button/radio-button.component';
+import { CategoryCardComponent } from './components/utils/category-card/category-card.component';
+import { CategoryPageComponent } from './components/category-page/category-page.component';
 
 
 @NgModule({
@@ -36,6 +40,8 @@ import { RadioButtonComponent } from './components/utils/radio-button/radio-butt
     ForgotPasswordComponent,
     VerifyEmailComponent,
     RadioButtonComponent,
+    CategoryCardComponent,
+    CategoryPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +54,8 @@ import { RadioButtonComponent } from './components/utils/radio-button/radio-butt
     MatRadioModule,
     BrowserAnimationsModule,
     FormsModule,
+    MatCardModule,
+    MatListModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent,RadioButtonComponent],
