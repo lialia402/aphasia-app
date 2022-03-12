@@ -13,7 +13,8 @@ export class WordInfraService {
   words: any;
   categoryName: any;
 
-  constructor(public firebaseProvider: FirebaseInfraService, public error: ErrorInfra) {
+  constructor(public firebaseProvider: FirebaseInfraService, //public error: ErrorInfra
+  ) {
   }
 
   //first,calling import of all category's phrases.
@@ -43,7 +44,7 @@ export class WordInfraService {
         resolve(temp)
       }
       catch (e) {
-        this.error.simpleToast("The wanted category doesn't exist")
+        //this.error.simpleToast("The wanted category doesn't exist")
       }
     })
   }
@@ -73,7 +74,7 @@ export class WordInfraService {
         resolve(temp)
       }
       catch (e) {
-        this.error.simpleToast("The wanted category doesn't exist")
+        //this.error.simpleToast("The wanted category doesn't exist")
       }
     })
   }

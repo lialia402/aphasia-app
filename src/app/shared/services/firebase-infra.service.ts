@@ -25,7 +25,8 @@ export class FirebaseInfraService {
   wordsCollection: AngularFirestoreCollection<WordClass> | undefined;
   words: Observable<WordClass[]> = new Observable<WordClass[]>()
 
-  constructor(public afs: AngularFirestore, public authentication: AuthService, public error: ErrorInfra) {
+  constructor(public afs: AngularFirestore, public authentication: AuthService, //public error: ErrorInfra
+  ) {
     //first import the users collection , mainly to get the current users's attrs.
     this.importUsers()
   }
@@ -42,7 +43,7 @@ export class FirebaseInfraService {
       }));
     }
     catch(e){
-      this.error.simpleToast("Connection error");
+     // this.error.simpleToast("Connection error");
     }
   }
 
@@ -65,7 +66,7 @@ export class FirebaseInfraService {
       }));
     }
     catch(e){
-      this.error.simpleToast("Connection error");
+     // this.error.simpleToast("Connection error");
     }
   }
 
@@ -90,7 +91,7 @@ export class FirebaseInfraService {
       }));
     }
       catch(e){
-        this.error.simpleToast("Connection error");
+       // this.error.simpleToast("Connection error");
       }
   }
 
@@ -107,17 +108,20 @@ export class FirebaseInfraService {
     return this.categories;
   }
 
-  addCategory(category: CategoryClass) {    
+  addCategory(category: CategoryClass) {   
+    debugger; 
     return this.categoriesCollection?.add(CategoryClass.toObject(category)).then(function(){
     }).catch((e) =>{
-      this.error.simpleToast("הוספה נכשלה");
-    })
+      debugger;
+      // this.error.simpleToast("הוספה נכשלה");
+         console.log("הוספה נכשלה");
+     })
   }
 
   removeCategory(category: CategoryClass){
     this.categoriesCollection?.doc(category.id ).delete().then(function() {
   }).catch((e) => {
-      this.error.simpleToast("מחיקה נכשלה");
+     // this.error.simpleToast("מחיקה נכשלה");
   });
   }
 
@@ -128,14 +132,15 @@ export class FirebaseInfraService {
   addWord(word: WordClass) {
     return this.wordsCollection?.add(WordClass.toObject(word)).then(function(){
     }).catch((e) =>{
-      this.error.simpleToast("הוספה נכשלה");
+     // this.error.simpleToast("הוספה נכשלה");
+        console.log("הוספה נכשלה");
     })
   }
 
   removePhrase(phrase: WordClass){
     this.wordsCollection?.doc(phrase.id).delete().then(function() {
   }).catch((e) => {
-      this.error.simpleToast("מחיקה נכשלה");
+      //this.error.simpleToast("מחיקה נכשלה");
   });
   }
 

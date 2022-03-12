@@ -18,7 +18,7 @@ export class CategoryInfraService {
   //import categories collection from db and initialize categories attr.
   constructor(
     public firebaseProvider: FirebaseInfraService,
-    public error: ErrorInfra,
+    //public error: ErrorInfra,
     public authentication: AuthService,
     //public loadingCtrl: LoadingController,
     public wordInfraService: WordInfraService
@@ -129,7 +129,7 @@ export class CategoryInfraService {
           resolve(temp);
       }
       catch (e) {
-        this.error.simpleToast("The wanted category doesn't exist")
+        //this.error.simpleToast("The wanted category doesn't exist")
       }
     })
   }
@@ -147,12 +147,13 @@ export class CategoryInfraService {
         resolve(temp)
       }
       catch (e) {
-        this.error.simpleToast("The wanted category doesn't exist")
+       // this.error.simpleToast("The wanted category doesn't exist")
       }
     })
   }
 
   public addCategory(category: CategoryClass, callFromAppBuilder = false): Promise<void>|undefined {
+    debugger;
     let promise = this.firebaseProvider.addCategory(category);
     if (callFromAppBuilder == false) {
       this.updateCategoriesArray().then(res => {
