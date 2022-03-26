@@ -64,9 +64,9 @@ h6 {
 
 .displayTable {
   display: table;
+  background-size: cover;
   width: 100%;
   height: 100%;
-  background: #12056d;
   background-image:url("https://images.pexels.com/photos/2114014/pexels-photo-2114014.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
 }
 
@@ -605,8 +605,9 @@ body .table thead th {
 
   .nodata-msg,
   .h2,
-  h2 {
+  h2,h1 {
     font-size: 1.4rem;
+    text-align: center;
   }
 
   .custom-text {

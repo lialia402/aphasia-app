@@ -1,0 +1,16 @@
+<div class="page-title">
+    <h1 class="h2">{{this.categoryService.getCurrentCategory.name}}</h1>
+  </div>
+
+<!-- for normal mode -->
+<div class="page-content">
+    <div class="card-deck" fxLayout.xs="row">
+
+      <mat-card style="width:10rem;" *ngFor="let item of this.words" (click)="playVoice(item);"
+               class="mat-card">
+        <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image" />
+        <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
+      </mat-card>
+  </div>
+</div>
+

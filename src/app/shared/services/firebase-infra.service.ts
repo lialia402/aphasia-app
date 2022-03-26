@@ -109,10 +109,8 @@ export class FirebaseInfraService {
   }
 
   addCategory(category: CategoryClass) {   
-    debugger; 
     return this.categoriesCollection?.add(CategoryClass.toObject(category)).then(function(){
     }).catch((e) =>{
-      debugger;
       // this.error.simpleToast("הוספה נכשלה");
          console.log("הוספה נכשלה");
      })

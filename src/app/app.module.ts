@@ -29,6 +29,7 @@ import { AuthService } from './shared/services/auth.service';
 import { RadioButtonComponent } from './components/utils/radio-button/radio-button.component';
 import { CategoryCardComponent } from './components/utils/category-card/category-card.component';
 import { CategoryPageComponent } from './components/category-page/category-page.component';
+import { WordPageComponent } from './components/word-page/word-page.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { CategoryPageComponent } from './components/category-page/category-page.
     RadioButtonComponent,
     CategoryCardComponent,
     CategoryPageComponent,
+    WordPageComponent,
   ],
   imports: [
     BrowserModule,

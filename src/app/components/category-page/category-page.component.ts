@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-category-page',
@@ -11,12 +13,13 @@ export class CategoryPageComponent implements OnInit {
 
  // public phrasesPage: PhrasesPage;
 
-  constructor(public categoryService: CategoryInfraService) {
+  constructor(public categoryService: CategoryInfraService, public router: Router) {
   }
 
   //popup the category's phrases's page.
   public openCategoryPhrases(category: CategoryClass) {
-     ///TODO ADD WORDS ROUTE
+    this.categoryService.setCurrentCategory(category);
+    this.router.navigate(['word-page']);
   }
 
   ngOnInit(): void {

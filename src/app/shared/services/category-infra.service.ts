@@ -9,7 +9,7 @@ import { WordInfraService } from './word-infra.service';
   providedIn: 'root'
 })
 export class CategoryInfraService {
-
+  public currentCategory: CategoryClass;
   public categories: any[]=[];
   private allUserPhrases : any[]= [];
   //categories that have parent category, and shown only at theirs parentCategory's page (next the phrases)
@@ -112,7 +112,10 @@ export class CategoryInfraService {
     return this.allUserPhrases;
   }
 
-
+  public get getCurrentCategory() {
+    return this.currentCategory;
+  }
+  
   /**
    * for handling the promise returned, use "promise.then((data) =>{'data' hold the wanted category...})"
    * for catching error use "promise.then().catch(e){...handling error...}"
@@ -153,7 +156,6 @@ export class CategoryInfraService {
   }
 
   public addCategory(category: CategoryClass, callFromAppBuilder = false): Promise<void>|undefined {
-    debugger;
     let promise = this.firebaseProvider.addCategory(category);
     if (callFromAppBuilder == false) {
       this.updateCategoriesArray().then(res => {
@@ -217,6 +219,9 @@ export class CategoryInfraService {
   }
 
   //SETTERS
+  public setCurrentCategory(category: CategoryClass) {
+    this.currentCategory = category;
+  }
   public setName(category: CategoryClass, newName: string) {
     category.name = newName;
     this.firebaseProvider.updateCategory(category)
