@@ -6,11 +6,15 @@
 <div class="page-content">
     <div class="card-deck" fxLayout.xs="row">
 
-      <mat-card style="width:10rem;" *ngFor="let item of this.words" (click)="playVoice(item);"
+      <mat-card style="width:10rem;" *ngFor="let item of this.words"
                class="mat-card">
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image" />
+        <!-- <button class="button button-stable button-clear" (click)="playVoice(item);">
+          <img src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/VoiceBTN.jpeg?alt=media&token=591457a9-e7f5-4c9d-8ad0-ea95ca4abfd6" >
+          </button>           -->
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
       </mat-card>
+      <button class="button button-stable button-clear" (click)="addNewWord();"></button>
   </div>
 </div>
 
