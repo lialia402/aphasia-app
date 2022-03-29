@@ -19,8 +19,8 @@ export class DashboardComponent implements OnInit {
     }
   ngOnInit(): void {}
   public showCategories(){
-    //this.appBuilderProvider?.fillDB();
-    this.router.navigate(['category-page']);
+   //this.appBuilderProvider?.fillDB();
+  this.router.navigate(['category-page']);
 
   }
 }
