@@ -20,6 +20,11 @@ export class WordPageComponent implements OnInit {
 
   ngOnInit() {
     debugger;
+    this.getwords();
+  }
+
+  getwords()
+  {
     let promise= this.wordService.getPhrases(this.category);
     promise.then((data) => {
       this.words = data;
@@ -32,6 +37,15 @@ export class WordPageComponent implements OnInit {
     voice.src= word.audio;
     voice.load();
     voice.play();
+  }
+
+   public deleteWord(word: WordClass) {
+    setTimeout(async () => {
+      await this.wordService.removePhrase(word);
+      this.getwords()      
+    }, 500)
+    this.wordService.arrangePhrasesByOrder();
+    
   }
 
   public addNewWord() {

@@ -25,4 +25,11 @@ export class CategoryPageComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public deleteCategory(category: CategoryClass) {
+    setTimeout(async () => {
+      await this.categoryService.removeCategory(category);     
+    }, 500)
+    
+  }
+
 }

@@ -30,6 +30,7 @@ import { RadioButtonComponent } from './components/utils/radio-button/radio-butt
 import { CategoryCardComponent } from './components/utils/category-card/category-card.component';
 import { CategoryPageComponent } from './components/category-page/category-page.component';
 import { WordPageComponent } from './components/word-page/word-page.component';
+import { MaterialModule } from './material/material.module';
 
 
 @NgModule({
@@ -53,11 +54,9 @@ import { WordPageComponent } from './components/word-page/word-page.component';
     AngularFireStorageModule,
     AngularFireDatabaseModule,
     AppRoutingModule,
-    MatRadioModule,
     BrowserAnimationsModule,
     FormsModule,
-    MatCardModule,
-    MatListModule,
+    MaterialModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent,RadioButtonComponent],
