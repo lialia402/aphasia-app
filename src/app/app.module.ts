@@ -33,6 +33,7 @@ import { WordPageComponent } from './components/word-page/word-page.component';
 import { MaterialModule } from './material/material.module';
 import { ConfirmationDialogComponent } from './components/utils/confirmation-dialog/confirmation-dialog.component';
 import { ReturnButtonComponent } from './components/utils/return-button/return-button.component';
+import { AddDialogComponent } from './components/utils/add-dialog/add-dialog.component';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { ReturnButtonComponent } from './components/utils/return-button/return-b
     WordPageComponent,
     ConfirmationDialogComponent,
     ReturnButtonComponent,
+    AddDialogComponent,
   ],
   imports: [
     BrowserModule,
