@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { WordInfraService } from 'src/app/shared/services/word-infra.service';
+import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-word-page',
@@ -14,7 +16,7 @@ export class WordPageComponent implements OnInit {
   public words: WordClass[];
   public category: CategoryClass;
 
-  constructor(private route: ActivatedRoute, public categoryService: CategoryInfraService, public wordService: WordInfraService, public router: Router) {
+  constructor(private route: ActivatedRoute, public categoryService: CategoryInfraService, public wordService: WordInfraService, public router: Router ,public dialog: MatDialog) {
     this.category=categoryService.getCurrentCategory;
   }
 
@@ -46,6 +48,16 @@ export class WordPageComponent implements OnInit {
     }, 500)
     this.wordService.arrangePhrasesByOrder();
     
+  }
+
+  openDialog(word: WordClass) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result)
+      {
+        this.deleteWord(word);
+      }
+    });
   }
 
   public addNewWord() {
