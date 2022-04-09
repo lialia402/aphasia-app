@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
 import { AuthService } from './auth.service';
 
-
-@Injectable()
-export class StorageProvider {
+@Injectable({
+  providedIn: 'root'
+})
+export class StorageInfraProvider {
 
   //float of uploaded percentage.
   public imageUploadPercentage;
@@ -35,6 +36,7 @@ export class StorageProvider {
    * @returns a new promise with the new url, on error - undefine
    */
   public uploadFileByPath(path : any, type:any) {
+    debugger;
     return new Promise((resolve, reject) => {
       let user = this.authentication.afAuth.currentUser.then(user => user?.email)
 
@@ -42,11 +44,11 @@ export class StorageProvider {
       if (type.includes("image")) {
         this.imageUploadPercentage = 0
         const imageFolder = "/images/";
-        let storage_path = user + imageFolder + this.createFileName() + ".jpg";//create the path on the storage
+        let storage_path = imageFolder + this.createFileName() + ".jpg";//create the path on the storage
 
         this.imageRef = firebase.storage().ref(storage_path);
 
-        let task = this.imageRef.putString(type + path, "data_url")
+        let task = this.imageRef.putString(path, "data_url")
 
         task.on(
           firebase.storage.TaskEvent.STATE_CHANGED,
@@ -56,8 +58,10 @@ export class StorageProvider {
           }
         );
 
-        task.then((url:any) => {
-          this.imageDownloadURL = url.downloadURL;
+        task.then(() => {
+          // this.imageDownloadURL = url.downloadURL;
+          // resolve(this.imageDownloadURL)
+          this.imageDownloadURL = task.snapshot.downloadURL;
           resolve(this.imageDownloadURL)
 
         })
