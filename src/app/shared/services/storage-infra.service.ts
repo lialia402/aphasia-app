@@ -22,6 +22,32 @@ export class StorageInfraProvider {
 
   }
 
+    public uploadFile = (file:any, type:any) => {
+    let folderName;
+    let storage_path
+    if(type.includes("image"))
+    {
+      folderName = "/images/";
+      storage_path = folderName + this.createFileName() + ".jpg";
+    }
+    
+    else
+    {
+      folderName = "/audio/";
+      storage_path = folderName + this.createFileName() + ".mp3";//create the path on the storage
+    }
+  
+    let uploadTask = firebase.storage().ref(storage_path).putString(file, "data_url")
+    return uploadTask.
+      then(snapshot => {
+        return snapshot.ref.getDownloadURL();
+      })
+      .then((url) => {
+        return url
+      });
+  }
+  
+
   /** This function called from the add-phrase form (you can use it from different pages also).
    * How does it work?
    * This function checks if the type is image, if it is then it uploads it to

@@ -19,6 +19,7 @@ export class WordPageComponent implements OnInit {
   public category: CategoryClass;
   public name:string;
   public imagePath:any;
+  public audioPath:any;
   public imageLink:any;
 
   constructor(private route: ActivatedRoute, public categoryService: CategoryInfraService, public wordService: WordInfraService, public router: Router ,public dialog: MatDialog, public storageService: StorageInfraProvider) {
@@ -66,22 +67,16 @@ export class WordPageComponent implements OnInit {
 
   async createImageInStorage(result:any)
   {
-    let promise = await this.storageService.uploadFileByPath(result.imagePath,"image");
-    
-    let res = new Promise((resolve, reject) => {
-      resolve(promise);
-    });
-
-    console.log(this.storageService.imageDownloadURL);
-
-
+    let link = await this.storageService.uploadFile(result.imagePath,"image");
+    console.log(link);
+    return link;
   }
 
   public addNewWord() {
     const dialogRef = this.dialog.open(AddDialogComponent, {
       height: '500px',
       width: '300px',
-      data: {name: this.name, imagePath: this.imagePath}
+      data: {name: this.name, imagePath: this.imagePath, audioPath: this.audioPath}
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result)
