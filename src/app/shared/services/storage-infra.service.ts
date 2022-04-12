@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
 import { AuthService } from './auth.service';
 
-
-@Injectable()
-export class StorageProvider {
+@Injectable({
+  providedIn: 'root'
+})
+export class StorageInfraProvider {
 
   //float of uploaded percentage.
   public imageUploadPercentage;
@@ -21,6 +22,32 @@ export class StorageProvider {
 
   }
 
+    public uploadFile = (file:any, type:any) => {
+    let folderName;
+    let storage_path
+    if(type.includes("image"))
+    {
+      folderName = "/images/";
+      storage_path = folderName + this.createFileName() + ".jpg";
+    }
+    
+    else
+    {
+      folderName = "/audio/";
+      storage_path = folderName + this.createFileName() + ".mp3";//create the path on the storage
+    }
+  
+    let uploadTask = firebase.storage().ref(storage_path).putString(file, "data_url")
+    return uploadTask.
+      then(snapshot => {
+        return snapshot.ref.getDownloadURL();
+      })
+      .then((url) => {
+        return url
+      });
+  }
+  
+
   /** This function called from the add-phrase form (you can use it from different pages also).
    * How does it work?
    * This function checks if the type is image, if it is then it uploads it to
@@ -35,6 +62,7 @@ export class StorageProvider {
    * @returns a new promise with the new url, on error - undefine
    */
   public uploadFileByPath(path : any, type:any) {
+    debugger;
     return new Promise((resolve, reject) => {
       let user = this.authentication.afAuth.currentUser.then(user => user?.email)
 
@@ -42,11 +70,11 @@ export class StorageProvider {
       if (type.includes("image")) {
         this.imageUploadPercentage = 0
         const imageFolder = "/images/";
-        let storage_path = user + imageFolder + this.createFileName() + ".jpg";//create the path on the storage
+        let storage_path = imageFolder + this.createFileName() + ".jpg";//create the path on the storage
 
         this.imageRef = firebase.storage().ref(storage_path);
 
-        let task = this.imageRef.putString(type + path, "data_url")
+        let task = this.imageRef.putString(path, "data_url")
 
         task.on(
           firebase.storage.TaskEvent.STATE_CHANGED,
@@ -56,8 +84,10 @@ export class StorageProvider {
           }
         );
 
-        task.then((url:any) => {
-          this.imageDownloadURL = url.downloadURL;
+        task.then(() => {
+          // this.imageDownloadURL = url.downloadURL;
+          // resolve(this.imageDownloadURL)
+          this.imageDownloadURL = task.snapshot.downloadURL;
           resolve(this.imageDownloadURL)
 
         })
