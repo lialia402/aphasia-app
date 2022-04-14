@@ -63,7 +63,7 @@ export class AddDialogComponent implements OnInit {
       let reader = new FileReader();
       reader.onload = (event: any) => {
         this.audioUrl = this.domSanitizer.bypassSecurityTrustUrl(event.target.result);
-        this.data.audioPath = this.audioUrl;
+        this.data.audioPath = this.audioUrl.changingThisBreaksApplicationSecurity;
       }
       reader.readAsDataURL(this.fileToUpload);
    }
