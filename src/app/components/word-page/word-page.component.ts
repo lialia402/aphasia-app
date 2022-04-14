@@ -68,22 +68,31 @@ export class WordPageComponent implements OnInit {
   async createImageInStorage(result:any)
   {
     let link = await this.storageService.uploadFile(result.imagePath,"image");
-    console.log(link);
     return link;
   }
 
-  public addNewWord() {
+  async createAudioInStorage(result:any)
+  {
+    let link = await this.storageService.uploadFile(result.audioPath,"audio");
+    return link;
+  }
+
+  async addNewWord() {
     const dialogRef = this.dialog.open(AddDialogComponent, {
-      height: '500px',
-      width: '300px',
+      height: '560px',
+      width: '350px',
       data: {name: this.name, imagePath: this.imagePath, audioPath: this.audioPath}
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if(result)
       {
         // go to storage to add word
         console.log(result);
-        this.createImageInStorage(result);
+        const imageLink = await this.createImageInStorage(result);
+        const audioLink = await this.createAudioInStorage(result);
+        const newWord = new WordClass("", result.name, imageLink, this.categoryService.currentCategory.id, 0, audioLink, false, -1, true);
+        this.wordService.addPhrase(newWord);
+        this.getwords();
       }
     });
   }
