@@ -1,7 +1,7 @@
-<h1 mat-dialog-title align="end">הוספת מילה</h1>
+<h1 mat-dialog-title align="end">הוספת קטגוריה</h1>
 <div mat-dialog-content style="height: calc(100% - 96px);" align="end">
     <mat-form-field style="text-align: right">
-      <input matInput placeholder="שם המילה" [(ngModel)]="data.name">
+      <input matInput placeholder="שם הקטגוריה" [(ngModel)]="data.name">
     </mat-form-field>
     <div>
     <button mat-raised-button class="btn" (click)="fileInput.click()">הוסף תמונה</button>
@@ -16,21 +16,6 @@
     />
     </div>
     <div style="padding-bottom: 17px;"><img style="width: 15rem;" height="150px" *ngIf="imageUrl" [src]="imageUrl" class="image"></div>
-    <div>
-        <button mat-raised-button class="btn" (click)="fileInputAudio.click()">הוסף סאונד</button>
-        <input
-          type="file"
-          id="fileInputAudio"
-          style="visibility:hidden;"
-          name="fileAudioInput"
-          accept="audio/*" multiple 
-          (change)="setFileField($event)"
-          #fileInputAudio
-        />
-    </div>
-    <audio *ngIf="audioUrl" autoplay controls>
-        <source [src]="audioUrl" type="audio/mpeg">  
-    </audio> 
   </div>
  <div mat-dialog-actions align="end" layout="row" layout-align="end center">
     <button mat-button mat-dialog-close>ביטול</button>

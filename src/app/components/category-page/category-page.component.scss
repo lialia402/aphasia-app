@@ -3,44 +3,49 @@
   min-width: 180px; /* adjust as desired */
   min-height: 250px;
   margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
-  background-color: cornsilk;
-  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #f8f9fa;
+  //transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
   display: grid;
   position: relative;
   padding: 16px;
   border-radius: 4px;
   margin-left: 5px;
   margin-bottom: 8px;
-  border: 1px solid;
-  box-shadow: -1px 1px #c7ccd5, -2px 2px #cbd2dd, -3px 3px #d2d7df, -4px 4px #c8ccd3, -5px 5px #dee2e9;
+  //border: 1px solid;
+  //box-shadow: -1px 1px #c7ccd5, -2px 2px #cbd2dd, -3px 3px #d2d7df, -4px 4px #c8ccd3, -5px 5px #dee2e9;
 }
   
 .card-deck{
   display: flex;
   height: 100%;
   flex-wrap: wrap;
-  gap: 30px 30px;
+  gap: 20px 20px;
   cursor: pointer;
+  margin-left: 60px;
 }
 .page-content{  
-  background-color: gainsboro
+  //background-color: gainsboro
 }
 .page-title{
   //  pt-3 pb-2 mb-3;
   padding-top: 3px;
   padding-bottom: 2px;
   margin-bottom: 3px;
-  background-image:url("https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/css-background-image-linear-gradient.webp?alt=media&token=d1c4006f-c7bf-4270-8dee-ebd7a6f40508");
+  //background-image:url("https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/css-background-image-linear-gradient.webp?alt=media&token=d1c4006f-c7bf-4270-8dee-ebd7a6f40508");
   background-size: 100%;
+  background-color: black;
+  display: flex;
 }
 .h2{
-  font-size: 3.0rem;
-  font-weight: bold;
+  margin-left: 700px;
+  font-size: 2.5rem;
   text-align: center;
+  font-family: system-ui;
+  color: white;
   }
 
 .mat-card-image{
-height: 150px; /* adjust as needed */
+height: 170px; /* adjust as needed */
 }
 
 .middle-button{
@@ -53,7 +58,7 @@ height: 150px; /* adjust as needed */
 
 .mat-card-title{
   font-size: 1.3rem;
-  font-weight: bold;
+  font-family: serif;
   color: rgb(0 0 0);
 }
 
