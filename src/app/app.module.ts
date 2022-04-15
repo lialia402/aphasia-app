@@ -34,6 +34,8 @@ import { MaterialModule } from './material/material.module';
 import { ConfirmationDialogComponent } from './components/utils/confirmation-dialog/confirmation-dialog.component';
 import { ReturnButtonComponent } from './components/utils/return-button/return-button.component';
 import { AddDialogComponent } from './components/utils/add-dialog/add-dialog.component';
+import { FooterComponent } from './components/utils/footer/footer.component';
+import { AddCategoryDialogComponent } from './components/utils/add-category-dialog/add-category-dialog.component';
 
 
 @NgModule({
@@ -51,6 +53,8 @@ import { AddDialogComponent } from './components/utils/add-dialog/add-dialog.com
     ConfirmationDialogComponent,
     ReturnButtonComponent,
     AddDialogComponent,
+    FooterComponent,
+    AddCategoryDialogComponent,
   ],
   imports: [
     BrowserModule,
