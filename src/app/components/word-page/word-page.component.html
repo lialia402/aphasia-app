@@ -1,8 +1,11 @@
-<div class="page-title">
-    <app-return-button></app-return-button>
+<div class="title-bar">
+  <div class="page-title">
+    <div class="class-button">
+      <app-return-button></app-return-button>
+    </div>
     <h4 class="h2">{{this.categoryService.getCurrentCategory.name}}</h4>
   </div>
-
+</div>
 <!-- for normal mode -->
 <div>
     <div class="card-deck" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px">

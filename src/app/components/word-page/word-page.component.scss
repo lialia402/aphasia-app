@@ -10,50 +10,63 @@
     border-radius: 4px;
     margin-left: 5px;
     margin-bottom: 8px;
-}
+  }
     
-.card-deck{
+  .card-deck{
     display: flex;
     height: 100%;
+    margin-top: 20px;
     flex-wrap: wrap;
     gap: 20px 20px;
     cursor: pointer;
     margin-left: 60px;
-}
-
-.page-title{
+    margin-bottom: 20px;
+  }
+  
+  .title-bar {
+    position: relative;
+  }
+  
+  .class-button{
+    position:absolute;
+    top:0;
+    left:0;
+  }
+  
+  .page-title{
     padding-top: 3px;
     padding-bottom: 2px;
     margin-bottom: 3px;
     background-size: 100%;
     background-color: black;
     display: flex;
-}
-
-.h2{
-    margin-left: 700px;
+  }
+  
+  .h2{
+    display: block;
+    margin: auto;
     font-size: 2.5rem;
-    text-align: center;
+    margin-bottom: 10px;
     font-family: system-ui;
     color: white;
     }
-
-.mat-card-image{
+  
+  .mat-card-image{
   height: 170px; /* adjust as needed */
-}
-
-.middle-button{
+  }
+  
+  .middle-button{
     margin-left: 16px;
   }
     
-.right-button{
+  .right-button{
     margin-left: 10px;
-}
-
-.mat-card-title{
+  }
+  
+  .mat-card-title{
     font-size: 1.3rem;
     font-family: serif;
     color: rgb(0 0 0);
-}
-
+  }
+  
     
