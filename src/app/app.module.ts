@@ -36,9 +36,12 @@ import { ReturnButtonComponent } from './components/utils/return-button/return-b
 import { AddDialogComponent } from './components/utils/add-dialog/add-dialog.component';
 import { FooterComponent } from './components/utils/footer/footer.component';
 import { AddCategoryDialogComponent } from './components/utils/add-category-dialog/add-category-dialog.component';
+import { SideBarComponent } from './components/utils/side-bar/side-bar.component';
+import { AboutMeComponent } from './components/about-me/about-me.component';
 
 
 @NgModule({
+  entryComponents: [SideBarComponent],
   declarations: [
     AppComponent,
     DashboardComponent,
@@ -55,6 +58,8 @@ import { AddCategoryDialogComponent } from './components/utils/add-category-dial
     AddDialogComponent,
     FooterComponent,
     AddCategoryDialogComponent,
+    SideBarComponent,
+    AboutMeComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +74,7 @@ import { AddCategoryDialogComponent } from './components/utils/add-category-dial
     MaterialModule,
   ],
   providers: [AuthService],
-  bootstrap: [AppComponent,RadioButtonComponent],
+  bootstrap: [AppComponent,RadioButtonComponent,SideBarComponent],
 })
 
 export class AppModule {}

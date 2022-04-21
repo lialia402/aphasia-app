@@ -71,5 +71,4 @@ export class CategoryPageComponent implements OnInit {
       }
     });
   }
-
 }
