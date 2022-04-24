@@ -43,18 +43,13 @@ export class FirebaseInfraService {
       }));
     }
     catch(e){
-     // this.error.simpleToast("Connection error");
+     // To do
     }
   }
 
 
-  /**
-   * import all categories from DB to Observable object
-   * @returns the categories array
-   */
   public importCategories()
   {
-    //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
     try{
       this.categoriesCollection = this.afs.collection<CategoryClass>('categories', ref => ref.orderBy('order','asc').where('userEmail', '==', this.authentication.userData.email));
       this.categories = this.categoriesCollection.snapshotChanges().pipe(map((result:any[]) => {
@@ -66,15 +61,9 @@ export class FirebaseInfraService {
       }));
     }
     catch(e){
-     // this.error.simpleToast("Connection error");
+     // To do
     }
   }
-
-
- /**
-   * import all words from DB to observable object.
-   * @returns the words array
-   */
 
   public importwords(category: CategoryClass)
   {
@@ -91,7 +80,7 @@ export class FirebaseInfraService {
       }));
     }
       catch(e){
-       // this.error.simpleToast("Connection error");
+       // To do
       }
   }
 
@@ -111,7 +100,6 @@ export class FirebaseInfraService {
   addCategory(category: CategoryClass) {   
     return this.categoriesCollection?.add(CategoryClass.toObject(category)).then(function(){
     }).catch((e) =>{
-      // this.error.simpleToast("הוספה נכשלה");
          console.log("הוספה נכשלה");
      })
   }
@@ -119,7 +107,7 @@ export class FirebaseInfraService {
   removeCategory(category: CategoryClass){
     this.categoriesCollection?.doc(category.id ).delete().then(function() {
   }).catch((e) => {
-     // this.error.simpleToast("מחיקה נכשלה");
+     console.log("מחיקה נכשלה");
   });
   }
 
@@ -130,7 +118,6 @@ export class FirebaseInfraService {
   addWord(word: WordClass) {
     return this.wordsCollection?.add(WordClass.toObject(word)).then(function(){
     }).catch((e) =>{
-     // this.error.simpleToast("הוספה נכשלה");
         console.log("הוספה נכשלה");
     })
   }
@@ -138,22 +125,14 @@ export class FirebaseInfraService {
   removePhrase(phrase: WordClass){
     this.wordsCollection?.doc(phrase.id).delete().then(function() {
   }).catch((e) => {
-      //this.error.simpleToast("מחיקה נכשלה");
+    console.log("מחיקה נכשלה");
   });
   }
 
-    /**
-   * Update fields of a document without overwriting the entire document.
-   * @param phrase, the updated local phrase, to update the db
-   */
   updateWord(word: WordClass){
     this.afs.doc('words/' + word.id).update(word);
   }
 
-    /**
-   * Update fields of a document without overwriting the entire document.
-   * @param category, the updated local category, to update the db
-   */
   updateCategory(category: CategoryClass){
     this.afs.doc('categories/' + category.id).update(category);
   }

@@ -12,15 +12,12 @@ export class CategoryInfraService {
   public currentCategory: CategoryClass;
   public categories: any[]=[];
   private allUserPhrases : any[]= [];
-  //categories that have parent category, and shown only at theirs parentCategory's page (next the phrases)
   private subCategories : any[]= [];
 
   //import categories collection from db and initialize categories attr.
   constructor(
     public firebaseProvider: FirebaseInfraService,
-    //public error: ErrorInfra,
     public authentication: AuthService,
-    //public loadingCtrl: LoadingController,
     public wordInfraService: WordInfraService
   ) {
 
@@ -30,11 +27,6 @@ export class CategoryInfraService {
   }
 
 
-  /**
-   * updating the categories and favorites local arrays and refreshing the page, the method return a Promise object"
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @returns Promise object
-   */
   public updateCategoriesArray(): Promise<CategoryClass[]> {
     this.firebaseProvider.importCategories();
     return new Promise((resolve, reject) => {
@@ -55,13 +47,6 @@ export class CategoryInfraService {
     })
   }
 
-  /**
-   * get sub-category of specific category by its name, the method return a Promise object.
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param parentCategory parent category id of the wanted sub-category
-   * @param name name of the wanted sub-category
-   * @returns Promise object
-   */
   public getSubCategoryByName(parentCategoryID: string, name: string): Promise<CategoryClass> {
     return new Promise((resolve, reject) => {
       let temp = this.subCategories.filter(cat => cat.parentCategoryID == parentCategoryID);
@@ -72,12 +57,6 @@ export class CategoryInfraService {
     })
   }
 
-  /**
-   * get sub-categories array of specific category, the method return a Promise object.
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param parentCategory parent category id of the wanted sub-categories array
-   * @returns Promise object
-   */
   public getSubCategoriesOfParent(parentCategoryID: string): Promise<CategoryClass[]> {
     return new Promise((resolve, reject) => {
       let temp = this.subCategories.filter(cat => cat.parentCategoryID == parentCategoryID);
@@ -116,12 +95,7 @@ export class CategoryInfraService {
     return this.currentCategory;
   }
   
-  /**
-   * for handling the promise returned, use "promise.then((data) =>{'data' hold the wanted category...})"
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param n name of category
-   * @returns Promise object
-   */
+  
   public getCategoryByName(n: string): Promise<CategoryClass> {
     return new Promise((resolve, reject) => {
       try {
@@ -137,12 +111,6 @@ export class CategoryInfraService {
     })
   }
 
-  /**
-   * for handling the promise returned, use "promise.then((data) =>{'data' hold the wanted category...})"
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param n id of category, id that given by firebase
-   * @returns Promise object
-   */
   public getCategoryById(id: string): Promise<CategoryClass> {
     return new Promise((resolve, reject) => {
       try {
@@ -150,7 +118,7 @@ export class CategoryInfraService {
         resolve(temp)
       }
       catch (e) {
-       // this.error.simpleToast("The wanted category doesn't exist")
+       // To do
       }
     })
   }
@@ -159,7 +127,6 @@ export class CategoryInfraService {
     let promise = this.firebaseProvider.addCategory(category);
     if (callFromAppBuilder == false) {
       this.updateCategoriesArray().then(res => {
-        // this.arrangeCategoriesByOrder();
       }).catch((err) =>{
         console.log(err);
       })
@@ -167,51 +134,31 @@ export class CategoryInfraService {
     return promise;
   }
 
-  /**
-   * remove category from db, but before that, the method remove:
-   * 1. sub-categories's phrases
-   * 2. sub-categories.
-   * 3. the category's phrases 
-   * the method know to handle if the wanted remove category is sub-category.
-   * also update favorites
-   * @param category category to remove.
-   */
   public removeCategory(category: CategoryClass): Promise<any> {
     return new Promise((resolve, reject) => {
-      //let favoriteProvider = new FavoriteProvider(HomePage.favClass)
       let promise = this.wordInfraService.getPhrases(category);
       promise.then((data) => {
         let phrases = data;
         if (category.parentCategoryID == "") {//if the wanted remove category isn't a sub-category.
           let subCategories = this.subCategories.filter(cat => cat.parentCategoryID == category.id);
           subCategories.forEach(element => {
-           // favoriteProvider.remove_fav_cat(element);
-           // favoriteProvider.remove_from_commom_cat(element);
             let promise2 = this.wordInfraService.getPhrases(element);//remove the sub-categories's phrases
             promise2.then((data) => {
               let phrases2 = data;
               phrases2.forEach(element => {
                 this.firebaseProvider.removePhrase(element);
-               // favoriteProvider.remove_fav_phrases(element)
-               // favoriteProvider.remove_from_commom_phrases(element)
               })
             });
             this.firebaseProvider.removeCategory(element);
           })
         }
-        //favoriteProvider.remove_fav_cat(category);
-        //favoriteProvider.remove_from_commom_cat(category);
-
         phrases.forEach(element => {
           this.firebaseProvider.removePhrase(element);
-          //favoriteProvider.remove_fav_phrases(element)
-          //favoriteProvider.remove_from_commom_phrases(element)
         });
 
         this.firebaseProvider.removeCategory(category);
         let promise = this.updateCategoriesArray();
         promise.then(() => {
-          // this.arrangeCategoriesByOrder();//TODO: Check if needed here, it update all the items in the DB
           resolve(true);
         })
       })

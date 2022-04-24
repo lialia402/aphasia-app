@@ -25,4 +25,10 @@
     top:0;
     left:0;
   }
+
+  main{
+    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
+    height : 100%;            /* Internet Explorer treats as min-height. */
+    min-height : 100%;
+  }
   
