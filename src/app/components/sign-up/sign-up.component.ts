@@ -12,9 +12,6 @@ export class SignUpComponent implements OnInit {
     public authService: AuthService
   ) { }
   ngOnInit() { }
+  
 
-  userTypeChangedHandler(value : string)
-  {
-    this.userType = value;
-  }
 }

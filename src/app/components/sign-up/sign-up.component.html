@@ -1,38 +1,71 @@
 <div class="displayTable">
     <div class="displayTableCell">
       <div class="authBlock">
-        <h3>Sign Up</h3>
+        <h1>הרשמה</h1>
         <div class="formGroup">
-          <input
+          <input dir="rtl"
+            type="text"
+            class="formControl"
+            placeholder="שם פרטי"
+            #userFirstName
+            required
+          />
+        </div>
+        <div class="formGroup">
+          <input dir="rtl"
+            type="text"
+            class="formControl"
+            placeholder="שם משפחה"
+            #userLastName
+            required
+          />
+        </div>
+        <div class="formGroup">
+          <input dir="rtl"
+            type="text"
+            class="formControl"
+            placeholder="תעודת זהות"
+            #userID
+            required
+          />
+        </div>
+        <div class="formGroup">
+          <input dir="rtl"
             type="email"
             class="formControl"
-            placeholder="Email Address"
+            placeholder="דואר אלקטרוני"
             #userEmail
             required
           />
         </div>
         <div class="formGroup">
-          <input
+          <input dir="rtl"
             type="password"
             class="formControl"
-            placeholder="Password"
+            placeholder="סיסמה"
             #userPwd
             required
           />
         </div>
-        <app-radio-button (userTypeChanged)="userTypeChangedHandler($event)"></app-radio-button>
+        <div class="rtl fix">
+        <mat-radio-group [(ngModel)]="userType"
+          dir="rtl" align="end" aria-label="Select an option">
+          <mat-radio-button color="primary" class="space" value="patient">מטופל</mat-radio-button>
+          <mat-radio-button color="primary" value="admin">מטפל</mat-radio-button>
+        </mat-radio-group>
+      </div>
         <div class="formGroup">
           <input
             type="button"
             class="btn btnPrimary"
-            value="Sign Up"
-            (click)="authService.SignUp(userEmail.value, userPwd.value, this.userType)"
+            value="הירשם"
+            (click)="authService.SignUp(userFirstName.value, userLastName.value, userID.value, userEmail.value, userPwd.value, this.userType)"
           />
         </div>
 
        
         <div class="formGroup">
-          <span class="or"><span class="orInner">Or</span></span>
+          <span class="or"><span class="orInner">או</span></span>
         </div>
         <!-- Continue with Google -->
         <div class="formGroup">
@@ -42,14 +75,14 @@
             (click)="authService.GoogleAuth()"
           >
             <i class="fab fa-google-plus-g"></i>
-            Continue with Google
-          </button>
+          המשך עם גוגל          
+      </button>
         </div>
       </div>
       <div class="redirectToLogin">
-        <span
-          >Already have an account?
-          <span class="redirect" routerLink="/sign-in">Log In</span></span
+        <span>
+          ברשותך חשבון קיים?  
+          <span class="redirect" routerLink="/sign-in">התחבר</span></span
         >
       </div>
     </div>
