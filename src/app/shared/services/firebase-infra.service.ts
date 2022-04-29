@@ -47,7 +47,6 @@ export class FirebaseInfraService {
     }
   }
 
-
   /**
    * import all categories from DB to Observable object
    * @returns the categories array

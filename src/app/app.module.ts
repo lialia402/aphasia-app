@@ -26,7 +26,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 // service
 import { AuthService } from './shared/services/auth.service';
-import { RadioButtonComponent } from './components/utils/radio-button/radio-button.component';
 import { CategoryCardComponent } from './components/utils/category-card/category-card.component';
 import { CategoryPageComponent } from './components/category-page/category-page.component';
 import { WordPageComponent } from './components/word-page/word-page.component';
@@ -49,7 +48,6 @@ import { AboutMeComponent } from './components/about-me/about-me.component';
     SignUpComponent,
     ForgotPasswordComponent,
     VerifyEmailComponent,
-    RadioButtonComponent,
     CategoryCardComponent,
     CategoryPageComponent,
     WordPageComponent,
@@ -74,7 +72,7 @@ import { AboutMeComponent } from './components/about-me/about-me.component';
     MaterialModule,
   ],
   providers: [AuthService],
-  bootstrap: [AppComponent,RadioButtonComponent,SideBarComponent],
+  bootstrap: [AppComponent,SideBarComponent],
 })
 
 export class AppModule {}
