@@ -17,6 +17,11 @@ export class WordInfraService {
   ) {
   }
 
+  //first,calling import of all category's phrases.
+  //then, create a Promise object that active only when arrayOfPhrases filled up once.
+  //Promise return to an async function that handle with him.
+  //subscribe listen to the db while the app is alive.
+  //note that there is no relation between Promise object to  method. 
   public getPhrases(category: CategoryClass): Promise<WordClass[]> {
     this.firebaseProvider.importwords(category);
     return new Promise((resolve, reject) => {
@@ -26,6 +31,12 @@ export class WordInfraService {
     })
   }
 
+  /**
+  * for handling the promise returned, use "promise.then((data) =>{'data' hold the wanted phrase...})"
+  * for catching error use "promise.then().catch(e){...handling error...}"
+  * @param n name of phrase
+  * @returns Promise object
+  */
   public getPhraseByName(n: string): Promise<WordClass> {
     return new Promise((resolve, reject) => {
       try {
@@ -38,12 +49,24 @@ export class WordInfraService {
     })
   }
 
+  /**
+   * Rearrange the current phrases array by order propery.
+   * usually used after adding or removing of phrase. 
+   * MAKE SURE you update the local prhase array here in the provider
+   *  or you are going to have a bad time
+   */
   public arrangePhrasesByOrder() {
     for (var i = 0; i < this.words.length; i++) {
       this.setOrder(this.words[i], i);
     }
   }
 
+  /**
+   * for handling the promise returned, use "promise.then((data) =>{'data' hold the wanted phrase...})"
+   * for catching error use "promise.then().catch(e){...handling error...}"
+   * @param n name of phrase
+   * @returns Promise object
+   */
   public getPhraseById(id: string): Promise<WordClass> {
     return new Promise((resolve, reject) => {
       try {
@@ -56,17 +79,30 @@ export class WordInfraService {
     })
   }
 
-
+  /**
+   * add phrase, update DB and arrange by order.
+   * if addPhrase called from App-Builder don't arrange by order.
+   */
   public addPhrase(word: WordClass, callFromAppBuilder = false) : Promise<any> {
     return new Promise((resolve, reject) => {
       this.firebaseProvider.addWord(word)?.then(() => {
         resolve(word);
       });
     })
+    //if (callFromAppBuilder == false)
+    //this.arrangePhrasesByOrder();
   }
 
+  /**
+ * remove phrase, update DB and arrange by order.
+ * 
+ */
   public removePhrase(phrase: WordClass) {
     this.firebaseProvider.removePhrase(phrase);
+    // let favoriteProvider = new FavoriteProvider(HomePage.favClass);
+    // favoriteProvider.remove_fav_phrases(phrase);
+    // favoriteProvider.remove_from_commom_phrases(phrase);
+    //this.arrangePhrasesByOrder();
   }
 
   //SETTERS

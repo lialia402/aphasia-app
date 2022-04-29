@@ -65,6 +65,12 @@ export class FirebaseInfraService {
     }
   }
 
+
+ /**
+   * import all words from DB to observable object.
+   * @returns the words array
+   */
+
   public importwords(category: CategoryClass)
   {
     try{
@@ -80,7 +86,7 @@ export class FirebaseInfraService {
       }));
     }
       catch(e){
-       // To do
+       // this.error.simpleToast("Connection error");
       }
   }
 
@@ -100,6 +106,7 @@ export class FirebaseInfraService {
   addCategory(category: CategoryClass) {   
     return this.categoriesCollection?.add(CategoryClass.toObject(category)).then(function(){
     }).catch((e) =>{
+      // this.error.simpleToast("הוספה נכשלה");
          console.log("הוספה נכשלה");
      })
   }
@@ -107,7 +114,7 @@ export class FirebaseInfraService {
   removeCategory(category: CategoryClass){
     this.categoriesCollection?.doc(category.id ).delete().then(function() {
   }).catch((e) => {
-     console.log("מחיקה נכשלה");
+     // this.error.simpleToast("מחיקה נכשלה");
   });
   }
 
@@ -118,6 +125,7 @@ export class FirebaseInfraService {
   addWord(word: WordClass) {
     return this.wordsCollection?.add(WordClass.toObject(word)).then(function(){
     }).catch((e) =>{
+     // this.error.simpleToast("הוספה נכשלה");
         console.log("הוספה נכשלה");
     })
   }
@@ -125,14 +133,22 @@ export class FirebaseInfraService {
   removePhrase(phrase: WordClass){
     this.wordsCollection?.doc(phrase.id).delete().then(function() {
   }).catch((e) => {
-    console.log("מחיקה נכשלה");
+      //this.error.simpleToast("מחיקה נכשלה");
   });
   }
 
+    /**
+   * Update fields of a document without overwriting the entire document.
+   * @param phrase, the updated local phrase, to update the db
+   */
   updateWord(word: WordClass){
     this.afs.doc('words/' + word.id).update(word);
   }
 
+    /**
+   * Update fields of a document without overwriting the entire document.
+   * @param category, the updated local category, to update the db
+   */
   updateCategory(category: CategoryClass){
     this.afs.doc('categories/' + category.id).update(category);
   }
