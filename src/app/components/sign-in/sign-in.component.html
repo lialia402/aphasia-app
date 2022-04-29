@@ -1,33 +1,33 @@
 <div class="displayTable">
     <div class="displayTableCell">
       <div class="authBlock">
-        <h3>Sign In</h3>
+        <h1>התחברות</h1>
         <div class="formGroup">
-          <input type="text" class="formControl" placeholder="Username" #userName required>
+          <input  dir="rtl" type="text" class="formControl" placeholder="דואר אלקטרוני " #userName required>
         </div>
         <div class="formGroup">
-          <input type="password" class="formControl" placeholder="Password" #userPassword required>
+          <input dir="rtl" type="password" class="formControl" placeholder="סיסמה" #userPassword required>
         </div>
         <!-- Calling SignIn Api from AuthService -->
         <div class="formGroup">
-          <input type="button" class="btn btnPrimary" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)">
+          <input type="button" class="btn btnPrimary" value="התחבר" (click)="authService.SignIn(userName.value, userPassword.value)">
         </div>
         <div class="formGroup">
-          <span class="or"><span class="orInner">Or</span></span>
+          <span class="or"><span class="orInner">או</span></span>
         </div>
         <!-- Calling GoogleAuth Api from AuthService -->
         <div class="formGroup">
           <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
             <i class="fab fa-google-plus-g"></i>
-            Log in with Google
+            התחבר עם גוגל
           </button>
         </div>
         <div class="forgotPassword">
-          <span routerLink="/forgot-password">Forgot Password?</span>
+          <span routerLink="/forgot-password"> ?שכחת סיסמה</span>
         </div>
       </div>
       <div class="redirectToLogin">
-        <span>Don't have an account?<span class="redirect" routerLink="/register-user"> Sign Up</span></span>
+        <span>אין לך חשבון? <span class="redirect" routerLink="/register-user"> הירשם</span></span>
       </div>
     </div>
   </div>

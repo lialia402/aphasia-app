@@ -50,16 +50,17 @@ export class AuthService {
       });
   }
   // Sign up with email/password
-  SignUp(email: string, password: string, userType: string) {
-    console.log(userType);
+  SignUp(firstName: string, lastName: string, userID: string, email: string, password: string, userType: string) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign 
         up and returns promise */
         this.SendVerificationMail();
-        this.SetUserData(result.user);
-        this.afs.collection('users/').doc(result.user?.uid).set({userType: userType})
+        this.afs.collection('users/').doc(result.user?.uid).set({userType: userType}, {
+          merge: true,
+        })
+        this.SetUserData(result.user, firstName, lastName, userID);
       })
       .catch((error) => {
         window.alert(error.message);
@@ -114,17 +115,30 @@ export class AuthService {
   /* Setting up user data when sign in with username/password, 
   sign up with username/password and sign in with social auth  
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  SetUserData(user: any) {
+  SetUserData(user: any, firstName?:string, lastName?:string, userID?:string) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
     );
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified,
-    };
+    let userData: User;
+    if(firstName!== undefined && lastName!== undefined && userID!== undefined)
+    {
+        userData= {
+        uid: user.uid,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        firstName:firstName,
+        lastName: lastName,
+        userID: userID,
+      };
+    }
+    else
+    {
+      userData= {
+        uid: user.uid,
+        email: user.email,
+        emailVerified: user.emailVerified,
+      };
+    }
     return userRef.set(userData, {
       merge: true,
     });

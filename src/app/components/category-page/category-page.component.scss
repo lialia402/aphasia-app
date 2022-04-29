@@ -69,4 +69,11 @@ height: 170px; /* adjust as needed */
   color: rgb(0 0 0);
 }
 
+.stretch{
+  height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
+  height : 100%;            /* Internet Explorer treats as min-height. */
+  min-height : 100%;
+}
+  
+
   
