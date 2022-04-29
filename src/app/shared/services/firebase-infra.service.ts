@@ -43,13 +43,18 @@ export class FirebaseInfraService {
       }));
     }
     catch(e){
-     // To do
+     // this.error.simpleToast("Connection error");
     }
   }
 
 
+  /**
+   * import all categories from DB to Observable object
+   * @returns the categories array
+   */
   public importCategories()
   {
+    //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
     try{
       this.categoriesCollection = this.afs.collection<CategoryClass>('categories', ref => ref.orderBy('order','asc').where('userEmail', '==', this.authentication.userData.email));
       this.categories = this.categoriesCollection.snapshotChanges().pipe(map((result:any[]) => {
@@ -61,7 +66,7 @@ export class FirebaseInfraService {
       }));
     }
     catch(e){
-     // To do
+     // this.error.simpleToast("Connection error");
     }
   }
 
