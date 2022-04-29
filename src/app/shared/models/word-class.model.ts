@@ -1,9 +1,5 @@
 import { Unit } from "./unit-class.model";
-// export class Unit{
-//     public static toObject(unit:any){
-//         return JSON.parse(JSON.stringify(unit));
-//     }
-// }
+
 export class WordClass extends Unit{
     public id: string; //the ID of the phrase in the DB
     public name: string; //the hebrew name of the phrase
