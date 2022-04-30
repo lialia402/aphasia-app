@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AppInitService } from 'src/app/shared/services/app-init.service';
+import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
+import { WordInfraService } from 'src/app/shared/services/word-infra.service';
 import { AuthService } from "../../shared/services/auth.service";
 @Component({
   selector: 'app-sign-up',
@@ -7,11 +10,13 @@ import { AuthService } from "../../shared/services/auth.service";
 })
 export class SignUpComponent implements OnInit {
   userType: string = "";
+  public appBuilderProvider: AppInitService | undefined;
 
-  constructor(
-    public authService: AuthService
-  ) { }
+  constructor(public authService: AuthService,public categoryInfra: CategoryInfraService,
+    public wordInfra: WordInfraService) {
+      this.appBuilderProvider = new AppInitService(this.categoryInfra, this.wordInfra, this.authService);
+
+    }
   ngOnInit() { }
-  
 
 }

@@ -13,12 +13,14 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 })
 export class AuthService {
   userData: any; // Save logged in user data
+  user:User;
   constructor(
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public db: AngularFireDatabase,
     public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    public ngZone: NgZone, // NgZone service to remove outside scope warning
+
   ) {
     /* Saving user data in localstorage when 
     logged in and setting up null when logged out */
@@ -60,9 +62,8 @@ export class AuthService {
         this.afs.collection('users/').doc(result.user?.uid).set({userType: userType}, {
           merge: true,
         })
-        this.SetUserData(result.user, firstName, lastName, userID);
-      })
-      .catch((error) => {
+        this.SetUserData(result.user, firstName, lastName, userID,false);
+      }).catch((error) => {
         window.alert(error.message);
       });
   }
@@ -115,10 +116,11 @@ export class AuthService {
   /* Setting up user data when sign in with username/password, 
   sign up with username/password and sign in with social auth  
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  SetUserData(user: any, firstName?:string, lastName?:string, userID?:string) {
+  SetUserData(user: any, firstName?:string, lastName?:string, userID?:string,firstTime?:boolean) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
     );
+
     let userData: User;
     if(firstName!== undefined && lastName!== undefined && userID!== undefined)
     {
@@ -129,6 +131,7 @@ export class AuthService {
         firstName:firstName,
         lastName: lastName,
         userID: userID,
+        firstTime:firstTime,
       };
     }
     else
@@ -143,6 +146,26 @@ export class AuthService {
       merge: true,
     });
   }
+
+  SetFirstTime() {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${this.userData.uid}`
+    );
+
+    this.user.firstTime = true;
+    let userData: User;
+      userData= {
+        uid: this.userData.uid,
+        email: this.userData.email,
+        emailVerified: this.userData.emailVerified,
+        firstTime:true,
+      };
+    return userRef.set(userData, {
+      merge: true,
+    });
+  }
+
+
   // Sign out
   SignOut() {
     return this.afAuth.signOut().then(() => {

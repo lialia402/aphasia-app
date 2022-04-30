@@ -8,27 +8,29 @@
   </div>
 
   <!-- Main content -->
-  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="width: 100%;">
     <div class="inner-adjust">
       <div class="pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">פרטים אישיים</h1>
+        <h1>פרטים אישיים</h1>
       </div>
       <!-- Show user data when logged in -->
-      <div class="row" *ngIf="authService.userData as user">
+      <div class="row">
         <div class="col-md-12">
-          <div class="media">
+          <div class="media" >
             <!-- <img class="align-self-start mr-5 img-thumbnail rounded-circle" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}" -->
               <!-- alt="{{user.displayName}}"> -->
-            <div class="media-body">
-              <h1>שלום: <strong>{{(user.firstName) ? user.firstName : 'User'}}</strong></h1>
-              <p>תעודת זהות: <strong>{{user.userID}}</strong></p>
-              <p>דואר אלקטרוני: <strong>{{user.email}}</strong></p>
+            <div dir="rtl" class="media-body rtl">
+              <p dir="rtl">שם פרטי: <strong>{{this.user.firstName}}</strong></p>
+              <p dir="rtl">שם משפחה: <strong>{{this.user.lastName}}</strong></p>
+              <p dir="rtl">תעודת זהות: <strong>{{this.user.userID}}</strong></p>
+              <p dir="rtl">דואר אלקטרוני: <strong>{{this.user.email}}</strong></p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </main>
+
 <app-footer>
 </app-footer>
   

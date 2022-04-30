@@ -6,7 +6,7 @@
     </mat-toolbar>
   
     <mat-sidenav-container class="example-sidenav-container">
-      <mat-sidenav position= "end" #snav [mode]="'side'"
+      <mat-sidenav position= "end" #snav [mode]="'side'" 
                    fixedTopGap="56">
         <mat-nav-list class = "mat-nav-list">
           <span *ngFor="let item of menu">
@@ -44,6 +44,11 @@
           </span>
         </mat-nav-list>
       </mat-sidenav>
+      <mat-sidenav-content>
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1>,שלום {{this.user.firstName}}</h1>
+        </div>
+      </mat-sidenav-content>
     </mat-sidenav-container>
   </div>
   
