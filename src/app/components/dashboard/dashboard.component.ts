@@ -18,14 +18,14 @@ export class DashboardComponent implements OnInit {
 
     }
   ngOnInit(): void {
-  debugger;
-  if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
+   if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
   {
     setTimeout(async () => {
       this.appBuilderProvider?.fillDB();
       this.authService.SetFirstTime();   
     }, 1500)
   }
+
   }
   public showCategories(){
 

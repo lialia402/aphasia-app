@@ -12,9 +12,7 @@ export class SignUpComponent implements OnInit {
   userType: string = "";
   public appBuilderProvider: AppInitService | undefined;
 
-  constructor(public authService: AuthService,public categoryInfra: CategoryInfraService,
-    public wordInfra: WordInfraService) {
-      this.appBuilderProvider = new AppInitService(this.categoryInfra, this.wordInfra, this.authService);
+  constructor(public authService: AuthService) {
 
     }
   ngOnInit() { }

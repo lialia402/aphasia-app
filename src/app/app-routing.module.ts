@@ -11,6 +11,7 @@ import { AuthGuard } from './shared/guard/auth.guard';
 import { CategoryPageComponent } from './components/category-page/category-page.component';
 import { WordPageComponent } from './components/word-page/word-page.component';
 import { AboutMeComponent } from './components/about-me/about-me.component';
+import { TherapistPanelComponent } from './components/therapist-panel/therapist-panel.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: 'verify-email-address', component: VerifyEmailComponent },
   { path: 'category-page', component: CategoryPageComponent },
   { path: 'word-page', component: WordPageComponent},
-  {path: 'about-me', component: AboutMeComponent }
+  {path: 'about-me', component: AboutMeComponent },
+  {path: 'therapist-panel', component: TherapistPanelComponent }
 
 ];
 
