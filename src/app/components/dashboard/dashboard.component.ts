@@ -17,9 +17,18 @@ export class DashboardComponent implements OnInit {
       this.appBuilderProvider = new AppInitService(this.categoryInfra, this.wordInfra, this.authService);
 
     }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+   if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
+  {
+    setTimeout(async () => {
+      this.appBuilderProvider?.fillDB();
+      this.authService.SetFirstTime();   
+    }, 1500)
+  }
+
+  }
   public showCategories(){
-  //this.appBuilderProvider?.fillDB();
+
   this.router.navigate(['category-page']);
 
   }

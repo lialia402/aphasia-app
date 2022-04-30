@@ -4,21 +4,28 @@ import * as auth from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   AngularFirestore,
+  AngularFirestoreCollection,
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Observable } from 'rxjs-compat';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   userData: any; // Save logged in user data
+  user:User;
+  usersCollection: AngularFirestoreCollection<User> | undefined;
+  users: Observable<User[]> = new Observable<User[]>()
   constructor(
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public db: AngularFireDatabase,
     public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    public ngZone: NgZone, // NgZone service to remove outside scope warning
+
   ) {
     /* Saving user data in localstorage when 
     logged in and setting up null when logged out */
@@ -38,10 +45,8 @@ export class AuthService {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-       
         this.ngZone.run(() => {
-         
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['home-page']);
         });
         this.SetUserData(result.user);
       })
@@ -49,6 +54,8 @@ export class AuthService {
         window.alert(error.message);
       });
   }
+
+  
   // Sign up with email/password
   SignUp(firstName: string, lastName: string, userID: string, email: string, password: string, userType: string) {
     return this.afAuth
@@ -60,9 +67,8 @@ export class AuthService {
         this.afs.collection('users/').doc(result.user?.uid).set({userType: userType}, {
           merge: true,
         })
-        this.SetUserData(result.user, firstName, lastName, userID);
-      })
-      .catch((error) => {
+        this.SetUserData(result.user, firstName, lastName, userID,false);
+      }).catch((error) => {
         window.alert(error.message);
       });
   }
@@ -115,10 +121,11 @@ export class AuthService {
   /* Setting up user data when sign in with username/password, 
   sign up with username/password and sign in with social auth  
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  SetUserData(user: any, firstName?:string, lastName?:string, userID?:string) {
+  SetUserData(user: any, firstName?:string, lastName?:string, userID?:string,firstTime?:boolean) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
     );
+
     let userData: User;
     if(firstName!== undefined && lastName!== undefined && userID!== undefined)
     {
@@ -129,6 +136,7 @@ export class AuthService {
         firstName:firstName,
         lastName: lastName,
         userID: userID,
+        firstTime:firstTime,
       };
     }
     else
@@ -143,6 +151,25 @@ export class AuthService {
       merge: true,
     });
   }
+
+  SetFirstTime() {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${this.userData.uid}`
+    );
+    this.user.firstTime = true;
+    let userData: User;
+      userData= {
+        uid: this.userData.uid,
+        email: this.userData.email,
+        emailVerified: this.userData.emailVerified,
+        firstTime:true,
+      };
+    return userRef.set(userData, {
+      merge: true,
+    });
+  }
+
+
   // Sign out
   SignOut() {
     return this.afAuth.signOut().then(() => {

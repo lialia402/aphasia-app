@@ -37,6 +37,9 @@ import { FooterComponent } from './components/utils/footer/footer.component';
 import { AddCategoryDialogComponent } from './components/utils/add-category-dialog/add-category-dialog.component';
 import { SideBarComponent } from './components/utils/side-bar/side-bar.component';
 import { AboutMeComponent } from './components/about-me/about-me.component';
+import { TherapistPanelComponent } from './components/therapist-panel/therapist-panel.component';
+import { HomePageComponent } from './components/home-page/home-page.component';
+import { AddDialogPatientComponent } from './components/utils/add-dialog-patient/add-dialog-patient.component';
 
 
 @NgModule({
@@ -58,6 +61,9 @@ import { AboutMeComponent } from './components/about-me/about-me.component';
     AddCategoryDialogComponent,
     SideBarComponent,
     AboutMeComponent,
+    TherapistPanelComponent,
+    HomePageComponent,
+    AddDialogPatientComponent,
   ],
   imports: [
     BrowserModule,

@@ -6,5 +6,8 @@ export interface User {
     email: string;
     // photoURL: string;
     emailVerified: boolean;
+    userType?: string;
+    firstTime?:boolean;
+    listOfPatients?:string[];
  }
 
