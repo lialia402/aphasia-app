@@ -4,16 +4,21 @@ import * as auth from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   AngularFirestore,
+  AngularFirestoreCollection,
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Observable } from 'rxjs-compat';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   userData: any; // Save logged in user data
   user:User;
+  usersCollection: AngularFirestoreCollection<User> | undefined;
+  users: Observable<User[]> = new Observable<User[]>()
   constructor(
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
@@ -40,17 +45,18 @@ export class AuthService {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-       
         this.ngZone.run(() => {
-         
           this.router.navigate(['dashboard']);
         });
+        debugger;
         this.SetUserData(result.user);
       })
       .catch((error) => {
         window.alert(error.message);
       });
   }
+
+  
   // Sign up with email/password
   SignUp(firstName: string, lastName: string, userID: string, email: string, password: string, userType: string) {
     return this.afAuth
