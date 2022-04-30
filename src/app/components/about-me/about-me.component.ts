@@ -13,19 +13,24 @@ export class AboutMeComponent implements OnInit {
 
   user: any;
   constructor(public authService: AuthService,public router: Router,public userInfaService: UserInfaService,) {
+    
         }
 
-  ngOnInit(): void {
-   this.getUser();
-  }
-
-  async getUser() {
-    let email= this.authService.userData.email;
-    this.user= await this.userInfaService.getUserByEmail(email);
-    console.log(email);
-    console.log(this.userInfaService.users);
-    console.log(this.user);
-
+   ngOnInit(): void{
+    if(this.authService.user === undefined)
+    {
+      setTimeout(async () => {
+      let email= this.authService.userData.email;
+      let promise= this.userInfaService.getUserByEmail(email);
+      await promise.then((data) => {
+        this.user = data;
+        this.authService.user = this.user;
+      });     
+    }, 1500)
+    }
+    else{
+      this.user = this.authService.user;
+    }
   }
 
 }

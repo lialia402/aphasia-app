@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 import { FirebaseInfraService } from './firebase-infra.service';
 import { User } from './user';
 
@@ -8,10 +9,13 @@ import { User } from './user';
 export class UserInfaService {
 
   users:any[]=[];
+  currentUser:any;
+
   
-  constructor(public firebaseInfraService: FirebaseInfraService) {
+  constructor(public firebaseInfraService: FirebaseInfraService, public authentication: AuthService,) {
         
     this.updateUsersArray()
+    this.currentUser = this.parseGetUserByEmail();
   }
 
   //updating the users local array by subscribe the users observable array.
@@ -33,5 +37,16 @@ export class UserInfaService {
       resolve(this.users.find(e => e.email === email));
     })
   }
+
+  public parseGetUserByEmail()
+  {
+    let email= this.authentication.userData.email;
+    let promise= this.getUserByEmail(email);
+    promise.then((data:any) => {
+      this.currentUser = data;
+    })
+  }
+
+
 
 }

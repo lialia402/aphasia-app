@@ -19,6 +19,7 @@ export class CategoryPageComponent implements OnInit {
   imagePath: any;
   constructor(public authService: AuthService, private route: ActivatedRoute, public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, public storageService: StorageInfraProvider) 
   {
+    
   }
   
   //popup the category's 'word's page.
