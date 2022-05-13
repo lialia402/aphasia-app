@@ -21,7 +21,7 @@ import { map } from 'rxjs/operators';
 export class UserInfaService {
 
   users:any[]=[];
-
+  patients:any[]=[];
   
   constructor(public firebaseInfraService: FirebaseInfraService, public authentication: AuthService,) {
         
@@ -55,15 +55,56 @@ export class UserInfaService {
   }
   public async addNewPatientForTherpist(patientID:string)
 {
+  let email;
   let user:User ;
   let promise= this.getUserByID(patientID);
   await promise.then((data) => {
     user = data;
   }).then(()=>{
-    let email=user?.email
+   email=user?.email;
+  this.authentication.user.listOfPatients?.push(email);
+   this.firebaseInfraService.addPatient(email);
+
 
   })
  
 }
+
+public removePatient(user:User)
+{
+  const index = this.authentication.user?.listOfPatients?.indexOf(user.email);
+  if(index!==undefined&&index>-1)
+  {
+    this.authentication.user?.listOfPatients?.splice(index, 1);
+    console.log(index);
+  }
+
+ this.firebaseInfraService.removePatient(user.email);
+}
+
+public importPatients(){
+  try{
+    let emailPatients=this.authentication.user.listOfPatients || ''; 
+    console.log(emailPatients);
+    let patientsArrayLength=emailPatients?.length ?emailPatients.length :0;
+    if(emailPatients!==undefined)
+    {  
+      this.patients=[];
+    for(let i=0;i<patientsArrayLength;i++)
+    {
+      this.patients[i]= (this.users.find(e => e.email === emailPatients[i]));      
+    }
+    }
+    }
+    catch(e){
+      // this.error.simpleToast("Connection error");
+     }
+     return this.patients;
+  }
+/**
+ * import all categories from DB to Observable object
+ * @returns the categories array
+ */
+
 }
 

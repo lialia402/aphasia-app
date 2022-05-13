@@ -67,6 +67,11 @@ export class AuthService {
         this.afs.collection('users/').doc(result.user?.uid).set({userType: userType}, {
           merge: true,
         })
+        if(userType==='admin'){
+          this.afs.collection('users/').doc(result.user?.uid).set({listOfPatients: []}, {
+            merge: true,
+          })
+        }
         this.SetUserData(result.user, firstName, lastName, userID,false);
       }).catch((error) => {
         window.alert(error.message);
