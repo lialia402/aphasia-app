@@ -14,6 +14,7 @@ import {MatListModule} from '@angular/material/list';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
+
 // components
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
@@ -38,6 +39,8 @@ import { AddCategoryDialogComponent } from './components/utils/add-category-dial
 import { SideBarComponent } from './components/utils/side-bar/side-bar.component';
 import { AboutMeComponent } from './components/about-me/about-me.component';
 import { TherapistPanelComponent } from './components/therapist-panel/therapist-panel.component';
+import { HomePageComponent } from './components/home-page/home-page.component';
+import { AddDialogPatientComponent } from './components/utils/add-dialog-patient/add-dialog-patient.component';
 
 
 @NgModule({
@@ -60,6 +63,8 @@ import { TherapistPanelComponent } from './components/therapist-panel/therapist-
     SideBarComponent,
     AboutMeComponent,
     TherapistPanelComponent,
+    HomePageComponent,
+    AddDialogPatientComponent,
   ],
   imports: [
     BrowserModule,

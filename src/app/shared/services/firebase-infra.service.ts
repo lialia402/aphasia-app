@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestoreCollection, AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { Observable, OperatorFunction, pipe } from 'rxjs';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/map'
@@ -10,6 +10,9 @@ import { AuthService } from './auth.service';
 import { ErrorInfra } from './error-infra.service';
 import { User } from './user';
 import { UserClass } from '../models/user-class.model';
+import firebase from 'firebase/compat/app';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +28,14 @@ export class FirebaseInfraService {
   wordsCollection: AngularFirestoreCollection<WordClass> | undefined;
   words: Observable<WordClass[]> = new Observable<WordClass[]>()
 
+  patientsCollection: AngularFirestoreCollection<User> | undefined;
+  patients: Observable<User[]> = new Observable<User[]>()
+
   constructor(public afs: AngularFirestore, public authentication: AuthService, //public error: ErrorInfra
   ) {
     //first import the users collection , mainly to get the current users's attrs.
     this.importUsers()
+    //const firestore = firebase.firestore();
   }
 
    //import all users from DB to Observable object
@@ -47,10 +54,7 @@ export class FirebaseInfraService {
     }
   }
 
-  /**
-   * import all categories from DB to Observable object
-   * @returns the categories array
-   */
+
   public importCategories()
   {
     //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
@@ -155,6 +159,19 @@ export class FirebaseInfraService {
    */
   updateCategory(category: CategoryClass){
     this.afs.doc('categories/' + category.id).update(category);
+  }
+  addPatient(email: string) {
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );
+    const addPatient= firebase.firestore.FieldValue.arrayUnion(email) as unknown as string[];
+    userRef.update({ listOfPatients: addPatient });
+    console.log(this.authentication.user.listOfPatients);
+  }
+  removePatient(email:string)
+  {
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );
+    const addPatient= firebase.firestore.FieldValue.arrayRemove(email) as unknown as string[];
+    userRef.update({ listOfPatients: addPatient });
+    console.log(this.authentication.user.listOfPatients);
   }
 }
 

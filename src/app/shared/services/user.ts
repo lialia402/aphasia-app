@@ -8,5 +8,6 @@ export interface User {
     emailVerified: boolean;
     userType?: string;
     firstTime?:boolean;
+    listOfPatients?:string[];
  }
 

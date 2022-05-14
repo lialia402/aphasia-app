@@ -46,9 +46,8 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['home-page']);
         });
-        debugger;
         this.SetUserData(result.user);
       })
       .catch((error) => {
@@ -68,6 +67,11 @@ export class AuthService {
         this.afs.collection('users/').doc(result.user?.uid).set({userType: userType}, {
           merge: true,
         })
+        if(userType==='admin'){
+          this.afs.collection('users/').doc(result.user?.uid).set({listOfPatients: []}, {
+            merge: true,
+          })
+        }
         this.SetUserData(result.user, firstName, lastName, userID,false);
       }).catch((error) => {
         window.alert(error.message);
@@ -157,7 +161,6 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${this.userData.uid}`
     );
-
     this.user.firstTime = true;
     let userData: User;
       userData= {
