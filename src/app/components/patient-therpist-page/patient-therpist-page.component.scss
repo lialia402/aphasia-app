@@ -1,0 +1,79 @@
+
+.mat-card {
+    min-width: 250px; /* adjust as desired */
+    min-height: 250px;
+    margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
+    background-color: #f8f9fa;
+    display: grid;
+    position: relative;
+    padding: 16px;
+    border-radius: 4px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+  }
+    
+  .card-deck{
+    display: flex;
+    height: 100%;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 60px 60px;
+    cursor: pointer;
+    margin-left: 60px;
+    margin-bottom:20px;
+  }
+  
+  .title-bar {
+    position: relative;
+  }
+  
+  .class-button{
+    position:absolute;
+    top:0;
+    left:0;
+  }
+  
+  .page-title{
+    padding-top: 3px;
+    padding-bottom: 2px;
+    margin-bottom: 3px;
+    background-size: 100%;
+    background-color: black;
+    display: flex;
+  }
+  
+  .h2{
+    display: block;
+    margin: auto;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-family: system-ui;
+    color: white;
+    }
+  
+  .mat-card-image{
+  height: 170px; /* adjust as needed */
+  }
+  
+  .middle-button{
+    margin-left: 16px;
+  }
+    
+  .right-button{
+    margin-left: 10px;
+  }
+  
+  .mat-card-title{
+    font-size: 1.3rem;
+    font-family: serif;
+    color: rgb(0 0 0);
+  }
+  
+  .stretch{
+    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
+    height : 100%;            /* Internet Explorer treats as min-height. */
+    min-height : 100%;
+  }
+    
+  
+    

@@ -86,5 +86,9 @@ export class TherapistPanelComponent implements OnInit {
       }
     });
   }
+  public openSelectedPatient(user:User)
+  {
+    this.router.navigate(['patient-therpist-page']);
+  }
 
 }

@@ -44,6 +44,7 @@ export class WordPageComponent implements OnInit {
     voice.src= word.audio;
     voice.load();
     voice.play();
+    this.wordService.increaseViews(word);
   }
 
    public deleteWord(word: WordClass) {
@@ -93,6 +94,7 @@ export class WordPageComponent implements OnInit {
         const newWord = new WordClass("", result.name, imageLink, this.categoryService.currentCategory.id, 0, audioLink, false, -1, true);
         this.wordService.addPhrase(newWord);
         this.getwords();
+
       }
     });
   }
