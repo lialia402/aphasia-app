@@ -55,6 +55,25 @@ export class CategoryInfraService {
     })
   }
 
+  public updateCategoriesArrayByEmail(email:string): Promise<CategoryClass[]> {
+    this.firebaseProvider.importCategoriesByEmail(email);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getCategoriesObservable.subscribe(a => {
+        this.categories = a;
+        this.categories.forEach(element1 => {//initilize all user's phrases local array
+          let promise = this.wordInfraService.getPhrases(element1);
+          promise.then((data) => {
+            data.forEach(element2 => {
+              if (!this.allUserPhrases.some(phrase => phrase.id == element2.id))
+                this.allUserPhrases.push(element2);
+            });
+          })
+        })
+        this.categories = a.filter(cat => cat.parentCategoryID == "");
+        resolve(this.subCategories = a.filter(cat => cat.parentCategoryID != ""))
+      })
+    })
+  }
   /**
    * get sub-category of specific category by its name, the method return a Promise object.
    * for catching error use "promise.then().catch(e){...handling error...}"
@@ -158,11 +177,21 @@ export class CategoryInfraService {
   public addCategory(category: CategoryClass, callFromAppBuilder = false): Promise<void>|undefined {
     let promise = this.firebaseProvider.addCategory(category);
     if (callFromAppBuilder == false) {
-      this.updateCategoriesArray().then(res => {
-        // this.arrangeCategoriesByOrder();
-      }).catch((err) =>{
-        console.log(err);
-      })
+      if(this.authentication.user.userType==='patient')
+      {
+        this.updateCategoriesArray().then(res => {
+          // this.arrangeCategoriesByOrder();
+        }).catch((err) =>{
+          console.log(err);
+        })
+      }
+      else{
+        this.updateCategoriesArrayByEmail(this.authentication.patientOfTherapist.email).then(res => {
+          // this.arrangeCategoriesByOrder();
+        }).catch((err) =>{
+          console.log(err);
+        })
+      }
     }
     return promise;
   }

@@ -22,7 +22,7 @@ export class TherapistPanelComponent implements OnInit {
   patientID: any;
   user:any;
   public patients: User[];
-  constructor(public userService: UserInfaService, public authService: AuthService, private route: ActivatedRoute, public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, public storageService: StorageInfraProvider,public userInfaService: UserInfaService) 
+  constructor(public userService: UserInfaService, public authService: AuthService, public router: Router ,public dialog: MatDialog, public storageService: StorageInfraProvider,public userInfaService: UserInfaService) 
   {
     this.getPatients();
   }
@@ -88,6 +88,7 @@ export class TherapistPanelComponent implements OnInit {
   }
   public openSelectedPatient(user:User)
   {
+    this.authService.patientOfTherapist = user;
     this.router.navigate(['patient-therpist-page']);
   }
 
