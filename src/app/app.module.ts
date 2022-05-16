@@ -41,6 +41,8 @@ import { AboutMeComponent } from './components/about-me/about-me.component';
 import { TherapistPanelComponent } from './components/therapist-panel/therapist-panel.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { AddDialogPatientComponent } from './components/utils/add-dialog-patient/add-dialog-patient.component';
+import { PatientTherpistPageComponent } from './components/patient-therpist-page/patient-therpist-page.component';
+
 
 
 @NgModule({
@@ -65,6 +67,7 @@ import { AddDialogPatientComponent } from './components/utils/add-dialog-patient
     TherapistPanelComponent,
     HomePageComponent,
     AddDialogPatientComponent,
+    PatientTherpistPageComponent,
   ],
   imports: [
     BrowserModule,

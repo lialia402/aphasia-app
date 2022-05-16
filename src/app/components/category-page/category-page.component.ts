@@ -25,6 +25,7 @@ export class CategoryPageComponent implements OnInit {
   //popup the category's 'word's page.
   public openCategoryWords(category: CategoryClass) {
     this.categoryService.setCurrentCategory(category);
+    this.categoryService.increaseViews(category);
     this.router.navigate(['word-page']);
   }
 
