@@ -73,6 +73,24 @@ export class FirebaseInfraService {
     }
   }
 
+  public importCategoriesByEmail(email:string)
+  {
+    //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
+    try{
+      this.categoriesCollection = this.afs.collection<CategoryClass>('categories', ref => ref.orderBy('order','asc').where('userEmail', '==', email));
+      this.categories = this.categoriesCollection.snapshotChanges().pipe(map((result:any[]) => {
+        return result.map(a => {
+          let temp = a.payload.doc.data() as CategoryClass;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
 
  /**
    * import all words from DB to observable object.

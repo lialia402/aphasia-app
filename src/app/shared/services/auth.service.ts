@@ -17,6 +17,7 @@ import { map } from 'rxjs/operators';
 export class AuthService {
   userData: any; // Save logged in user data
   user:User;
+  patientOfTherapist:User;
   usersCollection: AngularFirestoreCollection<User> | undefined;
   users: Observable<User[]> = new Observable<User[]>()
   constructor(

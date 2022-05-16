@@ -17,7 +17,10 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class CategoryPageComponent implements OnInit {
   name: any;
   imagePath: any;
-  constructor(public authService: AuthService, private route: ActivatedRoute, public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, public storageService: StorageInfraProvider) 
+  public categories: CategoryClass[];
+  constructor(public authService: AuthService, private route: ActivatedRoute, 
+    public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, 
+    public storageService: StorageInfraProvider) 
   {
     
   }
@@ -29,12 +32,27 @@ export class CategoryPageComponent implements OnInit {
     this.router.navigate(['word-page']);
   }
 
+  public async getCategories()
+  {
+    if(this.authService.user.userType=='patient')
+    {
+      this.categories = this.categoryService.getCategories;
+    }
+    else
+    {
+      await this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
+      this.categories = this.categoryService.getCategories;
+    }
+  }
+
   ngOnInit(): void {
+    this.getCategories();
   }
 
   public deleteCategory(category: CategoryClass) {
     setTimeout(async () => {
-      await this.categoryService.removeCategory(category);     
+      await this.categoryService.removeCategory(category);   
+      this.getCategories();  
     }, 500)
   }
 
@@ -55,6 +73,14 @@ export class CategoryPageComponent implements OnInit {
   }
 
   async addNewCategory() {
+    let email:string;
+    if(this.authService.user.userType ==='patient')
+    {
+      email = this.authService.user.email;
+    }
+    else{
+      email = this.authService.patientOfTherapist.email;
+    }
     const dialogRef = this.dialog.open(AddCategoryDialogComponent, {
       height: '445px',
       width: '350px',
@@ -67,9 +93,10 @@ export class CategoryPageComponent implements OnInit {
         // go to storage to add word
         console.log(result);
         const imageLink = await this.createImageInStorage(result);
-        const newCategory = new CategoryClass(result.name, "", imageLink, this.authService.userData.email,
+        const newCategory = new CategoryClass(result.name, "", imageLink, email,
         "", 0, false, -1, true);
         this.categoryService.addCategory(newCategory);
+        this.getCategories();
       }
     });
   }

@@ -11,7 +11,7 @@
 <div class="stretch">
     <div class="card-deck" fxLayout.xs="row">
 
-      <mat-card style="width:10rem;" *ngFor="let item of  categoryService.getCategories"
+      <mat-card style="width:10rem;" *ngFor="let item of this.categories"
                class="mat-card">
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image"  (click)="openCategoryWords(item);"/>
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
