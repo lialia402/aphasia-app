@@ -14,6 +14,8 @@ import { AboutMeComponent } from './components/about-me/about-me.component';
 import { TherapistPanelComponent } from './components/therapist-panel/therapist-panel.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { PatientTherpistPageComponent } from './components/patient-therpist-page/patient-therpist-page.component';
+import { GameComponent } from './components/game/game.component';
+import { QuestionComponent } from './components/question/question.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
@@ -27,7 +29,10 @@ const routes: Routes = [
   {path: 'about-me', component: AboutMeComponent },
   {path: 'therapist-panel', component: TherapistPanelComponent },
   {path: 'home-page', component: HomePageComponent },
-  {path: 'patient-therpist-page', component: PatientTherpistPageComponent }
+  {path: 'patient-therpist-page', component: PatientTherpistPageComponent },
+  {path: 'game-page', component: GameComponent },
+  {path: 'question-page', component: QuestionComponent }
+
 ];
 
 @NgModule({

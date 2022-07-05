@@ -32,6 +32,11 @@ export class SideBarComponent implements  OnInit {
           route: '/category-page',
         },
         {
+          displayName: 'על קצה הלשון',
+          iconName: 'casino',          
+          route: '/game-page',
+        },
+        {
           displayName: 'התנתקות',
           iconName: 'exit_to_app',          
           route: '/sign-in',

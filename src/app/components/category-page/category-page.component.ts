@@ -7,6 +7,7 @@ import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confir
 import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.service';
 import { AddCategoryDialogComponent } from '../utils/add-category-dialog/add-category-dialog.component';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class CategoryPageComponent implements OnInit {
   public categories: CategoryClass[];
   constructor(public authService: AuthService, private route: ActivatedRoute, 
     public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, 
-    public storageService: StorageInfraProvider) 
+    public storageService: StorageInfraProvider,
+    public gameService: GameInfraService) 
   {
     
   }
@@ -47,6 +49,10 @@ export class CategoryPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCategories();
+    setTimeout(async () => {
+       console.log(await this.gameService.giveRandomList());
+    }, 500)
+    
   }
 
   public deleteCategory(category: CategoryClass) {

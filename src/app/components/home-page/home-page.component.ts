@@ -35,6 +35,7 @@ export class HomePageComponent implements OnInit {
 
 
  public NavigateUser(){
+   
 
   console.log(this.authService.user.userType === "admin");
   console.log(this.authService.user.userType);
