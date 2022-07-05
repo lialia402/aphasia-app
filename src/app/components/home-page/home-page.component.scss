@@ -1,0 +1,49 @@
+.main-text{
+    direction: rtl;
+    text-align: center;
+    font-family: system-ui;
+    font-size: larger;
+    line-height: 2.0;
+    font-weight: bold;
+    color: white;
+}
+
+.footer-text{
+    direction: rtl;
+    text-align: center;
+    font-style: italic;
+    color: wheat;
+}
+
+.main-content{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+h1{
+    font-weight: bold;
+    font-size: 40px;
+    margin-top: 30px;
+    margin-bottom: 43px;
+    color: white;
+}
+
+.next-button{
+    align-self: center;
+    background-color: indianred;
+}
+
+.logo-img{
+    align-self: center;
+    width: 400px;
+    height: 400px;
+    margin-bottom: 50px;
+    margin-top: 35px;
+}
+
+.footer-div{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

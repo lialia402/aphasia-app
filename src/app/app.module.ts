@@ -42,6 +42,8 @@ import { TherapistPanelComponent } from './components/therapist-panel/therapist-
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { AddDialogPatientComponent } from './components/utils/add-dialog-patient/add-dialog-patient.component';
 import { PatientTherpistPageComponent } from './components/patient-therpist-page/patient-therpist-page.component';
+import { GameComponent } from './components/game/game.component';
+import { QuestionComponent } from './components/question/question.component';
 
 
 
@@ -68,6 +70,8 @@ import { PatientTherpistPageComponent } from './components/patient-therpist-page
     HomePageComponent,
     AddDialogPatientComponent,
     PatientTherpistPageComponent,
+    GameComponent,
+    QuestionComponent,
   ],
   imports: [
     BrowserModule,
