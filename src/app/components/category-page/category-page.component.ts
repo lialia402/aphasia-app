@@ -21,8 +21,7 @@ export class CategoryPageComponent implements OnInit {
   public categories: CategoryClass[];
   constructor(public authService: AuthService, private route: ActivatedRoute, 
     public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, 
-    public storageService: StorageInfraProvider,
-    public gameService: GameInfraService) 
+    public storageService: StorageInfraProvider,) 
   {
     
   }
@@ -49,10 +48,6 @@ export class CategoryPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCategories();
-    setTimeout(async () => {
-       console.log(await this.gameService.giveRandomList());
-    }, 500)
-    
   }
 
   public deleteCategory(category: CategoryClass) {
