@@ -13,6 +13,10 @@
     text-align: center;
     font-style: italic;
     color: wheat;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .main-content{
@@ -43,7 +47,6 @@ h1{
 }
 
 .footer-div{
-    position: fixed;
     bottom: 0;
     width: 100%;
 }
