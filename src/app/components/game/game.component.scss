@@ -1,0 +1,70 @@
+.page-title{
+    padding-top: 3px;
+    padding-bottom: 2px;
+    margin-bottom: 3px;
+    background-size: 100%;
+    background-color: black;
+    display: flex;
+  }
+
+.h2{
+    display: block;
+    margin: auto;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-family: system-ui;
+    color: white;
+    }
+  
+.title-bar {
+    position: relative;
+  }
+  
+.class-button{
+    position:absolute;
+    top:0;
+    left:0;
+  }
+
+  main{
+    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
+    height : 100%;            /* Internet Explorer treats as min-height. */
+    min-height : 100%;
+    background-image: url("https://img.freepik.com/free-photo/white-jigsaw-puzzle-piece-blue-textured-surface_23-2148207325.jpg?w=2000");
+    background-size: cover;
+  }
+
+  .rtl{
+    direction:rtl;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+  }
+  
+  .line-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  .emoji{
+    font-size: xxx-large;
+  }
+
+  .rules{
+    font-size: xx-large;
+    font-weight: bold;
+  }
+
+  .game-title{
+    font-weight: bold;
+    font-size: xxx-large;
+  }
+
+  .start-button{
+    height: 51px !important;
+    width: 130px !important;
+    font-size: 20px !important;
+  }
