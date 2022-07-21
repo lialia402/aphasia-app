@@ -46,9 +46,9 @@ export class GameInfraService {
       if(this.findWordInArray(word) !== 1)
       {
         this.randomWordList.push(word);
+        this.randomSelectionWords.push(word);
         this.pushAnotherThreeWords(word,words);
       }
-
     }
 
     console.log('the original',this.randomWordList);
@@ -94,5 +94,15 @@ export class GameInfraService {
       }
     }
     return flag;
+  }
+
+  public getOptionsPerRound (currentRound: number)
+  {
+    return this.randomSelectionWords.slice(currentRound, 4);
+  }
+
+  public getCardQuestionPerRound(currentRound: number) 
+  {
+    return this.randomWordList[currentRound];
   }
 }

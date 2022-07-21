@@ -7,6 +7,47 @@
     </div>
 </div>
 
-<main >
+<main class="design-trivia">
+  <div class="round-number">
+    <mat-card class="round-number-text">
+      <mat-card-subtitle dir="rtl">סיבוב {{ this.currentRound+1 }}/10 </mat-card-subtitle>
+    </mat-card>
+  </div>
+
+<div class="question-div">
+  <img class="question" src={{this.cardQuestion?.imageURL}}/>
+</div>
+
+<div class="answer-div">
+  <mat-card style="width:10rem;" *ngFor="let item of this.cardAnswers">
+    <mat-card-content class="card-design">
+        <mat-card-subtitle dir="rtl" class="answer-text" (click)="validateAnswer(item);">{{ item.name }} </mat-card-subtitle>
+            <button mat-icon-button mat-button class="sound-button" (click)="playVoice(item);">
+                <mat-icon>mic</mat-icon>
+            </button>
+    </mat-card-content>
+  </mat-card>   
+</div>
+  
+  <!-- <div class="stretch">
+    <div class="card-deck" fxLayout.xs="row">
+
+      <mat-card style="width:10rem;" *ngFor="let item of this.categories"
+               class="mat-card">
+        <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image"  (click)="openCategoryWords(item);"/>
+        <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
+        <mat-card-actions>
+          <button class="middle-button" mat-icon-button mat-button >
+            <mat-icon>create</mat-icon>
+          </button>
+          <button class="right-button" mat-icon-button mat-button (click) ="openDialog(item);" >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      <button mat-fab color="gray"(click)="addNewCategory();">
+        <mat-icon>add</mat-icon>
+      </button>
+  </div> -->
 
 </main>
