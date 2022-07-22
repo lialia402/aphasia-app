@@ -1,4 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 
@@ -55,7 +56,7 @@ export class SideBarComponent implements  OnInit {
        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`);
 
 
-  constructor(public authService: AuthService,public userInfaService: UserInfaService,) {
+  constructor(public authService: AuthService,public userInfaService: UserInfaService,  public router: Router) {
   }
   ngOnInit(): void{
     if(this.authService.user === undefined)
@@ -73,6 +74,14 @@ export class SideBarComponent implements  OnInit {
       this.user = this.authService.user;
     }
     
+  }
+
+  public navigateToGame(){
+    this.router.navigate(['game-page']);
+  }
+
+  public navigateToCategory(){
+    this.router.navigate(['category-page']);
   }
 }
 

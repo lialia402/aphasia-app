@@ -46,8 +46,26 @@
       </mat-sidenav>
       <mat-sidenav-content>
         <div class="pt-3 pb-2 mb-3 border-bottom">
-          <h1>,שלום {{this.user.firstName}}</h1>
+          <h1>שלום {{this.user.firstName}}</h1>
         </div>
+        <!-- for normal mode -->
+        <div class="stretch">
+            <div class="card-deck" fxLayout.xs="row">
+        
+              <mat-card style="width:10rem;" (click) = "navigateToGame();"
+                       class="mat-card">
+                <img md-card-image=""  src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/WhatsApp%20Image%202022-07-22%20at%2016.55.03.jpeg?alt=media&token=9586db84-5bdd-437f-9ca1-ffd20d05589c" class="mat-card-image" />
+                <mat-card-subtitle  class="mat-card-title text-center">על קצה הלשון</mat-card-subtitle>
+              </mat-card>
+              <mat-card style="width:10rem;" (click) = "navigateToCategory();"
+                        class="mat-card">
+                <img md-card-image=""  src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/category.jpg?alt=media&token=15533869-f056-4586-bb3c-5e0785c8ee8d" class="mat-card-image" />
+                <mat-card-subtitle  class="mat-card-title text-center"> קטגוריות </mat-card-subtitle>
+              </mat-card>
+          </div>
+        
+        </div>
+      
       </mat-sidenav-content>
     </mat-sidenav-container>
   </div>

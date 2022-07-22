@@ -1,3 +1,32 @@
+.mat-card {
+  min-width: 250px; /* adjust as desired */
+  min-height: 250px;
+  margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
+  background-color: #f8f9fa;
+  display: grid;
+  position: relative;
+  padding: 16px;
+  border-radius: 4px;
+  margin-left: 5px;
+  margin-bottom: 8px;
+}
+  
+.card-deck{
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 60px 60px;
+  cursor: pointer;
+  margin-left: 60px;
+  margin-bottom:20px;
+}
+
+.mat-card-image{
+  height: 195px; 
+  }
+
 .example-container {
     display: flex;
     flex-direction: column;

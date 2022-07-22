@@ -72,12 +72,22 @@
 }
 
 .round-number-text{
-  width: 90%;
+  width: 100%;
+  height: 50px;
   text-align: center;
 }
 
 .answer-text{
   cursor: pointer;
+  font-size: x-large;
+}
+
+.wrong{
+background-color: rgb(233, 115, 115);
+}
+
+.right{
+background-color: rgb(150, 231, 150);
 }
 
   main{
@@ -87,3 +97,5 @@
     background-size: cover;
     background-color:  rgb(109, 204, 204);
   }
+
+  

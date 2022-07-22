@@ -44,6 +44,7 @@ import { AddDialogPatientComponent } from './components/utils/add-dialog-patient
 import { PatientTherpistPageComponent } from './components/patient-therpist-page/patient-therpist-page.component';
 import { GameComponent } from './components/game/game.component';
 import { QuestionComponent } from './components/question/question.component';
+import { ResultPageComponent } from './components/result-page/result-page.component';
 
 
 
@@ -72,6 +73,7 @@ import { QuestionComponent } from './components/question/question.component';
     PatientTherpistPageComponent,
     GameComponent,
     QuestionComponent,
+    ResultPageComponent,
   ],
   imports: [
     BrowserModule,
