@@ -1,0 +1,48 @@
+.page-title{
+    padding-top: 3px;
+    padding-bottom: 2px;
+    margin-bottom: 3px;
+    background-size: 100%;
+    background-color: black;
+    display: flex;
+  }
+
+.h2{
+    display: block;
+    margin: auto;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-family: system-ui;
+    color: white;
+    }
+
+.line-item
+{
+    display: flex;
+    justify-content: center;
+}
+
+.title-bar {
+    position: relative;
+    }
+
+.logo-img{
+    align-self: center;
+    width: 400px;
+    height: 400px;
+    margin-bottom: 50px;
+    margin-top: 35px;
+}
+
+.main-content{
+    display: flex;
+    flex-direction: column;
+}
+
+main{
+    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
+    height : 100%;            /* Internet Explorer treats as min-height. */
+    min-height : 100%;
+    background-size: cover;
+    background-color:  rgb(109, 204, 204);
+    }

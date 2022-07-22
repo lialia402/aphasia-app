@@ -54,7 +54,6 @@ export class FirebaseInfraService {
     }
   }
 
-
   public importCategories()
   {
     //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
@@ -91,12 +90,6 @@ export class FirebaseInfraService {
     }
   }
 
-
- /**
-   * import all words from DB to observable object.
-   * @returns the words array
-   */
-
   public importwords(category: CategoryClass)
   {
     try{
@@ -115,7 +108,6 @@ export class FirebaseInfraService {
        // this.error.simpleToast("Connection error");
       }
   }
-
   
   get getUsersObservable() {
     return this.users
@@ -163,27 +155,21 @@ export class FirebaseInfraService {
   });
   }
 
-    /**
-   * Update fields of a document without overwriting the entire document.
-   * @param phrase, the updated local phrase, to update the db
-   */
   updateWord(word: WordClass){
     this.afs.doc('words/' + word.id).update(word);
   }
 
-    /**
-   * Update fields of a document without overwriting the entire document.
-   * @param category, the updated local category, to update the db
-   */
   updateCategory(category: CategoryClass){
     this.afs.doc('categories/' + category.id).update(category);
   }
+  
   addPatient(email: string) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );
     const addPatient= firebase.firestore.FieldValue.arrayUnion(email) as unknown as string[];
     userRef.update({ listOfPatients: addPatient });
     console.log(this.authentication.user.listOfPatients);
   }
+
   removePatient(email:string)
   {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );

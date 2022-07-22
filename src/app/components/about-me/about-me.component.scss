@@ -26,13 +26,32 @@
     left:0;
   }
 
-  main{
-    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
-    height : 100%;            /* Internet Explorer treats as min-height. */
-    min-height : 100%;
-  }
+.line-item{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+}
 
-  .rtl{
-    direction:rtl;
-  }
+.media{
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.media-body{
+  display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+main{
+  height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
+  height : 100%;            /* Internet Explorer treats as min-height. */
+  min-height : 100%;
+}
+
+.rtl{
+  direction:rtl;
+}
   

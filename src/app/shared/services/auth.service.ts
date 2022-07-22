@@ -55,7 +55,6 @@ export class AuthService {
         window.alert(error.message);
       });
   }
-
   
   // Sign up with email/password
   SignUp(firstName: string, lastName: string, userID: string, email: string, password: string, userType: string) {
@@ -78,6 +77,7 @@ export class AuthService {
         window.alert(error.message);
       });
   }
+
   // Send email verfificaiton when new user sign up
   SendVerificationMail() {
     return this.afAuth.currentUser
@@ -86,6 +86,7 @@ export class AuthService {
         this.router.navigate(['verify-email-address']);
       });
   }
+
   // Reset Forggot password
   ForgotPassword(passwordResetEmail: string) {
     return this.afAuth
@@ -97,11 +98,13 @@ export class AuthService {
         window.alert(error);
       });
   }
+
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
     return user !== null && user.emailVerified !== false ? true : false;
   }
+
   // Sign in with Google
   GoogleAuth() {
     return this.AuthLogin(new auth.GoogleAuthProvider()).then((res: any) => {
@@ -110,6 +113,7 @@ export class AuthService {
       }
     });
   }
+
   // Auth logic to run auth providers
   AuthLogin(provider: any) {
     return this.afAuth
@@ -124,6 +128,7 @@ export class AuthService {
         window.alert(error);
       });
   }
+
   /* Setting up user data when sign in with username/password, 
   sign up with username/password and sign in with social auth  
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
@@ -158,6 +163,29 @@ export class AuthService {
     });
   }
 
+
+  UpdateUserData(user: any, firstName?:string, lastName?:string, userID?:string) {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${user.uid}`
+    );
+
+    let userData: User;
+    userData= {
+    uid: user.uid,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    firstName:firstName,
+    lastName: lastName,
+    userID: userID,
+    firstTime: false,
+    userType: user.userType,
+  };
+    this.user= userData;
+    return userRef.set(userData, {
+      merge: true,
+    });
+  }
+
   SetFirstTime() {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${this.userData.uid}`
@@ -174,7 +202,6 @@ export class AuthService {
       merge: true,
     });
   }
-
 
   // Sign out
   SignOut() {
