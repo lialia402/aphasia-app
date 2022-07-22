@@ -9,6 +9,7 @@ import { WordInfraService } from './word-infra.service';
 export class GameInfraService {
   public randomWordList:WordClass[]= [];
   public randomSelectionWords:WordClass[]= [];
+  public finalScoreCurrentGame:number=0;
 
   constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService) { }
 
@@ -29,6 +30,7 @@ export class GameInfraService {
     let word;
 
     this.randomWordList = [];
+    this.randomSelectionWords=[];
     console.log(this.randomWordList.length);
     while (this.randomWordList.length < 10) {
       category = this.giveRandomCategory();
@@ -98,11 +100,24 @@ export class GameInfraService {
 
   public getOptionsPerRound (currentRound: number)
   {
-    return this.randomSelectionWords.slice(currentRound, 4);
+    let tempListOfRandomAnswer=this.randomSelectionWords.slice(currentRound, currentRound+4);
+    return this.shuffle(tempListOfRandomAnswer);
   }
 
   public getCardQuestionPerRound(currentRound: number) 
   {
     return this.randomWordList[currentRound];
+  }
+
+  public shuffle(array:WordClass[]) {
+    let currentIndex = array.length,  randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
   }
 }

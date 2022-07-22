@@ -16,6 +16,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { PatientTherpistPageComponent } from './components/patient-therpist-page/patient-therpist-page.component';
 import { GameComponent } from './components/game/game.component';
 import { QuestionComponent } from './components/question/question.component';
+import { ResultPageComponent } from './components/result-page/result-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
@@ -31,7 +32,8 @@ const routes: Routes = [
   {path: 'home-page', component: HomePageComponent },
   {path: 'patient-therpist-page', component: PatientTherpistPageComponent },
   {path: 'game-page', component: GameComponent },
-  {path: 'question-page', component: QuestionComponent }
+  {path: 'question-page', component: QuestionComponent },
+  {path: 'result-page', component: ResultPageComponent}
 
 ];
 
