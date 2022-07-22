@@ -37,22 +37,18 @@ export class UserInfaService {
     });
   }
 
-   /**
-   * for handling the promise returned, use "promise.then((data) =>{'data' hold the wanted user...})"
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param email of user.
-   * @returns Promise object
-   */
   public getUserByEmail(email: string): Promise<User> {
     return new Promise((resolve, reject) => {
       resolve(this.users.find(e => e.email === email));
     })
   }
+
   public getUserByID(ID: string): Promise<User> {
     return new Promise((resolve, reject) => {
       resolve(this.users.find(e => e.userID === ID));
     })
   }
+
   public async addNewPatientForTherpist(patientID:string)
 {
   let email;
@@ -68,21 +64,21 @@ export class UserInfaService {
 
   })
  
-}
-
-public removePatient(user:User)
-{
-  const index = this.authentication.user?.listOfPatients?.indexOf(user.email);
-  if(index!==undefined&&index>-1)
-  {
-    this.authentication.user?.listOfPatients?.splice(index, 1);
-    console.log(index);
   }
 
- this.firebaseInfraService.removePatient(user.email);
-}
+  public removePatient(user:User)
+  {
+    const index = this.authentication.user?.listOfPatients?.indexOf(user.email);
+    if(index!==undefined&&index>-1)
+    {
+      this.authentication.user?.listOfPatients?.splice(index, 1);
+      console.log(index);
+    }
 
-public importPatients(){
+  this.firebaseInfraService.removePatient(user.email);
+  }
+
+  public importPatients(){
   try{
     let emailPatients=this.authentication.user.listOfPatients || ''; 
     console.log(emailPatients);
@@ -101,10 +97,5 @@ public importPatients(){
      }
      return this.patients;
   }
-/**
- * import all categories from DB to Observable object
- * @returns the categories array
- */
-
 }
 

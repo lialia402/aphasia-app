@@ -12,8 +12,11 @@ import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 export class AboutMeComponent implements OnInit {
 
   user: any;
+  isEditEnable: boolean=false;
+  firstName:string="";
+  lastName:string="";
+  id:string="";
   constructor(public authService: AuthService,public router: Router,public userInfaService: UserInfaService,) {
-    
         }
 
    ngOnInit(): void{
@@ -33,4 +36,26 @@ export class AboutMeComponent implements OnInit {
     }
   }
 
+   public startEditOption(){
+      this.isEditEnable=true;
+   }
+
+   public saveChangesOption(){
+     if(this.firstName==="" && this.lastName==="" && this.id==="")
+     {
+        this.cancelOption();
+     }
+     else{
+      this.firstName=this.firstName===""?this.user.firstName:this.firstName;
+      this.lastName=this.lastName===""?this.user.lastName:this.lastName;
+      this.id=this.id===""?this.user.userID:this.id;
+      this.authService.UpdateUserData(this.user, this.firstName,this.lastName,this.id);
+      this.user = this.authService.user;
+      this.isEditEnable=false;
+     }
+   }
+
+   public cancelOption(){
+      this.isEditEnable=false;
+   }
 }

@@ -20,10 +20,24 @@
             <!-- <img class="align-self-start mr-5 img-thumbnail rounded-circle" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}" -->
               <!-- alt="{{user.displayName}}"> -->
             <div dir="rtl" class="media-body rtl">
-              <p dir="rtl">שם פרטי: <strong>{{this.user.firstName}}</strong></p>
-              <p dir="rtl">שם משפחה: <strong>{{this.user.lastName}}</strong></p>
-              <p dir="rtl">תעודת זהות: <strong>{{this.user.userID}}</strong></p>
-              <p dir="rtl">דואר אלקטרוני: <strong>{{this.user.email}}</strong></p>
+              <mat-form-field class="example-full-width" *ngIf="isEditEnable">
+                <input matInput placeholder="שם פרטי" [(ngModel)]="firstName">
+              </mat-form-field>
+              <p *ngIf="!isEditEnable" dir="rtl"><strong>שם פרטי: </strong>{{this.user.firstName}}</p>
+              <mat-form-field class="example-full-width" *ngIf="isEditEnable">
+                <input matInput placeholder="שם משפחה" [(ngModel)]="lastName">
+              </mat-form-field>
+              <p *ngIf="!isEditEnable" dir="rtl"><strong>שם משפחה:</strong> {{this.user.lastName}}</p>
+              <mat-form-field class="example-full-width" *ngIf="isEditEnable">
+                <input matInput placeholder="תעודת זהות" [(ngModel)]="id">
+              </mat-form-field>
+              <p *ngIf="!isEditEnable" dir="rtl"><strong>תעודת זהות:</strong> {{this.user.userID}}</p>
+              <p dir="rtl"><strong>דואר אלקטרוני:</strong> {{this.user.email}}</p>
+            </div>
+            <div class="line-item">
+              <button *ngIf="!isEditEnable" class="edit-button" mat-raised-button color="primary" (click) ="startEditOption()">ערוך פרטי משתמש</button>
+              <button *ngIf="isEditEnable" class="edit-button" mat-raised-button color="primary" (click) ="saveChangesOption()">שמור שינויים</button>
+              <button *ngIf="isEditEnable" class="edit-button" mat-raised-button color="warn" (click) ="cancelOption()">בטל שינויים</button>
             </div>
           </div>
         </div>
