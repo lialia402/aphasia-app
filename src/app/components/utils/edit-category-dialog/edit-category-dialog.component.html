@@ -1,0 +1,25 @@
+<h1 mat-dialog-title align="end">עריכת קטגוריה</h1>
+<div mat-dialog-content style="height: calc(100% - 96px);" align="end">
+    <mat-form-field style="text-align: right">
+      <input matInput placeholder="שם הקטגוריה" [(ngModel)]="data.name">
+    </mat-form-field>
+    <div>
+    <button mat-raised-button class="btn" (click)="fileInput.click()">הוסף תמונה</button>
+    <input
+      type="file"
+      id="fileInput"
+      style="visibility:hidden;"
+      name="fileInput"
+      accept="image/*" multiple 
+      (change)="selectFiles($event)"
+      #fileInput
+    />
+    </div>
+    <div style="padding-bottom: 17px;"><img style="width: 15rem;" height="150px" *ngIf="imageUrl" [src]="imageUrl" class="image"></div>
+  </div>
+ <div mat-dialog-actions align="end" layout="row" layout-align="end center">
+    <button mat-button mat-dialog-close>ביטול</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>שמור שינויים</button>
+  </div>
+  
+

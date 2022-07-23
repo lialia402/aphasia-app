@@ -177,7 +177,7 @@ export class AuthService {
     firstName:firstName,
     lastName: lastName,
     userID: userID,
-    firstTime: false,
+    firstTime: true,
     userType: user.userType,
   };
     this.user= userData;
