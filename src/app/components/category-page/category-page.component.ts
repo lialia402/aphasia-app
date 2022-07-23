@@ -130,9 +130,7 @@ export class CategoryPageComponent implements OnInit {
           newImageLink=category.imageURL;
           if(result.imagePath!==undefined)
           {
-            console.log("im here")
             newImageLink= await this.createImageInStorage(result);
-            console.log(newImageLink)
           }
         }
         
