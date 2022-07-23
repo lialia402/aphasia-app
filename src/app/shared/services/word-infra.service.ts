@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { from } from 'rxjs';
 import { CategoryClass } from '../models/category-class.model';
 import { WordClass } from '../models/word-class.model';

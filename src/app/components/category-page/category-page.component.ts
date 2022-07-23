@@ -8,6 +8,8 @@ import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.serv
 import { AddCategoryDialogComponent } from '../utils/add-category-dialog/add-category-dialog.component';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
+import { EditCategoryDialogComponent } from '../utils/edit-category-dialog/edit-category-dialog.component';
+import { isNgTemplate } from '@angular/compiler';
 
 
 @Component({
@@ -92,12 +94,51 @@ export class CategoryPageComponent implements OnInit {
       if(result)
       {
         // go to storage to add word
-        console.log(result);
         const imageLink = await this.createImageInStorage(result);
         const newCategory = new CategoryClass(result.name, "", imageLink, email,
         "", 0, false, -1, true);
         this.categoryService.addCategory(newCategory);
         this.getCategories();
+      }
+    });
+  }
+
+  async editCategory(category: CategoryClass){
+    let email:string;
+    if(this.authService.user.userType ==='patient')
+    {
+      email = this.authService.user.email;
+    }
+    else{
+      email = this.authService.patientOfTherapist.email;
+    }
+    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
+      height: '445px',
+      width: '350px',
+      data: {name: this.name, imagePath: this.imagePath}
+    });
+    
+     dialogRef.afterClosed().subscribe(async result => {
+      if(result)
+      {
+        let newName;
+        let newImageLink;
+        // go to storage to edit category
+        if((result.imagePath!==undefined || result.name!==undefined))
+        {
+          newName= result.name===undefined? category.name:result.name;
+          newImageLink=category.imageURL;
+          if(result.imagePath!==undefined)
+          {
+            newImageLink= await this.createImageInStorage(result);
+          }
+        }
+        
+        this.categoryService.UpdateCategory(category, newName, newImageLink);
+        setTimeout(async () => {
+          await  
+          this.getCategories();  
+        }, 500);
       }
     });
   }

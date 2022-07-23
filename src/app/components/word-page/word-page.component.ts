@@ -8,6 +8,7 @@ import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.serv
 import { WordInfraService } from 'src/app/shared/services/word-infra.service';
 import { AddDialogComponent } from '../utils/add-dialog/add-dialog.component';
 import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
+import { EditWordsDialogComponent } from '../utils/edit-words-dialog/edit-words-dialog.component';
 
 @Component({
   selector: 'app-word-page',
@@ -62,6 +63,47 @@ export class WordPageComponent implements OnInit {
       if(result)
       {
         this.deleteWord(word);
+      }
+    });
+  }
+
+  async editWord(word: WordClass)
+  {
+    const dialogRef = this.dialog.open(EditWordsDialogComponent, {
+      height: '560px',
+      width: '350px',
+      data: {name: this.name, imagePath: this.imagePath, audioPath: this.audioPath}
+    });
+    dialogRef.afterClosed().subscribe(async result => {
+      if(result)
+      {
+        let newName;
+        let newImageLink;
+        let newSoundLink;
+        // go to storage to edit category
+        if((result.imagePath!==undefined || result.name!==undefined || result.audioPath!==undefined))
+        {
+          newName= result.name===undefined? word.name:result.name;
+          newImageLink=word.imageURL;
+          if(result.imagePath!==undefined)
+          {
+            newImageLink= await this.createImageInStorage(result);
+          }
+          newSoundLink=word.audio;
+          if(result.audioPath!==undefined)
+          {
+            newSoundLink= await this.createAudioInStorage(result);
+          }
+
+          let viewsCount=word.views;
+          const newWord = new WordClass("", newName, newImageLink, this.categoryService.currentCategory.id, viewsCount, newSoundLink, false, -1, true);
+
+         setTimeout(async () => {
+          await this.wordService.removePhrase(word);
+          await this.wordService.addPhrase(newWord);
+          await this.getwords();
+        }, 500);
+        }
       }
     });
   }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { CategoryClass } from '../models/category-class.model';
 import { AuthService } from './auth.service';
 import { ErrorInfra } from './error-infra.service';
@@ -135,12 +136,6 @@ export class CategoryInfraService {
     return this.currentCategory;
   }
   
-  /**
-   * for handling the promise returned, use "promise.then((data) =>{'data' hold the wanted category...})"
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param n name of category
-   * @returns Promise object
-   */
   public getCategoryByName(n: string): Promise<CategoryClass> {
     return new Promise((resolve, reject) => {
       try {
@@ -196,15 +191,6 @@ export class CategoryInfraService {
     return promise;
   }
 
-  /**
-   * remove category from db, but before that, the method remove:
-   * 1. sub-categories's phrases
-   * 2. sub-categories.
-   * 3. the category's phrases 
-   * the method know to handle if the wanted remove category is sub-category.
-   * also update favorites
-   * @param category category to remove.
-   */
   public removeCategory(category: CategoryClass): Promise<any> {
     return new Promise((resolve, reject) => {
       //let favoriteProvider = new FavoriteProvider(HomePage.favClass)
@@ -244,6 +230,34 @@ export class CategoryInfraService {
           resolve(true);
         })
       })
+    })
+  }
+
+  UpdateCategory(category: CategoryClass, name:string, image:string) {
+    const userRef: AngularFirestoreDocument<any> = this.firebaseProvider.afs.doc(
+      `categories/${category.id}`
+    );
+
+    let newCategory: any;
+    newCategory= {
+      name: name, 
+      id: category.id,
+      imageURL: image,
+      userEmail: category.userEmail, 
+      parentCategoryID: category.parentCategoryID, 
+      views: category.views,
+      isFav: category.isFav,
+      order: category.order,
+      visibility: category.visibility,
+  };
+
+    userRef.set(newCategory, {
+      merge: true,
+    });
+    this.updateCategoriesArray().then(res => {
+      // this.arrangeCategoriesByOrder();
+    }).catch((err) =>{
+      console.log(err);
     })
   }
 
