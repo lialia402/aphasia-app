@@ -9,12 +9,11 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-dialog',
-  templateUrl: './add-dialog.component.html',
-  styleUrls: ['./add-dialog.component.scss']
+  selector: 'app-edit-words-dialog',
+  templateUrl: './edit-words-dialog.component.html',
+  styleUrls: ['./edit-words-dialog.component.scss']
 })
-export class AddDialogComponent implements OnInit {
-
+export class EditWordsDialogComponent implements OnInit {
   selectedFiles?: FileList;
   audioFile?:FileList;
   selectedFileNames: string[] = [];
@@ -29,8 +28,8 @@ export class AddDialogComponent implements OnInit {
   imageUrl: any;
 
   constructor(private domSanitizer: DomSanitizer,
-    public dialogRef: MatDialogRef<AddDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    public dialogRef: MatDialogRef<EditWordsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit(): void {
   }
@@ -49,7 +48,6 @@ export class AddDialogComponent implements OnInit {
       }
       reader.readAsDataURL(this.fileToUpload);
    }
-  
   } 
 
   setFileField(event: any) {
@@ -66,5 +64,4 @@ export class AddDialogComponent implements OnInit {
       reader.readAsDataURL(this.fileToUpload);
    }
   }
-
 }
