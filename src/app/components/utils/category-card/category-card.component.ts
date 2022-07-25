@@ -13,20 +13,12 @@ export class CategoryCardComponent implements OnInit {
   constructor(public categoryProvider:CategoryInfraService) {
   }
 
-
   ngOnInit(): void {
   }
-  /**on click method when the user click on a category
-   * the method check if to add the category to the common categories list.
-   * @param cat the category that clicked
-  */
+  //on click method when the user click on a category the method check if to add the category to the common categories list.
     public categoryOnClick(event:any){
      if(this.category){
      this.categoryProvider.increaseViews(this.category)// update the category views field in the DB
-    }
- 
-
-}
-
-
+     }
+  }
 }

@@ -1,7 +1,5 @@
-import { BooleanInput } from '@angular/cdk/coercion';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { time } from 'console';
 import { WordClass } from 'src/app/shared/models/word-class.model';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
@@ -25,7 +23,8 @@ export class QuestionComponent implements OnInit {
     this.creatAnswersList();
     this.getQuestionWord();
   }
-
+  
+  //play the sound of the answer word
   public playVoice(word: WordClass, event:any) {
     event.preventDefault();
     event.stopPropagation()
@@ -35,6 +34,7 @@ export class QuestionComponent implements OnInit {
     voice.play();
   }
 
+  //create four options for answer 
   public creatAnswersList() {
     this.cardAnswers= this.gameService.getOptionsPerRound(this.currentRound*4);
   }
@@ -43,11 +43,11 @@ export class QuestionComponent implements OnInit {
     this.cardQuestion= this.gameService.getCardQuestionPerRound(this.currentRound);
   }
 
+  //check if the chosen word is the correct answer and it matches the picture of the question
   public validateAnswer(answer:WordClass) {
     if(answer.name===this.cardQuestion.name)
     {
       this.right=true;
-      //this.gameService.resultPerRround(True)
       this.correctAnswers++;
       setTimeout(() => {
         this.nextRound(answer);
@@ -61,6 +61,7 @@ export class QuestionComponent implements OnInit {
     }
   }
 
+  //check if the game ended. if yes move to result page, and if not show the next question
   public nextRound(answer:WordClass) {
     this.wrong=false;
     this.right=false;

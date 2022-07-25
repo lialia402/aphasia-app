@@ -16,7 +16,4 @@ export class ReturnButtonComponent implements OnInit {
   backClicked() {
     this._location.back();
   }
-
-  
-
 }

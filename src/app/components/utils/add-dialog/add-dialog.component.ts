@@ -13,6 +13,7 @@ export interface DialogData {
   templateUrl: './add-dialog.component.html',
   styleUrls: ['./add-dialog.component.scss']
 })
+
 export class AddDialogComponent implements OnInit {
 
   selectedFiles?: FileList;
@@ -35,8 +36,8 @@ export class AddDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //open the file explorer for the user to allow him to select an image
   selectFiles(event: any): void {
-
     this.selectedFiles = event.target.files;
     if (this.selectedFiles && this.selectedFiles[0]) {
       this.fileToUpload = this.selectedFiles[0];
@@ -49,9 +50,9 @@ export class AddDialogComponent implements OnInit {
       }
       reader.readAsDataURL(this.fileToUpload);
    }
-  
   } 
 
+   //open the file explorer for the user to allow him to select an image
   setFileField(event: any) {
     this.selectedFiles = event.target.files;
     if (this.selectedFiles && this.selectedFiles[0]) {

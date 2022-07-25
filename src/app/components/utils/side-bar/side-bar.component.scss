@@ -1,33 +1,33 @@
-.mat-card {
-  min-width: 250px; /* adjust as desired */
-  min-height: 250px;
-  margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
-  background-color: #f8f9fa;
-  display: grid;
-  position: relative;
-  padding: 16px;
-  border-radius: 4px;
-  margin-left: 5px;
-  margin-bottom: 8px;
-}
+  .mat-card {
+    min-width: 250px; /* adjust as desired */
+    min-height: 250px;
+    margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
+    background-color: #f8f9fa;
+    display: grid;
+    position: relative;
+    padding: 16px;
+    border-radius: 4px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+  }
   
-.card-deck{
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  margin-top: 20px;
-  flex-wrap: wrap;
-  gap: 60px 60px;
-  cursor: pointer;
-  margin-left: 60px;
-  margin-bottom:20px;
-}
-
-.mat-card-image{
-  height: 195px; 
+  .card-deck{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 60px 60px;
+    cursor: pointer;
+    margin-left: 60px;
+    margin-bottom:20px;
   }
 
-.example-container {
+  .mat-card-image{
+    height: 195px; 
+  }
+
+  .example-container {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -69,8 +69,6 @@
   }
   
   .example-sidenav-container {
-    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-       causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
     flex: 1;
   }
 
@@ -97,8 +95,6 @@
 
   
   .example-is-mobile .example-sidenav-container {
-    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-       `<body>` to be our scrolling element for mobile layouts. */
     flex: 1 0 auto;
   }
   

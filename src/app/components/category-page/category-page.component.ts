@@ -7,10 +7,7 @@ import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confir
 import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.service';
 import { AddCategoryDialogComponent } from '../utils/add-category-dialog/add-category-dialog.component';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 import { EditCategoryDialogComponent } from '../utils/edit-category-dialog/edit-category-dialog.component';
-import { isNgTemplate } from '@angular/compiler';
-
 
 @Component({
   selector: 'app-category-page',
@@ -23,18 +20,15 @@ export class CategoryPageComponent implements OnInit {
   public categories: CategoryClass[];
   constructor(public authService: AuthService, private route: ActivatedRoute, 
     public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, 
-    public storageService: StorageInfraProvider,) 
-  {
-    
-  }
-  
-  //popup the category's 'word's page.
+    public storageService: StorageInfraProvider,) {}
+
+  //move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
     this.categoryService.setCurrentCategory(category);
     this.categoryService.increaseViews(category);
     this.router.navigate(['word-page']);
   }
-
+  //load the relavant categories
   public async getCategories()
   {
     if(this.authService.user.userType=='patient')
@@ -52,6 +46,7 @@ export class CategoryPageComponent implements OnInit {
     this.getCategories();
   }
 
+  //delete the specific category and the words belongs to it
   public deleteCategory(category: CategoryClass) {
     setTimeout(async () => {
       await this.categoryService.removeCategory(category);   
@@ -59,6 +54,7 @@ export class CategoryPageComponent implements OnInit {
     }, 500)
   }
 
+  //verifies the deletion operation
   openDialog(category: CategoryClass) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
@@ -69,6 +65,7 @@ export class CategoryPageComponent implements OnInit {
     });
   }
 
+  //upload the new image to firebase
   async createImageInStorage(result:any)
   {
     let link = await this.storageService.uploadFile(result.imagePath,"image");
@@ -93,7 +90,7 @@ export class CategoryPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if(result)
       {
-        // go to storage to add word
+        //go to storage to add word
         const imageLink = await this.createImageInStorage(result);
         const newCategory = new CategoryClass(result.name, "", imageLink, email,
         "", 0, false, -1, true);
@@ -103,6 +100,7 @@ export class CategoryPageComponent implements OnInit {
     });
   }
 
+  //edit category: Change one or more of the following details: category name, category image
   async editCategory(category: CategoryClass){
     let email:string;
     if(this.authService.user.userType ==='patient')

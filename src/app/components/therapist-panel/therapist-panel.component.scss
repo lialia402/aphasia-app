@@ -1,5 +1,5 @@
 
-.mat-card {
+ .mat-card {
     min-width: -webkit-fill-available; /* adjust as desired */
     min-height: 100px;
     margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
@@ -12,7 +12,7 @@
     margin-bottom: 8px;
   }
     
-  .card-deck{
+ .card-deck{
     display: flex;
     height: 100%;
     margin-top: 20px;
@@ -49,7 +49,7 @@
     margin-bottom: 10px;
     font-family: system-ui;
     color: white;
-    }
+  }
   
   .mat-card-image{
   height: 170px; /* adjust as needed */
