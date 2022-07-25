@@ -1,5 +1,5 @@
 
-.mat-card {
+  .mat-card {
     min-width: 250px; /* adjust as desired */
     min-height: 250px;
     margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
@@ -71,8 +71,8 @@
   }
   
   .stretch{
-    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
-    height : 100%;            /* Internet Explorer treats as min-height. */
+    height : auto !important; 
+    height : 100%;            
     min-height : 100%;
   }
     

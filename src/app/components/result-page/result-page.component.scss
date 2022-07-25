@@ -5,7 +5,7 @@
     background-size: 100%;
     background-color: black;
     display: flex;
-  }
+}
 
 .h2{
     display: block;
@@ -14,17 +14,16 @@
     margin-bottom: 10px;
     font-family: system-ui;
     color: white;
-    }
+}
 
-.line-item
-{
+.line-item{
     display: flex;
     justify-content: center;
 }
 
 .title-bar {
     position: relative;
-    }
+}
 
 .logo-img{
     align-self: center;
@@ -45,4 +44,4 @@ main{
     min-height : 100%;
     background-size: cover;
     background-color:  rgb(109, 204, 204);
-    }
+}

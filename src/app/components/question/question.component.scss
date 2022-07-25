@@ -5,7 +5,7 @@
     background-size: 100%;
     background-color: black;
     display: flex;
-  }
+}
 
 .h2{
     display: block;
@@ -14,7 +14,7 @@
     margin-bottom: 10px;
     font-family: system-ui;
     color: white;
-    }
+}
 
 .design-trivia{
   display: flex;
@@ -25,7 +25,7 @@
 .question-div {
   display: flex;
   justify-content: center;
-  }
+}
 
 .question {
   margin-top: 20px;
@@ -33,7 +33,7 @@
   border: 5px solid #555;
   max-width: 300px;
   max-height: 300px;
-  }
+}
 
 .answer-div{
   align-items: center;
@@ -42,7 +42,7 @@
   flex-direction: column;
   margin-bottom: 20px;
   gap:10px;
-  }
+}
 
 .card-design{
   align-items:baseline;
@@ -57,13 +57,13 @@
 
 .title-bar {
     position: relative;
-  }
+}
   
 .class-button{
     position:absolute;
     top:0;
     left:0;
-  }
+}
  
 .round-number{
   display: flex;
@@ -90,12 +90,12 @@ background-color: rgb(233, 115, 115);
 background-color: rgb(150, 231, 150);
 }
 
-  main{
-    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
-    height : 100%;            /* Internet Explorer treats as min-height. */
-    min-height : 100%;
-    background-size: cover;
-    background-color:  rgb(109, 204, 204);
-  }
+main{
+  height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
+  height : 100%;            /* Internet Explorer treats as min-height. */
+  min-height : 100%;
+  background-size: cover;
+  background-color:  rgb(109, 204, 204);
+}
 
   

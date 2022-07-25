@@ -11,6 +11,7 @@ export interface DialogData {
   templateUrl: './edit-category-dialog.component.html',
   styleUrls: ['./edit-category-dialog.component.scss']
 })
+
 export class EditCategoryDialogComponent implements OnInit {
   selectedFiles?: FileList;
   audioFile?:FileList;
@@ -26,7 +27,6 @@ export class EditCategoryDialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<EditCategoryDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
   
-
   ngOnInit(): void {
   }
 

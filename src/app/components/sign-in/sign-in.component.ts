@@ -13,12 +13,10 @@ export class SignInComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
   signIn(userName:string,userPassword:string)
   {
     setTimeout(async () => {
       await this.authService.SignIn(userName,userPassword)  
     }, 1500)
   }
-
 }

@@ -13,14 +13,14 @@ export interface DialogData {
   templateUrl: './edit-words-dialog.component.html',
   styleUrls: ['./edit-words-dialog.component.scss']
 })
+
 export class EditWordsDialogComponent implements OnInit {
+
   selectedFiles?: FileList;
   audioFile?:FileList;
   selectedFileNames: string[] = [];
-
   progressInfos: any[] = [];
   message: string[] = [];
-
   previews: string[] = [];
   audioUrl: any;
   duration: number;
@@ -34,8 +34,8 @@ export class EditWordsDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //open the file explorer for the user to allow him to select an image
   selectFiles(event: any): void {
-
     this.selectedFiles = event.target.files;
     if (this.selectedFiles && this.selectedFiles[0]) {
       this.fileToUpload = this.selectedFiles[0];
@@ -50,6 +50,7 @@ export class EditWordsDialogComponent implements OnInit {
    }
   } 
 
+  //open the file explorer for the user to allow him to select an sound
   setFileField(event: any) {
     this.selectedFiles = event.target.files;
     if (this.selectedFiles && this.selectedFiles[0]) {

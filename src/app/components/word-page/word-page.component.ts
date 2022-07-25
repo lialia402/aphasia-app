@@ -67,6 +67,7 @@ export class WordPageComponent implements OnInit {
     });
   }
 
+  //option to change one or more details: word name, image or sound
   async editWord(word: WordClass)
   {
     const dialogRef = this.dialog.open(EditWordsDialogComponent, {
@@ -108,18 +109,21 @@ export class WordPageComponent implements OnInit {
     });
   }
 
+  //upload image to storage
   async createImageInStorage(result:any)
   {
     let link = await this.storageService.uploadFile(result.imagePath,"image");
     return link;
   }
 
+  //upload sound to storage
   async createAudioInStorage(result:any)
   {
     let link = await this.storageService.uploadFile(result.audioPath,"audio");
     return link;
   }
 
+  //option to add new word in specific category
   async addNewWord() {
     const dialogRef = this.dialog.open(AddDialogComponent, {
       height: '560px',
@@ -136,7 +140,6 @@ export class WordPageComponent implements OnInit {
         const newWord = new WordClass("", result.name, imageLink, this.categoryService.currentCategory.id, 0, audioLink, false, -1, true);
         this.wordService.addPhrase(newWord);
         this.getwords();
-
       }
     });
   }

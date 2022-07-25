@@ -1,5 +1,5 @@
 
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserInfaService } from 'src/app/shared/services/user-infa.service';
@@ -12,9 +12,9 @@ import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 export class HomePageComponent implements OnInit {
 
   user:any;
-
   constructor(public authService: AuthService,public userInfaService: UserInfaService,public router: Router) {
   }
+
   ngOnInit(): void{
     if(this.authService.user === undefined)
     {
@@ -30,24 +30,18 @@ export class HomePageComponent implements OnInit {
     else{
       this.user = this.authService.user;
     }
-    
   }
 
-
- public NavigateUser(){
-   
-
-  console.log(this.authService.user.userType === "admin");
-  console.log(this.authService.user.userType);
-  if(this.authService.user.userType === "admin")
-  {
-    
-    this.router.navigate(['therapist-panel']);
+  public NavigateUser(){
+    console.log(this.authService.user.userType === "admin");
+    console.log(this.authService.user.userType);
+    if(this.authService.user.userType === "admin")
+    {
+      this.router.navigate(['therapist-panel']);
+    }
+    else if(this.authService.user.userType === "patient")
+    {
+      this.router.navigate(['dashboard']);
+    }
   }
-  else if(this.authService.user.userType === "patient")
-  {
-    this.router.navigate(['dashboard']);
-  }
-
-}
 }

@@ -8,21 +8,17 @@
   </div>
     <div class="stretch">
       <div class="card-deck" fxLayout.xs="row">
-
         <mat-card style="width:10rem;" *ngFor="let item of patients"class="mat-card" >
           <mat-card-subtitle  (click)="openSelectedPatient(item);" class="mat-card-title text-center">{{ item.firstName }} {{ item.lastName }}  </mat-card-subtitle>
           <mat-card-subtitle  (click)="openSelectedPatient(item);" class="mat-card-title text-center">{{ item.userID }} </mat-card-subtitle>
           <button class="right-button" mat-icon-button mat-button (click) ="openDialog(item);" >
             <mat-icon>delete</mat-icon>
           </button>
-        </mat-card>
-        
+        </mat-card> 
     </div>
-
   <button mat-fab color="gray"(click)="addNewPatient();">
     <mat-icon>add</mat-icon>
   </button>
 </div>
-
-  <app-footer>
+<app-footer>
 </app-footer>
