@@ -47,6 +47,7 @@ import { QuestionComponent } from './components/question/question.component';
 import { ResultPageComponent } from './components/result-page/result-page.component';
 import { EditCategoryDialogComponent } from './components/utils/edit-category-dialog/edit-category-dialog.component';
 import { EditWordsDialogComponent } from './components/utils/edit-words-dialog/edit-words-dialog.component';
+import { AnalyticsPageComponent } from './components/analytics-page/analytics-page.component';
 
 
 
@@ -78,6 +79,7 @@ import { EditWordsDialogComponent } from './components/utils/edit-words-dialog/e
     ResultPageComponent,
     EditCategoryDialogComponent,
     EditWordsDialogComponent,
+    AnalyticsPageComponent,
   ],
   imports: [
     BrowserModule,
