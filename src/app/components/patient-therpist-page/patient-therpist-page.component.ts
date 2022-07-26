@@ -22,4 +22,9 @@ export class PatientTherpistPageComponent implements OnInit {
   {
     this.router.navigate(['category-page']);
   }
+
+  navigateToPatientAnalytics()
+  {
+    this.router.navigate(['analytics-page']);
+  }
 }
