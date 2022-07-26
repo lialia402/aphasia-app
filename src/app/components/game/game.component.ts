@@ -9,7 +9,6 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 })
 export class GameComponent implements OnInit {
 
-
   constructor(public router: Router,public gameService: GameInfraService) {}
 
   ngOnInit(): void {
@@ -22,5 +21,4 @@ export class GameComponent implements OnInit {
   {
     this.router.navigate(['question-page']);
   }
-
 }

@@ -9,9 +9,9 @@ import { CategoryInfraService } from 'src/app/shared/services/category-infra.ser
   templateUrl: './patient-therpist-page.component.html',
   styleUrls: ['./patient-therpist-page.component.scss']
 })
-export class PatientTherpistPageComponent implements OnInit {
 
-  constructor(public authService: AuthService,public categoryService: CategoryInfraService, public router: Router) { 
+export class PatientTherpistPageComponent implements OnInit {
+    constructor(public authService: AuthService,public categoryService: CategoryInfraService, public router: Router) { 
     this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
   }
 
@@ -22,5 +22,4 @@ export class PatientTherpistPageComponent implements OnInit {
   {
     this.router.navigate(['category-page']);
   }
-
 }

@@ -2,21 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { AddDialogPatientComponent } from '../utils/add-dialog-patient/add-dialog-patient.component';
 import {MatDialog} from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
-import { CategoryClass } from 'src/app/shared/models/category-class.model';
-import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.service';
-import { AddCategoryDialogComponent } from '../utils/add-category-dialog/add-category-dialog.component';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 import { User } from 'src/app/shared/services/user';
-
 
 @Component({
   selector: 'app-therapist-panel',
   templateUrl: './therapist-panel.component.html',
   styleUrls: ['./therapist-panel.component.scss']
 })
+
 export class TherapistPanelComponent implements OnInit {
 
   patientID: any;
@@ -26,6 +23,7 @@ export class TherapistPanelComponent implements OnInit {
   {
     this.getPatients();
   }
+
   ngOnInit(): void {
     if(this.authService.user === undefined)
     {
@@ -38,11 +36,13 @@ export class TherapistPanelComponent implements OnInit {
       });     
     }, 1500)
     }
-    else{
+    else
+    {
       this.user = this.authService.user;
     }
-   
   }
+
+  //option to therapist delete specific patient
   public deletePatient(user: User) {
     setTimeout(async () => {
       await this.userService.removePatient(user);   
@@ -50,25 +50,25 @@ export class TherapistPanelComponent implements OnInit {
     }, 500)
   }
 
+  //show to therapist his own patients
   getPatients()
   {
    this.patients= this.userService.importPatients();
    console.log(this.userService.importPatients());
   }
 
+  //verify the delete patient request
   async openDialog(user: User) {
-
     const dialogRef = this.dialog.open(ConfirmationDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
       if(result&&user!==null)
       {
        this.deletePatient(user);
-     
       }
-  
     });
   }
 
+  //option to therapist adding new patient
   async addNewPatient() {
     const dialogRef = this.dialog.open(AddDialogPatientComponent, {
       height: '220px',
@@ -79,17 +79,18 @@ export class TherapistPanelComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if(result)
       {
-        // go to storage to add word
+        //go to storage to add word
         console.log(result.id);
         await this.userService.addNewPatientForTherpist(result.id);
         this.getPatients();
       }
     });
   }
+
+  //navigate to specific patient data
   public openSelectedPatient(user:User)
   {
     this.authService.patientOfTherapist = user;
     this.router.navigate(['patient-therpist-page']);
   }
-
 }
