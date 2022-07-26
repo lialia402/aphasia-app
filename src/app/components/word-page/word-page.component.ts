@@ -134,7 +134,6 @@ export class WordPageComponent implements OnInit {
       if(result)
       {
         // go to storage to add word
-        console.log(result);
         const imageLink = await this.createImageInStorage(result);
         const audioLink = await this.createAudioInStorage(result);
         const newWord = new WordClass("", result.name, imageLink, this.categoryService.currentCategory.id, 0, audioLink, false, -1, true);

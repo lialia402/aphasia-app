@@ -33,8 +33,6 @@ export class HomePageComponent implements OnInit {
   }
 
   public NavigateUser(){
-    console.log(this.authService.user.userType === "admin");
-    console.log(this.authService.user.userType);
     if(this.authService.user.userType === "admin")
     {
       this.router.navigate(['therapist-panel']);

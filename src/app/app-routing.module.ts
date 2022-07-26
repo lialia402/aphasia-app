@@ -17,6 +17,7 @@ import { PatientTherpistPageComponent } from './components/patient-therpist-page
 import { GameComponent } from './components/game/game.component';
 import { QuestionComponent } from './components/question/question.component';
 import { ResultPageComponent } from './components/result-page/result-page.component';
+import { AnalyticsPageComponent } from './components/analytics-page/analytics-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
@@ -33,7 +34,8 @@ const routes: Routes = [
   {path: 'patient-therpist-page', component: PatientTherpistPageComponent },
   {path: 'game-page', component: GameComponent },
   {path: 'question-page', component: QuestionComponent },
-  {path: 'result-page', component: ResultPageComponent}
+  {path: 'result-page', component: ResultPageComponent},
+  {path: 'analytics-page', component:AnalyticsPageComponent},
 
 ];
 

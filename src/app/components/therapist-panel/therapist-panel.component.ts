@@ -54,7 +54,6 @@ export class TherapistPanelComponent implements OnInit {
   getPatients()
   {
    this.patients= this.userService.importPatients();
-   console.log(this.userService.importPatients());
   }
 
   //verify the delete patient request
@@ -80,7 +79,6 @@ export class TherapistPanelComponent implements OnInit {
       if(result)
       {
         //go to storage to add word
-        console.log(result.id);
         await this.userService.addNewPatientForTherpist(result.id);
         this.getPatients();
       }
