@@ -10,6 +10,11 @@
     background-color: black;
     display: flex;
   }
+
+  .canvas1{
+    width: 460px;
+    height: 246px;
+  }
   
   .h2{
     display: block;
@@ -24,6 +29,7 @@
     height : auto !important; 
     height : 100%;            
     min-height : 100%;
+    gap:2px;
   }
 
     
