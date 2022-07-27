@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CategoryClass } from '../models/category-class.model';
+import { GameResult } from '../models/game-result.model';
 import { WordClass } from '../models/word-class.model';
 import { CategoryInfraService } from './category-infra.service';
+import { GameInfraService } from './game-infra.service';
 import { WordInfraService } from './word-infra.service';
 
 @Injectable({
@@ -11,13 +13,18 @@ export class AnalyticsInfraService {
 
   allWords:WordClass[];
   allCategories:CategoryClass[];
+  allGameResults:GameResult[];
   topTenWordsViews:number[]=[];
   topTenWordsNames:string[]=[];
   topFiveCategoriesNames:string[]=[];
   topFiveCategoriesViews:number[]=[];
-  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService) {
+  categoriesNamesInGame:string[] = [];
+  rightAnswers:number[] = [];
+  wrongAnswers:number[] = [];
+  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService, public gameInfraService: GameInfraService) {
     this.allWords=this.categoryInfraService.getAllUserPhrases;
     this.allCategories=this.categoryInfraService.getCategories;
+    this.allGameResults = this.gameInfraService.resultGameArray;
    }
 
   public getSortedWordsListByViewsDesc() {
@@ -36,6 +43,20 @@ export class AnalyticsInfraService {
     {
       this.topFiveCategoriesNames.push(listFiveCategories[i].name);
       this.topFiveCategoriesViews.push(listFiveCategories[i].views);
+    }
+  }
+
+   getGameAnswers(){
+    
+    for(let i=0; i<this.allGameResults.length;i++){
+      const checkCategory = (obj: CategoryClass) => obj.id === this.allGameResults[i].categoryID;
+      let category = this.allCategories.find(checkCategory);
+      if(category !== undefined)
+      {
+        this.categoriesNamesInGame.push(category?.name);
+      }
+      this.rightAnswers.push(this.allGameResults[i].right);
+      this.wrongAnswers.push(this.allGameResults[i].wrong);
     }
   }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameResult } from 'src/app/shared/models/game-result.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 @Component({
@@ -13,7 +15,8 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     setTimeout(async () => {
-      await this.gameService.giveRandomList();
+      await this.gameService.giveRandomList()
+      await this.gameService.getGameResults();
    }, 500)
   }
 

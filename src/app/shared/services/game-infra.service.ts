@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { GameResult } from '../models/game-result.model';
 import { WordClass } from '../models/word-class.model';
 import { CategoryInfraService } from './category-infra.service';
+import { FirebaseInfraService } from './firebase-infra.service';
 import { WordInfraService } from './word-infra.service';
 
 @Injectable({
@@ -10,8 +12,9 @@ export class GameInfraService {
   public randomWordList:WordClass[]= [];
   public randomSelectionWords:WordClass[]= [];
   public finalScoreCurrentGame:number=0;
+  public resultGameArray:GameResult[];
 
-  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService) { }
+  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService,public firebaseInfraService: FirebaseInfraService) { }
 
   public giveRandomCategory(){
     let randomNumber = Math.floor(Math.random()*this.categoryInfraService.categories.length);
@@ -52,9 +55,6 @@ export class GameInfraService {
         this.pushAnotherThreeWords(word,words);
       }
     }
-
-    console.log('the original',this.randomWordList);
-    console.log('the list',this.randomSelectionWords);
 
 
     return this.randomWordList;
@@ -119,5 +119,79 @@ export class GameInfraService {
     }
   
     return array;
+  }
+
+
+  public getGameResults(): Promise<GameResult[]> {
+    this.firebaseInfraService.importGameResults();
+    return new Promise((resolve, reject) => {
+      this.firebaseInfraService.getGameResultsObservable.subscribe(arrayOfResults => {
+        this.resultGameArray = arrayOfResults;
+        console.log(this.resultGameArray);
+        resolve(arrayOfResults);
+      })
+    })
+  }
+
+  public getGameResultsByEmail(email:string): Promise<GameResult[]> {
+    this.firebaseInfraService.importGameResultsByEmail(email);
+    return new Promise((resolve, reject) => {
+      this.firebaseInfraService.getGameResultsObservable.subscribe(arrayOfResults => {
+        this.resultGameArray = arrayOfResults;
+        console.log(this.resultGameArray);
+        resolve(arrayOfResults);
+      })
+    })
+  }
+
+  public increaseRightAnswer(categoryId:string)
+  {
+
+    const checkCategory = (obj: GameResult) => obj.categoryID === categoryId;
+    console.log(categoryId);
+    if(this.resultGameArray.some(checkCategory)){
+     let currentResult = this.resultGameArray.find(checkCategory);
+     if(currentResult !== undefined){
+       currentResult.right++;
+       this.firebaseInfraService.updateResult(currentResult);
+     }
+
+    }
+    else
+    {
+      const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,1,0);
+      this.addResult(result);
+    }
+  
+  }
+
+  public increaseWrongAnswer(categoryId:string)
+  {
+    const checkCategory = (obj: GameResult) => obj.categoryID === categoryId;
+    console.log(categoryId);
+    if(this.resultGameArray.some(checkCategory)){
+      let currentResult = this.resultGameArray.find(checkCategory);
+      if(currentResult !== undefined){
+        currentResult.wrong++;
+        this.firebaseInfraService.updateResult(currentResult);
+      }
+
+    }
+    else
+    {
+      const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,0,1);
+      this.addResult(result);
+    }
+  
+  }
+
+  public addResult(result: GameResult, callFromAppBuilder = false) : Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.firebaseInfraService.addGameResult(result)?.then(() => {
+        resolve(result);
+      });
+    })
+    //if (callFromAppBuilder == false)
+    //this.arrangePhrasesByOrder();
   }
 }
