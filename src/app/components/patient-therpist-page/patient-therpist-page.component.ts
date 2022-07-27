@@ -15,6 +15,7 @@ export class PatientTherpistPageComponent implements OnInit {
     constructor(public authService: AuthService,public categoryService: CategoryInfraService, public router: Router,public gameService:GameInfraService) { 
     this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
     this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
+    this.gameService.getGamesByEmail(this.authService.patientOfTherapist.email);
   }
 
   ngOnInit(): void {
