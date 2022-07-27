@@ -31,6 +31,12 @@ export class WordPageComponent implements OnInit {
     this.getwords();
   }
 
+  updateWordsList(category: CategoryClass){
+    this.categoryService.currentCategory = category;
+    this.category = category;
+    this.getwords();
+  }
+
   getwords()
   {
     let promise= this.wordService.getPhrases(this.category);
