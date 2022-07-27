@@ -17,6 +17,7 @@ export class GameComponent implements OnInit {
     setTimeout(async () => {
       await this.gameService.giveRandomList()
       await this.gameService.getGameResults();
+      await this.gameService.getGames();
    }, 500)
   }
 

@@ -18,6 +18,7 @@ export class AnalyticsPageComponent implements OnInit {
     
     this.analytics.getSortedWordsListByViewsDesc();
     this.analytics.getSortedCategoriesListByViewsDesc();
+    this.analytics.getGameImprovment();
 
     
     this.analytics.getGameAnswers();
@@ -31,20 +32,10 @@ export class AnalyticsPageComponent implements OnInit {
               label: 'כמות צפיות',
               data: this.analytics.topTenWordsViews,
               backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
+                  '#1C75E1',
               ],
               borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
+                  '#1C75E1',
               ],
               borderWidth: 1
           }]
@@ -66,20 +57,14 @@ export class AnalyticsPageComponent implements OnInit {
             label: 'כמות צפיות',
             data: this.analytics.topFiveCategoriesViews,
             backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
+                '#E4C618',
+                '#1AA9D2',
+                '#E0160C',
+                '#22AC41',
+                '#B85FC5',
             ],
             borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
+                '#FDFDFD',
             ],
             borderWidth: 1
         }]
@@ -96,15 +81,15 @@ let myChart3 = new Chart("myChart3", {
           {
             label: 'צדק',
             data: this.analytics.rightAnswers,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: '#22AC41',
+            borderColor: '#22AC41',
             borderWidth: 1
           },
           {
             label: 'טעה',
             data:this.analytics.wrongAnswers ,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: '#FF0000',
+            borderColor: '#FF0000',
             borderWidth: 1
           },
         ]
@@ -117,6 +102,19 @@ let myChart3 = new Chart("myChart3", {
         }
     }
 });
+
+let myChart4 = new Chart("myChart4", {
+    type: 'line',
+    data: {
+        labels: this.analytics.dateArray,
+        datasets: [{
+          label: 'תוצאות משחק',
+          data: this.analytics.gameRightAnswers,
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+ } });
   }
 
   public async getCategories()
