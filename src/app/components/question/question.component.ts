@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameResult } from 'src/app/shared/models/game-result.model';
+import { Game } from 'src/app/shared/models/game.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 @Component({
@@ -17,7 +20,7 @@ export class QuestionComponent implements OnInit {
   correctAnswers:number=0;
   public cardQuestion:WordClass;
   public cardAnswers:WordClass[];
-  constructor(public gameService: GameInfraService,public router: Router) { }
+  constructor(public gameService: GameInfraService,public router: Router,public authService: AuthService) { }
 
   ngOnInit(): void {
     this.creatAnswersList();
@@ -50,12 +53,14 @@ export class QuestionComponent implements OnInit {
       this.right=true;
       this.correctAnswers++;
       setTimeout(() => {
+      this.gameService.increaseRightAnswer(this.cardQuestion.categoryID);
         this.nextRound(answer);
       }, 1000);
     }
     else{
       this.wrong=true;
       setTimeout(() => {
+        this.gameService.increaseWrongAnswer(this.cardQuestion.categoryID);
         this.nextRound(answer);
       }, 2000);
     }
@@ -74,6 +79,9 @@ export class QuestionComponent implements OnInit {
     else
     {
       this.gameService.finalScoreCurrentGame=this.correctAnswers;
+      let today = new Date().toLocaleDateString(); 
+      const currentGame = new Game("",this.correctAnswers, this.authService.user.email,new Date());
+      this.gameService.addGame(currentGame);
       this.router.navigate(['result-page']);
     }
   }

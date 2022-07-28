@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
+import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 
 @Component({
@@ -11,8 +12,10 @@ import { CategoryInfraService } from 'src/app/shared/services/category-infra.ser
 })
 
 export class PatientTherpistPageComponent implements OnInit {
-    constructor(public authService: AuthService,public categoryService: CategoryInfraService, public router: Router) { 
+    constructor(public authService: AuthService,public categoryService: CategoryInfraService, public router: Router,public gameService:GameInfraService) { 
     this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
+    this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
+    this.gameService.getGamesByEmail(this.authService.patientOfTherapist.email);
   }
 
   ngOnInit(): void {
