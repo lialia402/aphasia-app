@@ -48,6 +48,7 @@ import { ResultPageComponent } from './components/result-page/result-page.compon
 import { EditCategoryDialogComponent } from './components/utils/edit-category-dialog/edit-category-dialog.component';
 import { EditWordsDialogComponent } from './components/utils/edit-words-dialog/edit-words-dialog.component';
 import { AnalyticsPageComponent } from './components/analytics-page/analytics-page.component';
+import { GameSettingsComponent } from './components/game-settings/game-settings.component';
 
 
 
@@ -80,6 +81,7 @@ import { AnalyticsPageComponent } from './components/analytics-page/analytics-pa
     EditCategoryDialogComponent,
     EditWordsDialogComponent,
     AnalyticsPageComponent,
+    GameSettingsComponent,
   ],
   imports: [
     BrowserModule,

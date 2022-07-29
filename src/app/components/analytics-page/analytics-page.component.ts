@@ -32,10 +32,10 @@ export class AnalyticsPageComponent implements OnInit {
               label: 'כמות צפיות',
               data: this.analytics.topTenWordsViews,
               backgroundColor: [
-                  '#1C75E1',
+                  '#0F9BD0',
               ],
               borderColor: [
-                  '#1C75E1',
+                  '#0F9BD0',
               ],
               borderWidth: 1
           }]
@@ -45,26 +45,26 @@ export class AnalyticsPageComponent implements OnInit {
               y: {
                   beginAtZero: true
               }
-          }
+          } 
       }
   });
 
   let myChart2 = new Chart("myChart2", {
-    type: 'pie',
+    type: 'doughnut',
     data: {
         labels: this.analytics.topFiveCategoriesNames,
         datasets: [{
             label: 'כמות צפיות',
             data: this.analytics.topFiveCategoriesViews,
             backgroundColor: [
-                '#E4C618',
-                '#1AA9D2',
-                '#E0160C',
-                '#22AC41',
-                '#B85FC5',
+                '#A984E6',
+                '#F16B5C',
+                '#81E988',
+                '#83DDE7',
+                '#0F9BD0',
             ],
             borderColor: [
-                '#FDFDFD',
+                '#FFFFFF',
             ],
             borderWidth: 1
         }]
@@ -81,15 +81,15 @@ let myChart3 = new Chart("myChart3", {
           {
             label: 'צדק',
             data: this.analytics.rightAnswers,
-            backgroundColor: '#22AC41',
-            borderColor: '#22AC41',
+            backgroundColor: '#65E278',
+            borderColor: '#65E278',
             borderWidth: 1
           },
           {
             label: 'טעה',
             data:this.analytics.wrongAnswers ,
-            backgroundColor: '#FF0000',
-            borderColor: '#FF0000',
+            backgroundColor: '#F16B5C',
+            borderColor: '#F16B5C',
             borderWidth: 1
           },
         ]
@@ -110,8 +110,8 @@ let myChart4 = new Chart("myChart4", {
         datasets: [{
           label: 'תוצאות משחק',
           data: this.analytics.gameRightAnswers,
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
+          fill: true,
+          borderColor: '#727272',
           tension: 0.1
         }]
  } });

@@ -28,6 +28,7 @@
                  
                   <div class="line-item">
                     <button class="start-button" mat-raised-button color="primary" (click) ="navigateToGame()">התחל משחק</button>
+                    <button *ngIf="isCustonExists" class="start-button" mat-raised-button color="primary" (click) ="navigateToCustomGame()">משחק מותאם אישית</button>
                   </div>
             </div>
           </div>

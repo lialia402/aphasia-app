@@ -33,6 +33,8 @@ export class AnalyticsInfraService {
    }
 
   public getSortedWordsListByViewsDesc() {
+    this.topTenWordsNames = [];
+    this.topTenWordsViews = [];
     let listTenWords= this.allWords.sort((a,b) => (a.views < b.views) ? 1 : ((b.views < a.views) ? -1 : 0)).slice(0,10);
     for(let i=0; i<10; i++)
     {
@@ -43,6 +45,8 @@ export class AnalyticsInfraService {
 
   // create a list of the 5 most viewed categories by the user
   public getSortedCategoriesListByViewsDesc() {
+    this.topFiveCategoriesNames = [];
+    this.topFiveCategoriesViews = [];
     let listFiveCategories= this.allCategories.sort((a,b) => (a.views < b.views) ? 1 : ((b.views < a.views) ? -1 : 0)).slice(0,5);
     for(let i=0; i<5; i++)
     {
@@ -52,6 +56,9 @@ export class AnalyticsInfraService {
   }
 
    getGameAnswers(){
+    this.categoriesNamesInGame = [];
+    this.rightAnswers = [];
+    this.wrongAnswers = [];
     
     for(let i=0; i<this.allGameResults.length;i++){
       const checkCategory = (obj: CategoryClass) => obj.id === this.allGameResults[i].categoryID;
@@ -67,18 +74,16 @@ export class AnalyticsInfraService {
 
   getGameImprovment(){
 
-    console.log(this.allGames);
+    this.dateArray = [];
+    this.gameRightAnswers = [];
+  
     this.allGames.sort((b, a) => new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime());
-    console.log(this.allGames);
 
     for(let i=0; i<this.allGames.length;i++){
      this.dateArray.push(new Date(this.allGames[i].dateOfGame).toLocaleDateString());
      this.gameRightAnswers.push(this.allGames[i].right);
      
     }
-
-    console.log( this.dateArray);
-    console.log(this.gameRightAnswers);
     
   }
 }
