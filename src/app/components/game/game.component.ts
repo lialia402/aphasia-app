@@ -11,18 +11,35 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 })
 export class GameComponent implements OnInit {
 
-  constructor(public router: Router,public gameService: GameInfraService) {}
+  isCustonExists=false;
+
+  constructor(public router: Router,public gameService: GameInfraService) {
+  }
 
   ngOnInit(): void {
     setTimeout(async () => {
       await this.gameService.giveRandomList()
       await this.gameService.getGameResults();
       await this.gameService.getGames();
+      let settings = await this.gameService.getGameSettings();
+
+      if(settings.length === 1){
+        this.isCustonExists = true;
+        await this.gameService.giveCustomList();
+      }
+
    }, 500)
   }
 
   navigateToGame()
   {
+    this.gameService.customGame = false;
+    this.router.navigate(['question-page']);
+  }
+
+  navigateToCustomGame()
+  {
+    this.gameService.customGame = true;
     this.router.navigate(['question-page']);
   }
 }

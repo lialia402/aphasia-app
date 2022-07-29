@@ -13,6 +13,8 @@ import { UserClass } from '../models/user-class.model';
 import firebase from 'firebase/compat/app';
 import { GameResult } from '../models/game-result.model';
 import { Game } from '../models/game.model';
+import { GameSettings } from '../models/game-settings.model';
+
 
 
 
@@ -38,6 +40,9 @@ export class FirebaseInfraService {
 
   gamesCollection: AngularFirestoreCollection<Game> | undefined;
   games: Observable<Game[]> = new Observable<Game[]>();
+
+  gameSettingsCollection: AngularFirestoreCollection<GameSettings> | undefined;
+  gameSettings: Observable<GameSettings[]> = new Observable<GameSettings[]>();
 
 
   constructor(public afs: AngularFirestore, public authentication: AuthService, //public error: ErrorInfra
@@ -69,6 +74,38 @@ export class FirebaseInfraService {
       this.gameResults = this.gameResultsCollection.snapshotChanges().pipe(map((result:any[]) => {
       return result.map(a => {
           let temp = a.payload.doc.data() as GameResult;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
+  public importGameSettings(){
+    try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
+      this.gameSettingsCollection = this.afs.collection<GameSettings>('gameSettings', ref => ref.where('userEmail', '==', this.authentication.userData.email));
+      this.gameSettings = this.gameSettingsCollection.snapshotChanges().pipe(map((result:any[]) => {
+      return result.map(a => {
+          let temp = a.payload.doc.data() as GameSettings;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
+  public importGameSettingsByEmail(email:string){
+    try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
+      this.gameSettingsCollection = this.afs.collection<GameSettings>('gameSettings', ref => ref.where('userEmail', '==', email));
+      this.gameSettings = this.gameSettingsCollection.snapshotChanges().pipe(map((result:any[]) => {
+      return result.map(a => {
+          let temp = a.payload.doc.data() as GameSettings;
           temp.id = a.payload.doc.id;
           return temp;
         });
@@ -203,6 +240,21 @@ export class FirebaseInfraService {
      })
   }
 
+  addGameSettings(category: GameSettings) {   
+    return this.gameSettingsCollection?.add(GameSettings.toObject(category)).then(function(){
+    }).catch((e) =>{
+      // this.error.simpleToast("הוספה נכשלה");
+         console.log("הוספה נכשלה");
+     })
+  }
+
+  removeSettings(gameSettings: GameSettings){
+    this.gameSettingsCollection?.doc(gameSettings.id ).delete().then(function() {
+  }).catch((e) => {
+     // this.error.simpleToast("מחיקה נכשלה");
+  });
+  }
+
   removeCategory(category: CategoryClass){
     this.categoriesCollection?.doc(category.id ).delete().then(function() {
   }).catch((e) => {
@@ -221,6 +273,10 @@ export class FirebaseInfraService {
   
   get getGamesObservable() {
     return this.games;
+  }
+
+  get getGameSettingsObservable() {
+    return this.gameSettings;
   }
 
   addWord(word: WordClass) {
@@ -279,7 +335,7 @@ export class FirebaseInfraService {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );
     const addPatient= firebase.firestore.FieldValue.arrayUnion(email) as unknown as string[];
     userRef.update({ listOfPatients: addPatient });
-    console.log(this.authentication.user.listOfPatients);
+
   }
 
   removePatient(email:string)
@@ -287,7 +343,6 @@ export class FirebaseInfraService {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );
     const addPatient= firebase.firestore.FieldValue.arrayRemove(email) as unknown as string[];
     userRef.update({ listOfPatients: addPatient });
-    console.log(this.authentication.user.listOfPatients);
   }
 }
 
