@@ -75,5 +75,4 @@ export class StorageInfraProvider {
       return false;
     return true;
   }
-
 }
