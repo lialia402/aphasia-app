@@ -72,7 +72,6 @@ export class UserInfaService {
     if(index!==undefined&&index>-1)
     {
       this.authentication.user?.listOfPatients?.splice(index, 1);
-      console.log(index);
     }
 
   this.firebaseInfraService.removePatient(user.email);
@@ -81,7 +80,6 @@ export class UserInfaService {
   public importPatients(){
   try{
     let emailPatients=this.authentication.user.listOfPatients || ''; 
-    console.log(emailPatients);
     let patientsArrayLength=emailPatients?.length ?emailPatients.length :0;
     if(emailPatients!==undefined)
     {  

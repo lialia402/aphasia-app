@@ -45,7 +45,7 @@ export class AnalyticsPageComponent implements OnInit {
               y: {
                   beginAtZero: true
               }
-          }
+          } 
       }
   });
 

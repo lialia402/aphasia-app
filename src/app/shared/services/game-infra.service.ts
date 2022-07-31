@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { CategoryClass } from '../models/category-class.model';
 import { GameResult } from '../models/game-result.model';
+import { GameSettings } from '../models/game-settings.model';
 import { Game } from '../models/game.model';
 import { WordClass } from '../models/word-class.model';
 import { CategoryInfraService } from './category-infra.service';
@@ -12,11 +14,17 @@ import { WordInfraService } from './word-infra.service';
 export class GameInfraService {
   public randomWordList:WordClass[]= [];
   public randomSelectionWords:WordClass[]= [];
+  public customWordList:WordClass[]= [];
+  public customrandomSelectionWords:WordClass[]= [];
   public finalScoreCurrentGame:number=0;
   public resultGameArray:GameResult[];
   public patientGames:Game[];
+  public gameSettings:GameSettings[];
+  public customGame = false; 
 
-  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService,public firebaseInfraService: FirebaseInfraService) { }
+  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService,public firebaseInfraService: FirebaseInfraService) {
+
+   }
 
   public giveRandomCategory(){
     let randomNumber = Math.floor(Math.random()*this.categoryInfraService.categories.length);
@@ -53,15 +61,51 @@ export class GameInfraService {
       {
         this.randomWordList.push(word);
         this.randomSelectionWords.push(word);
-        this.pushAnotherThreeWords(word,words);
+        this.pushAnotherThreeWords(word,words,this.randomSelectionWords);
       }
     }
-
 
     return this.randomWordList;
   }
 
-  public pushAnotherThreeWords(word:WordClass, words:WordClass[]){
+  public async giveCustomList(){
+    let category:CategoryClass;
+    let words: WordClass[] = [];
+    let word:WordClass;
+
+    this.customWordList = [];
+    this.customrandomSelectionWords=[];
+    let i=0;
+    while (this.customWordList.length < 10) {
+
+      // Get word object by only string name
+      word = this.findWordByName(this.gameSettings[0].words[i]);
+  
+      const checkCategory = (obj: CategoryClass) => obj.id === word.categoryID;
+      category = this.categoryInfraService.categories.find(checkCategory);
+
+      let promiseOfWords= this.wordInfraService.getPhrases(category);
+
+      await promiseOfWords.then((data) => {
+        words = data;
+      })
+
+      this.customWordList.push(word);
+      this.customrandomSelectionWords.push(word);
+      this.pushAnotherThreeWords(word,words,this.customrandomSelectionWords);
+      
+      i++;
+    }
+    return this.customWordList;
+  }
+
+  findWordByName(wordName: string){
+    const findWord = (obj: WordClass) => obj.name === wordName;
+    let currentWord = this.categoryInfraService.getAllUserPhrases.find(findWord);
+    return currentWord;
+}
+
+  public pushAnotherThreeWords(word:WordClass, words:WordClass[],array:WordClass[]){
     let word1 = this.giveRandomWord(words);
     let word2 = this.giveRandomWord(words);
     let word3 = this.giveRandomWord(words);
@@ -81,9 +125,9 @@ export class GameInfraService {
       word3 = this.giveRandomWord(words);
     }
 
-    this.randomSelectionWords.push(word1);
-    this.randomSelectionWords.push(word2);
-    this.randomSelectionWords.push(word3);
+    array.push(word1);
+    array.push(word2);
+    array.push(word3);
 
   }
 
@@ -101,13 +145,32 @@ export class GameInfraService {
 
   public getOptionsPerRound (currentRound: number)
   {
-    let tempListOfRandomAnswer=this.randomSelectionWords.slice(currentRound, currentRound+4);
-    return this.shuffle(tempListOfRandomAnswer);
+
+    if(this.customGame === true)
+    {
+       let tempListOfRandomAnswer=this.customrandomSelectionWords.slice(currentRound, currentRound+4);
+      return this.shuffle(tempListOfRandomAnswer);
+    }
+    else
+    {
+      let tempListOfRandomAnswer=this.randomSelectionWords.slice(currentRound, currentRound+4);
+      return this.shuffle(tempListOfRandomAnswer);
+    }
   }
+
+  
 
   public getCardQuestionPerRound(currentRound: number) 
   {
-    return this.randomWordList[currentRound];
+    if(this.customGame === true)
+    {
+      return this.customWordList[currentRound];
+    }
+    else
+    {
+      return this.randomWordList[currentRound];
+    }
+    
   }
 
   public shuffle(array:WordClass[]) {
@@ -148,7 +211,6 @@ export class GameInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getGamesObservable.subscribe(arrayOfResults => {
         this.patientGames = arrayOfResults;
-        console.log(this.patientGames);
         resolve(arrayOfResults);
       })
     })
@@ -160,6 +222,26 @@ export class GameInfraService {
       this.firebaseInfraService.getGameResultsObservable.subscribe(arrayOfResults => {
         this.resultGameArray = arrayOfResults;
         resolve(arrayOfResults);
+      })
+    })
+  }
+
+   public getGameSettings(): Promise<GameSettings[]> {
+    this.firebaseInfraService.importGameSettings();
+    return new Promise((resolve, reject) => {
+      this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
+        this.gameSettings = settings;
+        resolve(this.gameSettings);
+      })
+    })
+  }
+
+  public getGameSettingsByEmail(email:string): Promise<GameSettings[]> {
+    this.firebaseInfraService.importGameSettingsByEmail(email);
+    return new Promise((resolve, reject) => {
+      this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
+        this.gameSettings = settings;
+        resolve(this.gameSettings);
       })
     })
   }
@@ -206,6 +288,19 @@ export class GameInfraService {
   public addResult(result: GameResult, callFromAppBuilder = false) : Promise<any> {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.addGameResult(result)?.then(() => {
+        resolve(result);
+      });
+    })
+  }
+
+  public addGameSettings(result: GameSettings, callFromAppBuilder = false) : Promise<any> {
+    if(this.gameSettings.length === 1)
+    {
+      this.firebaseInfraService.removeSettings(this.gameSettings[0]);
+    }
+
+    return new Promise((resolve, reject) => {
+      this.firebaseInfraService.addGameSettings(result)?.then(() => {
         resolve(result);
       });
     })

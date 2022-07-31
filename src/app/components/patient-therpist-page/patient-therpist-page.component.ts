@@ -16,6 +16,7 @@ export class PatientTherpistPageComponent implements OnInit {
     this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
     this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
     this.gameService.getGamesByEmail(this.authService.patientOfTherapist.email);
+    this.gameService.getGameSettingsByEmail(this.authService.patientOfTherapist.email);
   }
 
   ngOnInit(): void {
@@ -29,5 +30,10 @@ export class PatientTherpistPageComponent implements OnInit {
   navigateToPatientAnalytics()
   {
     this.router.navigate(['analytics-page']);
+  }
+
+  navigateToGameSettings()
+  {
+    this.router.navigate(['game-settings-page']);
   }
 }
