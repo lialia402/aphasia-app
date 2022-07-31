@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './game-settings.component.html',
   styleUrls: ['./game-settings.component.scss']
 })
+
 export class GameSettingsComponent implements OnInit {
   @ViewChildren ('checkBox') checkBox:QueryList<any>;
   checked:any[] = [];
@@ -25,6 +26,7 @@ export class GameSettingsComponent implements OnInit {
     this.allWords = this.categoryService.getAllUserPhrases;
   }
 
+  // sort the words in alphabetical order
   sortedWordsList() : Array<WordClass>{
     this.allWords.sort(function(a, b) {
       return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
@@ -32,6 +34,7 @@ export class GameSettingsComponent implements OnInit {
     return this.allWords;
   }
 
+  // allows you to mark exactly 10 words
   getCheckbox(checkbox:any){
     this.checked = [];
     const checked = this.checkBox.filter(checkbox => checkbox.checked);
@@ -49,6 +52,7 @@ export class GameSettingsComponent implements OnInit {
     })
   }
 
+  // create GameSettings object include list of 10 words 
   createGameList(){
     for(let i=0;i<10;i++)
     {
@@ -64,5 +68,4 @@ export class GameSettingsComponent implements OnInit {
   cancel(){
     this._location.back();
   }
-
 }

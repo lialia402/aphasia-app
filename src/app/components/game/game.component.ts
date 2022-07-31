@@ -29,12 +29,14 @@ export class GameComponent implements OnInit {
    }, 500)
   }
 
+  // navigate to diffult game
   navigateToGame()
   {
     this.gameService.customGame = false;
     this.router.navigate(['question-page']);
   }
 
+  // navigate to game created by the therapist
   navigateToCustomGame()
   {
     this.gameService.customGame = true;

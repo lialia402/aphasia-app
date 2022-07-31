@@ -87,6 +87,6 @@ export class QuestionComponent implements OnInit {
   }
 
   navigateHomePage(){
-    this._location.back();
+    this.router.navigate(['dashboard']);
   }
 }
