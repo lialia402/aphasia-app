@@ -31,13 +31,13 @@ export class AddCategoryDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  //open the file explorer for the user to allow him to select an image
+  // open the file explorer for the user to allow him to select an image
   selectFiles(event: any): void {
     this.selectedFiles = event.target.files;
     if (this.selectedFiles && this.selectedFiles[0]) {
       this.fileToUpload = this.selectedFiles[0];
 
-      //Show image preview
+      // show image preview
       let reader = new FileReader();
       reader.onload = (event: any) => {
         this.imageUrl = event.target.result;

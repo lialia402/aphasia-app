@@ -32,6 +32,7 @@ export class HomePageComponent implements OnInit {
     }
   }
 
+  // navigate to the right page according to the type of user: patient vs therapist
   public NavigateUser(){
     if(this.authService.user.userType === "admin")
     {

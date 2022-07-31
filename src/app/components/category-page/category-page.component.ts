@@ -22,13 +22,14 @@ export class CategoryPageComponent implements OnInit {
     public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, 
     public storageService: StorageInfraProvider,) {}
 
-  //move to category's 'word's page. in addition increase the views
+  // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
     this.categoryService.setCurrentCategory(category);
     this.categoryService.increaseViews(category);
     this.router.navigate(['word-page']);
   }
-  //load the relavant categories
+  
+  // load the relavant categories
   public async getCategories()
   {
     if(this.authService.user.userType=='patient')
@@ -46,7 +47,7 @@ export class CategoryPageComponent implements OnInit {
     this.getCategories();
   }
 
-  //delete the specific category and the words belongs to it
+  // delete the specific category and the words belongs to it
   public deleteCategory(category: CategoryClass) {
     setTimeout(async () => {
       await this.categoryService.removeCategory(category);   
@@ -54,7 +55,7 @@ export class CategoryPageComponent implements OnInit {
     }, 500)
   }
 
-  //verifies the deletion operation
+  // verifies the deletion operation
   openDialog(category: CategoryClass) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
@@ -65,7 +66,7 @@ export class CategoryPageComponent implements OnInit {
     });
   }
 
-  //upload the new image to firebase
+  // upload the new image to firebase
   async createImageInStorage(result:any)
   {
     let link = await this.storageService.uploadFile(result.imagePath,"image");
@@ -100,7 +101,7 @@ export class CategoryPageComponent implements OnInit {
     });
   }
 
-  //edit category: Change one or more of the following details: category name, category image
+  // edit category: Change one or more of the following details: category name, category image
   async editCategory(category: CategoryClass){
     let email:string;
     if(this.authService.user.userType ==='patient')

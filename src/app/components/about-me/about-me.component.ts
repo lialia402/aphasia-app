@@ -35,11 +35,11 @@ export class AboutMeComponent implements OnInit {
       this.user = this.authService.user;
     }
   }
-  //start edit mode in order to change user information
+  // start edit mode in order to change user information
    public startEditOption(){
       this.isEditEnable=true;
    }
-   //check if any detail change if not move to cancel
+   // check if any detail change if not move to cancel
    public saveChangesOption(){
      if(this.firstName==="" && this.lastName==="" && this.id==="")
      {

@@ -42,7 +42,7 @@ export class TherapistPanelComponent implements OnInit {
     }
   }
 
-  //option to therapist delete specific patient
+  // option to therapist delete specific patient
   public deletePatient(user: User) {
     setTimeout(async () => {
       await this.userService.removePatient(user);   
@@ -50,13 +50,13 @@ export class TherapistPanelComponent implements OnInit {
     }, 500)
   }
 
-  //show to therapist his own patients
+  // show to therapist his own patients
   getPatients()
   {
    this.patients= this.userService.importPatients();
   }
 
-  //verify the delete patient request
+  // verify the delete patient request
   async openDialog(user: User) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
@@ -67,7 +67,7 @@ export class TherapistPanelComponent implements OnInit {
     });
   }
 
-  //option to therapist adding new patient
+  // option to therapist adding new patient
   async addNewPatient() {
     const dialogRef = this.dialog.open(AddDialogPatientComponent, {
       height: '220px',
@@ -85,7 +85,7 @@ export class TherapistPanelComponent implements OnInit {
     });
   }
 
-  //navigate to specific patient data
+  // navigate to specific patient data
   public openSelectedPatient(user:User)
   {
     this.authService.patientOfTherapist = user;
