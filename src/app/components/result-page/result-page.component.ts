@@ -28,7 +28,7 @@ export class ResultPageComponent implements OnInit {
     this.router.navigate(['dashboard']);
   }
 
-  //shows the player his score results
+  // shows the player his score results
   public returnCorrectText()
   {
     let correctAnswers=this.gameService.finalScoreCurrentGame;
@@ -46,7 +46,7 @@ export class ResultPageComponent implements OnInit {
     }
   }
 
-  //sound of applause
+  // sound of applause
   public playVoice() {
     let voice= new Audio();
     voice.src= "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/Audience_Clapping_-_Sound_Effect%5BConConverter.com%5D.mp3?alt=media&token=93c4fd5e-1260-4a06-a74a-605b38e99143";

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GameResult } from 'src/app/shared/models/game-result.model';
+import {Location} from '@angular/common';
 import { Game } from 'src/app/shared/models/game.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -20,14 +20,14 @@ export class QuestionComponent implements OnInit {
   correctAnswers:number=0;
   public cardQuestion:WordClass;
   public cardAnswers:WordClass[];
-  constructor(public gameService: GameInfraService,public router: Router,public authService: AuthService) { }
+  constructor(private _location: Location, public gameService: GameInfraService,public router: Router,public authService: AuthService) { }
 
   ngOnInit(): void {
     this.creatAnswersList();
     this.getQuestionWord();
   }
   
-  //play the sound of the answer word
+  // play the sound of the answer word
   public playVoice(word: WordClass, event:any) {
     event.preventDefault();
     event.stopPropagation()
@@ -37,7 +37,7 @@ export class QuestionComponent implements OnInit {
     voice.play();
   }
 
-  //create four options for answer 
+  // create four options for answer 
   public creatAnswersList() {
     this.cardAnswers= this.gameService.getOptionsPerRound(this.currentRound*4);
   }
@@ -46,7 +46,7 @@ export class QuestionComponent implements OnInit {
     this.cardQuestion= this.gameService.getCardQuestionPerRound(this.currentRound);
   }
 
-  //check if the chosen word is the correct answer and it matches the picture of the question
+  // check if the chosen word is the correct answer and it matches the picture of the question
   public validateAnswer(answer:WordClass) {
     if(answer.name===this.cardQuestion.name)
     {
@@ -66,7 +66,7 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  //check if the game ended. if yes move to result page, and if not show the next question
+  // check if the game ended. if yes move to result page, and if not show the next question
   public nextRound(answer:WordClass) {
     this.wrong=false;
     this.right=false;
@@ -84,5 +84,9 @@ export class QuestionComponent implements OnInit {
       this.gameService.addGame(currentGame);
       this.router.navigate(['result-page']);
     }
+  }
+
+  navigateHomePage(){
+    this._location.back();
   }
 }

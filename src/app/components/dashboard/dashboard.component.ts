@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit {
       this.appBuilderProvider = new AppInitService(this.categoryInfra, this.wordInfra, this.authService);
 
     }
+    
   ngOnInit(): void {
    if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
   {
@@ -30,6 +31,5 @@ export class DashboardComponent implements OnInit {
   public showCategories(){
 
   this.router.navigate(['category-page']);
-
   }
 }

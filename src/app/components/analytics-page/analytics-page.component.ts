@@ -19,11 +19,9 @@ export class AnalyticsPageComponent implements OnInit {
     this.analytics.getSortedWordsListByViewsDesc();
     this.analytics.getSortedCategoriesListByViewsDesc();
     this.analytics.getGameImprovment();
-
-    
     this.analytics.getGameAnswers();
    
-    
+    // bar graph of the 10 most viewed words by the user
     let myChart1 = new Chart("myChart1", {
       type: 'bar',
       data: {
@@ -49,6 +47,7 @@ export class AnalyticsPageComponent implements OnInit {
       }
   });
 
+  // doughnut graph of the 5 most viewed categories by the user
   let myChart2 = new Chart("myChart2", {
     type: 'doughnut',
     data: {
@@ -72,7 +71,7 @@ export class AnalyticsPageComponent implements OnInit {
     options: {}
 });
 
-
+// bar graph of the number of wrong answers against the number of correct answers given by the user from each category
 let myChart3 = new Chart("myChart3", {
     type: 'bar',
     data: {
@@ -103,6 +102,7 @@ let myChart3 = new Chart("myChart3", {
     }
 });
 
+// line graph of results for up to the last 10 games the user has played
 let myChart4 = new Chart("myChart4", {
     type: 'line',
     data: {
