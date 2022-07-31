@@ -62,21 +62,6 @@
             (click)="authService.SignUp(userFirstName.value, userLastName.value, userID.value, userEmail.value, userPwd.value, this.userType); "
           />
         </div>
-       
-        <div class="formGroup">
-          <span class="or"><span class="orInner">או</span></span>
-        </div>
-        <!-- Continue with Google -->
-        <div class="formGroup">
-          <button
-            type="button"
-            class="btn googleBtn"
-            (click)="authService.GoogleAuth()"
-          >
-            <i class="fab fa-google-plus-g"></i>
-          המשך עם גוגל          
-      </button>
-        </div>
       </div>
       <div class="redirectToLogin">
         <span>

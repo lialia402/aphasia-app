@@ -12,16 +12,6 @@
         <div class="formGroup">
           <input type="button" class="btn btnPrimary" value="התחבר" (click)="signIn(userName.value, userPassword.value)">
         </div>
-        <div class="formGroup">
-          <span class="or"><span class="orInner">או</span></span>
-        </div>
-        <!-- Calling GoogleAuth Api from AuthService -->
-        <div class="formGroup">
-          <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
-            <i class="fab fa-google-plus-g"></i>
-            התחבר עם גוגל
-          </button>
-        </div>
         <div class="forgotPassword">
           <span routerLink="/forgot-password"> ?שכחת סיסמה</span>
         </div>
