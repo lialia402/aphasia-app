@@ -15,6 +15,11 @@
     width: 460px;
     height: 246px;
   }
+
+  .canvas{
+    width: 250px;
+    height: 250px;
+  }
   
   .h2{
     display: block;
@@ -37,6 +42,35 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 30px 220px;
+  }
+
+  .card-deck{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 100px 100px;
+    cursor: pointer;
+    margin-bottom:200px;
+  }
+
+  .mat-card {
+    min-width: 250px; 
+    min-height: 250px;
+    margin-bottom: 20px; 
+    display: grid;
+    position: relative;
+    padding: 16px;
+    border-radius: 4px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+
+  .display{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
     
