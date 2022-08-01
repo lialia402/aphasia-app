@@ -20,6 +20,7 @@
 
     cursor: pointer;
     margin-left: 60px;
+    margin-right: 60px;
     margin-bottom:20px;
   }
   
@@ -73,6 +74,10 @@
     height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
     height : 100%;            /* Internet Explorer treats as min-height. */
     min-height : 100%;
+  }
+  
+  .add-button{
+    margin-left: 60px;
   }
     
   
