@@ -57,7 +57,7 @@ export class CategoryPageComponent implements OnInit {
 
   // verifies the deletion operation
   openDialog(category: CategoryClass) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
       {

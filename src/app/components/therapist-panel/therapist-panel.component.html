@@ -6,6 +6,13 @@
       <h4 class="h2">ניהול מטופלים</h4>
     </div>
   </div>
+  <div class="exit-button">
+    
+    <button mat-icon-button color="gray"(click)="exitApp();">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+    <p dir="rtl" style="margin-top: 10px;">להתנתקות:</p>
+  </div>
     <div class="stretch">
       <div class="card-deck" fxLayout.xs="row">
         <mat-card style="width:10rem;" *ngFor="let item of patients"class="mat-card" >

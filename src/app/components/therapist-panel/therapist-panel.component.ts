@@ -85,10 +85,26 @@ export class TherapistPanelComponent implements OnInit {
     });
   }
 
+  
+
   // navigate to specific patient data
   public openSelectedPatient(user:User)
   {
     this.authService.patientOfTherapist = user;
     this.router.navigate(['patient-therpist-page']);
+  }
+
+  public exitApp(){
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, { data: {name: "להתנתק"}});
+    dialogRef.afterClosed().subscribe(result => {
+      if(result)
+      {
+        this.authService.SignOut();
+        this.router.navigate(['sign-in']).then(() => {
+          window.location.reload();
+        });
+      }
+    });
   }
 }

@@ -64,7 +64,7 @@ export class WordPageComponent implements OnInit {
   }
 
   openDialog(word: WordClass) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
       {
