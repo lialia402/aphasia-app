@@ -32,6 +32,13 @@ export class AnalyticsInfraService {
     this.allGames=this.gameInfraService.patientGames;
    }
 
+   public updateData(){
+    this.allWords=this.categoryInfraService.getAllUserPhrases;
+    this.allCategories=this.categoryInfraService.getCategories;
+    this.allGameResults = this.gameInfraService.resultGameArray;
+    this.allGames=this.gameInfraService.patientGames;
+   }
+
   public getSortedWordsListByViewsDesc() {
     this.topTenWordsNames = [];
     this.topTenWordsViews = [];

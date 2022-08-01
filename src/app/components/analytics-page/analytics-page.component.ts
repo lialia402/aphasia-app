@@ -16,6 +16,7 @@ export class AnalyticsPageComponent implements OnInit {
 
   ngOnInit(): void {
     
+    this.analytics.updateData();
     this.analytics.getSortedWordsListByViewsDesc();
     this.analytics.getSortedCategoriesListByViewsDesc();
     this.analytics.getGameImprovment();
@@ -68,7 +69,10 @@ export class AnalyticsPageComponent implements OnInit {
             borderWidth: 1
         }]
     },
-    options: {}
+    options: {
+        aspectRatio: 1,
+        maintainAspectRatio : false,
+    }
 });
 
 // bar graph of the number of wrong answers against the number of correct answers given by the user from each category
