@@ -78,7 +78,7 @@ export class TherapistPanelComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if(result)
       {
-        //go to storage to add word
+        // go to storage to add word
         await this.userService.addNewPatientForTherpist(result.id);
         this.getPatients();
       }
