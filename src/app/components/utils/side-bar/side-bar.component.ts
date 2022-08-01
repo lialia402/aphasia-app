@@ -77,5 +77,14 @@ export class SideBarComponent implements  OnInit {
   public navigateToCategory(){
     this.router.navigate(['category-page']);
   }
+
+  public handleClick(item:any){
+
+    if(item.displayName === 'התנתקות'){
+      this.authService.SignOut();
+      window.location.reload();
+    }
+  }
+
 }
 
