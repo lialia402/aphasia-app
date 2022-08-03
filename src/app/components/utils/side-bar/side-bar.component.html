@@ -22,7 +22,7 @@
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <span *ngFor="let child of item.children">
-                    <mat-list-item routerLinkActive="active" routerLink="[child.route]">
+                    <mat-list-item routerLinkActive="active" routerLink="[child.route]" (click)="handleClick(item);">
                       <div class="bar-option" fxLayout="row" fxLayoutAlign="space-between center" dir="rtl" > 
                         <mat-icon class="icon-menu-option">{{child.iconName}}</mat-icon>
                         {{child.displayName}}
@@ -33,7 +33,7 @@
               </mat-accordion>
             </span>
             <span *ngIf="!item.children || item.children.length === 0">
-              <mat-list-item routerLinkActive="active" [routerLink]="[item.route]">
+              <mat-list-item routerLinkActive="active" [routerLink]="[item.route]" (click)="handleClick(item);">
                 <!-- Entradas principales -->
                 <div class="bar-option" fxLayout="row" fxLayoutAlign="space-between center" dir="rtl">
                   <mat-icon class="icon-menu-option">{{item.iconName}}</mat-icon>

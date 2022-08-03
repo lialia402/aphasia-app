@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
+import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.service';
 import { WordInfraService } from 'src/app/shared/services/word-infra.service';
 import { AddDialogComponent } from '../utils/add-dialog/add-dialog.component';
@@ -23,9 +24,16 @@ export class WordPageComponent implements OnInit {
   public audioPath:any;
   public imageLink:any;
 
-  constructor(private route: ActivatedRoute, public categoryService: CategoryInfraService, public wordService: WordInfraService, public router: Router ,public dialog: MatDialog, public storageService: StorageInfraProvider) {
-    this.category=categoryService.getCurrentCategory;
-  }
+  constructor(
+    public categoryService: CategoryInfraService, 
+    public wordService: WordInfraService, 
+    public router: Router ,
+    public dialog: MatDialog, 
+    public storageService: StorageInfraProvider, 
+    public errorService: ErrorInfra) 
+    {
+      this.category=categoryService.getCurrentCategory;
+    }
 
   ngOnInit() {
     this.getwords();
@@ -64,7 +72,7 @@ export class WordPageComponent implements OnInit {
   }
 
   openDialog(word: WordClass) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
       {
@@ -111,6 +119,9 @@ export class WordPageComponent implements OnInit {
           await this.getwords();
         }, 500);
         }
+        else{
+          this.errorService.openSimleSnackBar('לא בוצעו שינויים', 'סגור');
+        }
       }
     });
   }
@@ -139,12 +150,26 @@ export class WordPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if(result)
       {
+        if(result.name === undefined)
+        {
+          this.errorService.openSimleSnackBar('לא הוזן שם', 'סגור');
+        }
+        else if(result.imagePath === undefined)
+        {
+          this.errorService.openSimleSnackBar('לא נבחרה תמונה', 'סגור');
+        }
+        else if(result.audioPath === undefined)
+        {
+          this.errorService.openSimleSnackBar('לא נבחר סאונד', 'סגור');
+        }
+        else{
         // go to storage to add word
         const imageLink = await this.createImageInStorage(result);
         const audioLink = await this.createAudioInStorage(result);
         const newWord = new WordClass("", result.name, imageLink, this.categoryService.currentCategory.id, 0, audioLink, false, -1, true);
         this.wordService.addPhrase(newWord);
         this.getwords();
+        }
       }
     });
   }

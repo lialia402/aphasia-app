@@ -7,9 +7,12 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
   templateUrl: './result-page.component.html',
   styleUrls: ['./result-page.component.scss']
 })
+
 export class ResultPageComponent implements OnInit {
 
-  constructor(public gameService: GameInfraService, public router: Router) { }
+  constructor(
+    public gameService: GameInfraService, 
+    public router: Router) { }
 
   ngOnInit(): void {
     if(this.gameService.finalScoreCurrentGame>=7)

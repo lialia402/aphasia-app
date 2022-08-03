@@ -20,7 +20,12 @@ export class GameSettingsComponent implements OnInit {
   showButton:boolean = false;
   allWords:WordClass[] = [];
 
-  constructor(public authService: AuthService,public categoryService: CategoryInfraService,private _location: Location,public gameService:GameInfraService,private _snackBar: MatSnackBar) { }
+  constructor(
+    public authService: AuthService,
+    public categoryService: CategoryInfraService,
+    private _location: Location,
+    public gameService:GameInfraService,
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.allWords = this.categoryService.getAllUserPhrases;

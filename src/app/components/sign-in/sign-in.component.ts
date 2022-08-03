@@ -6,9 +6,10 @@ import { AuthService } from "../../shared/services/auth.service";
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss']
 })
+
 export class SignInComponent implements OnInit {
 
-  constructor( public authService: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
   }

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { CategoryClass } from '../models/category-class.model';
 import { AuthService } from './auth.service';
-import { ErrorInfra } from './error-infra.service';
 import { FirebaseInfraService } from './firebase-infra.service';
 import { WordInfraService } from './word-infra.service';
 
@@ -147,24 +146,6 @@ export class CategoryInfraService {
       }
       catch (e) {
         //this.error.simpleToast("The wanted category doesn't exist")
-      }
-    })
-  }
-
-  /**
-   * for handling the promise returned, use "promise.then((data) =>{'data' hold the wanted category...})"
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param n id of category, id that given by firebase
-   * @returns Promise object
-   */
-  public getCategoryById(id: string): Promise<CategoryClass> {
-    return new Promise((resolve, reject) => {
-      try {
-        let temp = this.categories.find(cat => cat.id === id)
-        resolve(temp)
-      }
-      catch (e) {
-       // this.error.simpleToast("The wanted category doesn't exist")
       }
     })
   }

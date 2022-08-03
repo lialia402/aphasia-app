@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 
 @Component({
@@ -16,8 +17,11 @@ export class AboutMeComponent implements OnInit {
   lastName:string="";
   id:string="";
 
-  constructor(public authService: AuthService,public router: Router,public userInfaService: UserInfaService,) {
-        }
+  constructor(
+    public authService: AuthService,
+    public router: Router,
+    public userInfaService: UserInfaService,
+    public errorService:ErrorInfra) {}
 
    ngOnInit(): void{
     if(this.authService.user === undefined)
@@ -35,27 +39,30 @@ export class AboutMeComponent implements OnInit {
       this.user = this.authService.user;
     }
   }
+
   // start edit mode in order to change user information
    public startEditOption(){
       this.isEditEnable=true;
    }
-   // check if any detail change if not move to cancel
-   public saveChangesOption(){
-     if(this.firstName==="" && this.lastName==="" && this.id==="")
-     {
-        this.cancelOption();
-     }
-     else{
-      this.firstName=this.firstName===""?this.user.firstName:this.firstName;
-      this.lastName=this.lastName===""?this.user.lastName:this.lastName;
-      this.id=this.id===""?this.user.userID:this.id;
-      this.authService.UpdateUserData(this.user, this.firstName,this.lastName,this.id);
-      this.user = this.authService.user;
-      this.isEditEnable=false;
-     }
-   }
 
-   public cancelOption(){
-      this.isEditEnable=false;
-   }
+  // check if any detail change if not move to cancel
+  public saveChangesOption(){
+    if(this.firstName==="" && this.lastName==="" && this.id==="")
+    {
+    this.errorService.openSimleSnackBar('לא הוזנו שינויים', 'סגור');
+    this.cancelOption();
+    }
+    else{
+    this.firstName=this.firstName===""?this.user.firstName:this.firstName;
+    this.lastName=this.lastName===""?this.user.lastName:this.lastName;
+    this.id=this.id===""?this.user.userID:this.id;
+    this.authService.UpdateUserData(this.user, this.firstName,this.lastName,this.id);
+    this.user = this.authService.user;
+    this.isEditEnable=false;
+    }
+  }
+
+  public cancelOption(){
+    this.isEditEnable=false;
+  }
 }
