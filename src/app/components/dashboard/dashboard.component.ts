@@ -12,24 +12,26 @@ import { AuthService } from '../../shared/services/auth.service';
 export class DashboardComponent implements OnInit {
   public appBuilderProvider: AppInitService | undefined
 
-  constructor(public authService: AuthService,public categoryInfra: CategoryInfraService,
-    public wordInfra: WordInfraService,public router: Router,) {
+  constructor(
+    public authService: AuthService,
+    public categoryInfra: CategoryInfraService,
+    public wordInfra: WordInfraService,
+    public router: Router) 
+    {
       this.appBuilderProvider = new AppInitService(this.categoryInfra, this.wordInfra, this.authService);
-
     }
     
   ngOnInit(): void {
    if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
-  {
-    setTimeout(async () => {
-      this.appBuilderProvider?.fillDB();
-      this.authService.SetFirstTime();   
-    }, 1500)
+    {
+      setTimeout(async () => {
+        this.appBuilderProvider?.fillDB();
+        this.authService.SetFirstTime();   
+      }, 1500)
+    }
   }
 
-  }
   public showCategories(){
-
-  this.router.navigate(['category-page']);
+   this.router.navigate(['category-page']);
   }
 }

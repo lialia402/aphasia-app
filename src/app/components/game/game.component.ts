@@ -11,8 +11,9 @@ export class GameComponent implements OnInit {
 
   isCustonExists=false;
 
-  constructor(public router: Router,public gameService: GameInfraService) {
-  }
+  constructor(
+    public router: Router,
+    public gameService: GameInfraService) {}
 
   ngOnInit(): void {
     setTimeout(async () => {

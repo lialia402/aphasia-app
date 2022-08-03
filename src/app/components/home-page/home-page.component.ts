@@ -12,8 +12,10 @@ import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 export class HomePageComponent implements OnInit {
 
   user:any;
-  constructor(public authService: AuthService,public userInfaService: UserInfaService,public router: Router) {
-  }
+  constructor(
+    public authService: AuthService,
+    public userInfaService: UserInfaService,
+    public router: Router) {}
 
   ngOnInit(): void{
     if(this.authService.user === undefined)

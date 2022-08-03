@@ -58,12 +58,9 @@ export class UserInfaService {
     user = data;
   }).then(()=>{
    email=user?.email;
-  this.authentication.user.listOfPatients?.push(email);
+   this.authentication.user.listOfPatients?.push(email);
    this.firebaseInfraService.addPatient(email);
-
-
   })
- 
   }
 
   public removePatient(user:User)
@@ -95,5 +92,6 @@ export class UserInfaService {
      }
      return this.patients;
   }
+
 }
 

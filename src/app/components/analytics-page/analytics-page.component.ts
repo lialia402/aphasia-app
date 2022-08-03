@@ -12,7 +12,11 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 })
 export class AnalyticsPageComponent implements OnInit {
 
-  constructor(public authService: AuthService, public categoryService:CategoryInfraService, public analytics:AnalyticsInfraService,public gameService: GameInfraService) { }
+  constructor(
+      public authService: AuthService, 
+      public categoryService:CategoryInfraService, 
+      public analytics:AnalyticsInfraService,
+      public gameService: GameInfraService) { }
 
   ngOnInit(): void {
     

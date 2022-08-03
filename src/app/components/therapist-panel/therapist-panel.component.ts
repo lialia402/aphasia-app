@@ -7,6 +7,7 @@ import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.serv
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 import { User } from 'src/app/shared/services/user';
+import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 
 @Component({
   selector: 'app-therapist-panel',
@@ -19,7 +20,14 @@ export class TherapistPanelComponent implements OnInit {
   patientID: any;
   user:any;
   public patients: User[];
-  constructor(public userService: UserInfaService, public authService: AuthService, public router: Router ,public dialog: MatDialog, public storageService: StorageInfraProvider,public userInfaService: UserInfaService) 
+  constructor(
+    public userService: UserInfaService, 
+    public authService: AuthService, 
+    public router: Router ,
+    public dialog: MatDialog, 
+    public storageService: StorageInfraProvider,
+    public userInfaService: UserInfaService,
+    public errorService: ErrorInfra) 
   {
     this.getPatients();
   }
@@ -58,7 +66,7 @@ export class TherapistPanelComponent implements OnInit {
 
   // verify the delete patient request
   async openDialog(user: User) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
     dialogRef.afterClosed().subscribe(result => {
       if(result&&user!==null)
       {
@@ -69,6 +77,7 @@ export class TherapistPanelComponent implements OnInit {
 
   // option to therapist adding new patient
   async addNewPatient() {
+    console.log(this.userService.users);
     const dialogRef = this.dialog.open(AddDialogPatientComponent, {
       height: '220px',
       width: '300px',
@@ -78,14 +87,36 @@ export class TherapistPanelComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if(result)
       {
+        let user = this.findUser(result.id);
+        if(user === undefined){
+          this.errorService.openSimleSnackBar('לא קיים משתמש זה במערכת', 'סגור');
+        }
+        else if(user.userType === 'admin'){
+          this.errorService.openSimleSnackBar('לא ניתן להוסיף משתמש זה', 'סגור');
+        }
+        else if(this.findPatient(result.id) !== undefined){
+          this.errorService.openSimleSnackBar('המטופל כבר קיים אצלך במערכת', 'סגור');
+        }
+        else{
         // go to storage to add word
         await this.userService.addNewPatientForTherpist(result.id);
         this.getPatients();
+        }
       }
     });
   }
 
-  
+  // find user in user list
+  public findUser(id:string){
+    const findUser = (obj: any) => obj.userID === id;
+    return this.userService.users.find(findUser);
+  }
+
+  // find user in patient list
+  public findPatient(id:string){
+    const findPatient = (obj: any) => obj.userID === id;
+    return this.userService.patients.find(findPatient);
+  }
 
   // navigate to specific patient data
   public openSelectedPatient(user:User)

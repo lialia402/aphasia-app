@@ -1,26 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
 import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.service';
 import { AddCategoryDialogComponent } from '../utils/add-category-dialog/add-category-dialog.component';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { EditCategoryDialogComponent } from '../utils/edit-category-dialog/edit-category-dialog.component';
+import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 
 @Component({
   selector: 'app-category-page',
   templateUrl: './category-page.component.html',
   styleUrls: ['./category-page.component.scss']
 })
+
 export class CategoryPageComponent implements OnInit {
   name: any;
   imagePath: any;
   public categories: CategoryClass[];
-  constructor(public authService: AuthService, private route: ActivatedRoute, 
-    public categoryService: CategoryInfraService, public router: Router ,public dialog: MatDialog, 
-    public storageService: StorageInfraProvider,) {}
+  constructor(
+    public authService: AuthService, 
+    public categoryService: CategoryInfraService,
+    public router: Router,
+    public dialog: MatDialog, 
+    public storageService: StorageInfraProvider,
+    public errorService: ErrorInfra) {}
 
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
@@ -91,12 +97,23 @@ export class CategoryPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if(result)
       {
+        if(result.name === undefined)
+        {
+          this.errorService.openSimleSnackBar('לא הוזן שם', 'סגור');
+        }
+        else if(result.imagePath === undefined)
+        {
+          this.errorService.openSimleSnackBar('לא נבחרה תמונה', 'סגור');
+        }
+        else{
         //go to storage to add word
         const imageLink = await this.createImageInStorage(result);
         const newCategory = new CategoryClass(result.name, "", imageLink, email,
         "", 0, false, -1, true);
         this.categoryService.addCategory(newCategory);
         this.getCategories();
+        }
+
       }
     });
   }
@@ -131,6 +148,10 @@ export class CategoryPageComponent implements OnInit {
           {
             newImageLink= await this.createImageInStorage(result);
           }
+        }
+
+        else{
+          this.errorService.openSimleSnackBar('לא בוצעו שינויים', 'סגור');
         }
         
         this.categoryService.UpdateCategory(category, newName, newImageLink);

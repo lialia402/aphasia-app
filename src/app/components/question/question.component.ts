@@ -20,7 +20,10 @@ export class QuestionComponent implements OnInit {
   correctAnswers:number=0;
   public cardQuestion:WordClass;
   public cardAnswers:WordClass[];
-  constructor(private _location: Location, public gameService: GameInfraService,public router: Router,public authService: AuthService) { }
+  constructor(
+    public gameService: GameInfraService,
+    public router: Router,
+    public authService: AuthService) { }
 
   ngOnInit(): void {
     this.creatAnswersList();
@@ -79,7 +82,6 @@ export class QuestionComponent implements OnInit {
     else
     {
       this.gameService.finalScoreCurrentGame=this.correctAnswers;
-      let today = new Date().toLocaleDateString(); 
       const currentGame = new Game("",this.correctAnswers, this.authService.user.email,new Date());
       this.gameService.addGame(currentGame);
       this.router.navigate(['result-page']);
