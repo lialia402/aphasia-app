@@ -28,7 +28,9 @@ export class GameSettingsComponent implements OnInit {
     private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    this.allWords = [];
     this.allWords = this.categoryService.getAllUserPhrases;
+    console.log(this.allWords);
   }
 
   // sort the words in alphabetical order

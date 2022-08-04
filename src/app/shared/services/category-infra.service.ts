@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { CategoryClass } from '../models/category-class.model';
 import { AuthService } from './auth.service';
+import { ErrorInfra } from './error-infra.service';
 import { FirebaseInfraService } from './firebase-infra.service';
 import { WordInfraService } from './word-infra.service';
 
@@ -18,7 +19,7 @@ export class CategoryInfraService {
   //import categories collection from db and initialize categories attr.
   constructor(
     public firebaseProvider: FirebaseInfraService,
-    //public error: ErrorInfra,
+    public error: ErrorInfra,
     public authentication: AuthService,
     //public loadingCtrl: LoadingController,
     public wordInfraService: WordInfraService
@@ -36,6 +37,7 @@ export class CategoryInfraService {
    * @returns Promise object
    */
   public updateCategoriesArray(): Promise<CategoryClass[]> {
+    this.allUserPhrases = []
     this.firebaseProvider.importCategories();
     return new Promise((resolve, reject) => {
       this.firebaseProvider.getCategoriesObservable.subscribe(a => {
@@ -56,6 +58,7 @@ export class CategoryInfraService {
   }
 
   public updateCategoriesArrayByEmail(email:string): Promise<CategoryClass[]> {
+    this.allUserPhrases = []
     this.firebaseProvider.importCategoriesByEmail(email);
     return new Promise((resolve, reject) => {
       this.firebaseProvider.getCategoriesObservable.subscribe(a => {
@@ -152,20 +155,20 @@ export class CategoryInfraService {
 
   public addCategory(category: CategoryClass, callFromAppBuilder = false): Promise<void>|undefined {
     let promise = this.firebaseProvider.addCategory(category);
-    if (callFromAppBuilder == false) {
+    if(callFromAppBuilder == false) {
       if(this.authentication.user.userType==='patient')
       {
         this.updateCategoriesArray().then(res => {
           // this.arrangeCategoriesByOrder();
         }).catch((err) =>{
-          console.log(err);
+          this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
         })
       }
       else{
         this.updateCategoriesArrayByEmail(this.authentication.patientOfTherapist.email).then(res => {
           // this.arrangeCategoriesByOrder();
         }).catch((err) =>{
-          console.log(err);
+          this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
         })
       }
     }

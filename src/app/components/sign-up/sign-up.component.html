@@ -4,46 +4,56 @@
         <h1>הרשמה</h1>
         <div class="formGroup">
           <input dir="rtl"
+            matInput
             type="text"
             class="formControl"
             placeholder="שם פרטי"
             #userFirstName
+            ngModel 
             required
           />
         </div>
         <div class="formGroup">
           <input dir="rtl"
+            matInput
             type="text"
             class="formControl"
             placeholder="שם משפחה"
             #userLastName
+            ngModel
             required
           />
         </div>
         <div class="formGroup">
           <input dir="rtl"
+            matInput
             type="text"
             class="formControl"
             placeholder="תעודת זהות"
             #userID
+            ngModel 
             required
           />
         </div>
         <div class="formGroup">
-          <input dir="rtl"
+          <input required  dir="rtl"
+            matInput
             type="email"
             class="formControl"
             placeholder="דואר אלקטרוני"
             #userEmail
+            ngModel 
             required
           />
         </div>
         <div class="formGroup">
           <input dir="rtl"
+            matInput
             type="password"
             class="formControl"
             placeholder="סיסמה"
             #userPwd
+            ngModel 
             required
           />
         </div>
@@ -59,7 +69,7 @@
             type="button"
             class="btn btnPrimary"
             value="הירשם"
-            (click)="authService.SignUp(userFirstName.value, userLastName.value, userID.value, userEmail.value, userPwd.value, this.userType); "
+            (click)="signUp(userFirstName.value, userLastName.value, userID.value, userEmail.value, userPwd.value, this.userType); "
           />
         </div>
       </div>

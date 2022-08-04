@@ -231,6 +231,7 @@ export class GameInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
         this.gameSettings = settings;
+        console.log( this.gameSettings);
         resolve(this.gameSettings);
       })
     })
@@ -241,6 +242,7 @@ export class GameInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
         this.gameSettings = settings;
+        console.log(this.gameSettings);
         resolve(this.gameSettings);
       })
     })

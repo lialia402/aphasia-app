@@ -111,7 +111,10 @@ export class CategoryPageComponent implements OnInit {
         const newCategory = new CategoryClass(result.name, "", imageLink, email,
         "", 0, false, -1, true);
         this.categoryService.addCategory(newCategory);
-        this.getCategories();
+        setTimeout(async () => {
+          await  
+          this.getCategories();  
+        }, 500);
         }
 
       }
