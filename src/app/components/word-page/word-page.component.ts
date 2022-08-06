@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.service';
@@ -23,8 +24,12 @@ export class WordPageComponent implements OnInit {
   public imagePath:any;
   public audioPath:any;
   public imageLink:any;
+  isTherapist: boolean;
+  isWordDisabled: boolean = false;
+  isWordEnabled: boolean = false;
 
   constructor(
+    public authService: AuthService, 
     public categoryService: CategoryInfraService, 
     public wordService: WordInfraService, 
     public router: Router ,
@@ -37,6 +42,7 @@ export class WordPageComponent implements OnInit {
 
   ngOnInit() {
     this.getwords();
+    this.isTherapist = this.authService.user.userType === 'admin';
   }
 
   updateWordsList(category: CategoryClass){
@@ -51,6 +57,7 @@ export class WordPageComponent implements OnInit {
     promise.then((data) => {
       this.words = data;
       this.wordService.words = data;
+      this.checkWordsVisability();
     })
   }
   
@@ -118,6 +125,11 @@ export class WordPageComponent implements OnInit {
           await this.wordService.addPhrase(newWord);
           await this.getwords();
         }, 500);
+
+          if(result.name!==undefined && result.audioPath===undefined)
+          {
+            this.errorService.openSimleSnackBar('שים לב: שינית את שם המילה אך לא ערכת סאונד', 'סגור');
+          }
         }
         else{
           this.errorService.openSimleSnackBar('לא בוצעו שינויים', 'סגור');
@@ -172,5 +184,19 @@ export class WordPageComponent implements OnInit {
         }
       }
     });
+  }
+
+  // check if there are visible and invisible words
+  checkWordsVisability(){
+    const checkEnabledWord = (obj: WordClass) => obj.visibility === true;
+      this.isWordEnabled = this.wordService.words.some(checkEnabledWord);
+      const checkDisabledWord = (obj: WordClass) => obj.visibility === false;
+      this.isWordDisabled = this.wordService.words.some(checkDisabledWord);
+  }
+
+  // update visibility of a word
+  updateVisibility(word:WordClass){
+    this.wordService.changeVisibility(word);
+    this.checkWordsVisability();
   }
 }

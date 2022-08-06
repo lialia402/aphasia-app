@@ -26,7 +26,6 @@ export class DashboardComponent implements OnInit {
     {
       setTimeout(async () => {
         this.appBuilderProvider?.fillDB();
-        console.log("Im here");
         this.authService.SetFirstTime();   
       }, 1500)
     }

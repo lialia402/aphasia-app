@@ -15,30 +15,64 @@
       </mat-list-item>
     </mat-nav-list>
   </mat-toolbar>
+    
+  <p class="buttons" *ngIf="isTherapist && this.isWordEnabled">על מנת להסתיר את המילה מהמטופל אנא כבה את הכפתור</p>
     <div class="card-deck" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px">
-      <mat-card fxFlex="0 1 calc(20% - 20px)" style="width:10rem;" *ngFor="let item of this.words"
+      <ng-container class="stretch" *ngFor="let item of this.words">
+      <mat-card fxFlex="0 1 calc(20% - 20px)" style="width:10rem;" *ngIf="item.visibility"
                class="mat-card">
+        <mat-card-header *ngIf="isTherapist"> 
+        <mat-slide-toggle *ngIf="isTherapist" [checked]="item.visibility" (change)="updateVisibility(item);">
+        </mat-slide-toggle>
+        <mat-card-title style=" font-size: 1rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
+        </mat-card-header>
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image" />
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
-        <mat-card-actions>
+        <mat-card-actions class="buttons">
           <button mat-icon-button mat-button (click)="playVoice(item);">
             <mat-icon>mic</mat-icon>
           </button>
-          <button class="middle-button" mat-icon-button mat-button (click)="editWord(item);">
+          <button *ngIf="isTherapist" class="middle-button" mat-icon-button mat-button (click)="editWord(item);">
             <mat-icon>create</mat-icon>
           </button>
-          <button class="right-button" mat-icon-button mat-button (click)="openDialog(item);">
+          <button *ngIf="isTherapist" class="right-button" mat-icon-button mat-button (click)="openDialog(item);">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-card-actions>
       </mat-card>
-      <button mat-fab color="gray"(click)="addNewWord()">
+      </ng-container>
+      <button *ngIf="isTherapist" mat-fab color="gray"(click)="addNewWord()">
           <mat-icon>add</mat-icon>
         </button>
   </div>
+
+  <p class="buttons" *ngIf="isTherapist && this.isWordDisabled">על מנת לציג את המילה למטופל אנא הדלק את הכפתור</p>
+    <div class="card-deck" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px"*ngIf="isTherapist">
+      <ng-container class="stretch" *ngFor="let item of this.words">
+      <mat-card fxFlex="0 1 calc(20% - 20px)" style="width:10rem;" *ngIf="!item.visibility"
+               class="mat-card">
+        <mat-card-header *ngIf="isTherapist"> 
+        <mat-slide-toggle *ngIf="isTherapist" [checked]="item.visibility" (change)="updateVisibility(item);">
+        </mat-slide-toggle>
+        <mat-card-title style=" font-size: 1rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
+        </mat-card-header>
+        <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image" />
+        <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
+        <mat-card-actions class="buttons">
+          <button mat-icon-button mat-button (click)="playVoice(item);">
+            <mat-icon>mic</mat-icon>
+          </button>
+          <button *ngIf="isTherapist" class="middle-button" mat-icon-button mat-button (click)="editWord(item);">
+            <mat-icon>create</mat-icon>
+          </button>
+          <button *ngIf="isTherapist" class="right-button" mat-icon-button mat-button (click)="openDialog(item);">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      </ng-container>
+  </div>
 </div>
-<app-footer>
-</app-footer>
 
 
 
