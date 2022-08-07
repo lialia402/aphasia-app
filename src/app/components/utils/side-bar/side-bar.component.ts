@@ -20,6 +20,8 @@ export class SideBarComponent implements  OnInit {
 
   displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
   user:any;
+  isLoading:boolean = false;
+
 
   menu: NavItem [] = [
         {
@@ -67,6 +69,13 @@ export class SideBarComponent implements  OnInit {
     }
     else{
       this.user = this.authService.user;
+    }
+
+
+    if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
+    {
+        this.isLoading = true;
+        setTimeout(() => this.isLoading = false, 25000);
     }
   }
 

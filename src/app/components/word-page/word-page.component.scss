@@ -74,4 +74,18 @@
     height : 100%;            /* Internet Explorer treats as min-height. */
     min-height : 100%;
   }
+
+  .buttons{
+    display: flex;
+    justify-content: center;
+  }
+    
+  :host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+    background-color: #66a369 ;
+  }
+  
+  :host ::ng-deep  .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+    background-color: #66a369 ;
+  }
+  
     

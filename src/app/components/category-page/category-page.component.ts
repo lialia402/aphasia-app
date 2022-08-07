@@ -19,6 +19,9 @@ import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 export class CategoryPageComponent implements OnInit {
   name: any;
   imagePath: any;
+  isTherapist: boolean;
+  isCategoryDisabled: boolean = false;
+  isCategoryEnabled: boolean = false;
   public categories: CategoryClass[];
   constructor(
     public authService: AuthService, 
@@ -47,10 +50,20 @@ export class CategoryPageComponent implements OnInit {
       await this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
       this.categories = this.categoryService.getCategories;
     }
+    this.checkCategoriesVisability();
+  }
+
+  // check if there are visible and invisible categories
+  checkCategoriesVisability(){
+    const checkEnabledCat = (obj: CategoryClass) => obj.visibility === true;
+      this.isCategoryEnabled = this.categories.some(checkEnabledCat);
+      const checkDisabledCat = (obj: CategoryClass) => obj.visibility === false;
+      this.isCategoryDisabled = this.categories.some(checkDisabledCat);
   }
 
   ngOnInit(): void {
     this.getCategories();
+    this.isTherapist = this.authService.user.userType === 'admin';
   }
 
   // delete the specific category and the words belongs to it
@@ -116,7 +129,6 @@ export class CategoryPageComponent implements OnInit {
           this.getCategories();  
         }, 500);
         }
-
       }
     });
   }
@@ -164,5 +176,11 @@ export class CategoryPageComponent implements OnInit {
         }, 500);
       }
     });
+  }
+
+  // update visibility of a category
+  updateVisibility(category:CategoryClass){
+    this.categoryService.changeVisibility(category);
+    this.checkCategoriesVisability();
   }
 }
