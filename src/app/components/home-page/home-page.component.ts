@@ -12,6 +12,7 @@ import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 export class HomePageComponent implements OnInit {
 
   user:any;
+  isLoading:boolean=true;
   constructor(
     public authService: AuthService,
     public userInfaService: UserInfaService,
@@ -26,10 +27,12 @@ export class HomePageComponent implements OnInit {
       await promise.then((data) => {
         this.user = data;
         this.authService.user = this.user;
+        this.isLoading = false;
       });     
     }, 1500)
     }
     else{
+      this.isLoading = false;
       this.user = this.authService.user;
     }
   }

@@ -71,7 +71,6 @@ export class SideBarComponent implements  OnInit {
       this.user = this.authService.user;
     }
 
-
     if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
     {
         this.isLoading = true;

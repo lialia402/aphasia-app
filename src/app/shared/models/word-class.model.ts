@@ -7,14 +7,21 @@ export class WordClass extends Unit{
     public views: number; //the number of the times that the user clicked on the phrase
     public imageURL: string; //the url of the image of the phrase
     public audio: string;//a url link to the audio file in the storage
-    public isFav: boolean// TRUE if this phrase is one of the user selected favorite phrases. else, FALSE.
-    public order: number//the # of the phrase in the category
+    public isFav: boolean// tdl
+    public order: number//tdl
     public visibility: boolean;//TRUE if the phrase is visible to the user
 
-    constructor(id: string, name: string, imageURL: string,
-        categoryID: string, views: number, audio: string, isFav: boolean, order: number, visibility: boolean) {
+    constructor(
+        id: string, 
+        name: string, 
+        imageURL: string,
+        categoryID: string, 
+        views: number, 
+        audio: string, 
+        isFav: boolean, 
+        order: number, 
+        visibility: boolean) {
         super();
-
         this.id = id;
         this.imageURL = imageURL;
         this.name = name;
@@ -24,31 +31,5 @@ export class WordClass extends Unit{
         this.isFav = isFav;
         this.order = order;
         this.visibility = visibility;
-    }
-
-    //GETTERS
-    public getID() {
-        return this.id;
-    }
-    public getName() {
-        return this.name;
-    }
-    public getImageURL() {
-        return this.imageURL;
-    }
-    public getCategoryID() {
-        return this.categoryID;
-    }
-    public getViews() {
-        return this.views;
-    }
-    public getAudio() {
-        return this.audio;
-    }
-    public getIsFav() {
-        return this.isFav;
-    }
-    public getVisibility(){
-        return this.visibility;
     }
 }

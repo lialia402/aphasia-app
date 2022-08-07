@@ -1,35 +1,25 @@
 
 import { AuthService } from './auth.service';
 import { FirebaseInfraService } from './firebase-infra.service';
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { User } from '../services/user';
-import * as auth from 'firebase/auth';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument,
-} from '@angular/fire/compat/firestore';
-import { Router } from '@angular/router';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { Observable } from 'rxjs-compat';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserInfaService {
 
+export class UserInfaService {
+  
   users:any[]=[];
   patients:any[]=[];
-  
-  constructor(public firebaseInfraService: FirebaseInfraService, public authentication: AuthService,) {
-        
+  constructor(
+    public firebaseInfraService: FirebaseInfraService, 
+    public authentication: AuthService,) {
+      
     this.updateUsersArray()
-  
   }
 
-  //updating the users local array by subscribe the users observable array.
+  // updating the users local array by subscribe the users observable array
   private updateUsersArray() {
     this.firebaseInfraService.importCategories();
     this.firebaseInfraService.getUsersObservable.subscribe(a => {
@@ -37,32 +27,36 @@ export class UserInfaService {
     });
   }
 
+  // get user by unique email and return a promise
   public getUserByEmail(email: string): Promise<User> {
     return new Promise((resolve, reject) => {
       resolve(this.users.find(e => e.email === email));
     })
   }
 
+  // get user by unique id and return a promise
   public getUserByID(ID: string): Promise<User> {
     return new Promise((resolve, reject) => {
       resolve(this.users.find(e => e.userID === ID));
     })
   }
 
+  // add a new patient to therpist
   public async addNewPatientForTherpist(patientID:string)
-{
-  let email;
-  let user:User ;
-  let promise= this.getUserByID(patientID);
-  await promise.then((data) => {
-    user = data;
-  }).then(()=>{
-   email=user?.email;
-   this.authentication.user.listOfPatients?.push(email);
-   this.firebaseInfraService.addPatient(email);
-  })
+ {
+    let email;
+    let user:User ;
+    let promise= this.getUserByID(patientID);
+    await promise.then((data) => {
+      user = data;
+    }).then(()=>{
+        email=user?.email;
+        this.authentication.user.listOfPatients?.push(email);
+        this.firebaseInfraService.addPatient(email);
+    })
   }
 
+  // remove patient from therpist list of patients
   public removePatient(user:User)
   {
     const index = this.authentication.user?.listOfPatients?.indexOf(user.email);
@@ -71,27 +65,29 @@ export class UserInfaService {
       this.authentication.user?.listOfPatients?.splice(index, 1);
     }
 
-  this.firebaseInfraService.removePatient(user.email);
+    this.firebaseInfraService.removePatient(user.email);
   }
 
+  // return list of patients for the therapist
   public importPatients(){
-  try{
-    let emailPatients=this.authentication.user.listOfPatients || ''; 
-    let patientsArrayLength=emailPatients?.length ?emailPatients.length :0;
-    if(emailPatients!==undefined)
-    {  
-      this.patients=[];
-    for(let i=0;i<patientsArrayLength;i++)
+    try
     {
-      this.patients[i]= (this.users.find(e => e.email === emailPatients[i]));      
-    }
-    }
+      let emailPatients=this.authentication.user.listOfPatients || ''; 
+      let patientsArrayLength=emailPatients?.length ?emailPatients.length :0;
+      if(emailPatients!==undefined)
+      {  
+        this.patients=[];
+        for(let i=0;i<patientsArrayLength;i++)
+        {
+          this.patients[i]= (this.users.find(e => e.email === emailPatients[i]));      
+        }
+      }
     }
     catch(e){
-      // this.error.simpleToast("Connection error");
-     }
-     return this.patients;
+        console.log(e);
+      }
+     
+    return this.patients;
   }
-
 }
 

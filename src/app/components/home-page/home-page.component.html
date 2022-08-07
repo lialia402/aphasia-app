@@ -5,7 +5,11 @@
         באתר זה ניתן למצוא תרגולים שוטפים המותאמים אישית למטופל, תוך מעקב שוטף ושיפור נקודות החולשה שלו.
         כל זאת מתוך תקווה אמיתית להוביל לשיפור בתפקוד השפתי של המטופל.</p>
         <img class="logo-img" src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/WhatsApp%20Image%202022-07-01%20at%2014.07.41%20(1).jpeg?alt=media&token=4cd07940-3936-4b74-809e-2aae687d136d" />
-    <button   class="next-button"mat-raised-button color="primary" (click)="NavigateUser()">למעבר לאתר</button>
+    <button *ngIf="!isLoading"  class="next-button"mat-raised-button color="primary" (click)="NavigateUser()">למעבר לאתר</button>
+    <div class="loader">
+        <mat-spinner [diameter]="50" *ngIf="isLoading"></mat-spinner>
+        <div  *ngIf="isLoading"> אנא המתן עד טעינת נתוני המערכת</div>
+        </div> 
 </div>
 
 <div class="footer-div">

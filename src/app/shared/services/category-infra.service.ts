@@ -9,40 +9,33 @@ import { WordInfraService } from './word-infra.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CategoryInfraService {
   public currentCategory: CategoryClass;
   public categories: any[]=[];
   private allUserPhrases : any[]= [];
-  //categories that have parent category, and shown only at theirs parentCategory's page (next the phrases)
-  private subCategories : any[]= [];
+  private subCategories : any[]= []; //tdl
 
-  //import categories collection from db and initialize categories attr.
+  // import categories collection from database and initialize categories
   constructor(
     public firebaseProvider: FirebaseInfraService,
     public error: ErrorInfra,
     public authentication: AuthService,
-    //public loadingCtrl: LoadingController,
-    public wordInfraService: WordInfraService
-  ) {
-
+    public wordInfraService: WordInfraService) {
     if (authentication.afAuth.currentUser!==null)
       this.updateCategoriesArray();
-
   }
 
-
-  /**
-   * updating the categories and favorites local arrays and refreshing the page, the method return a Promise object"
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @returns Promise object
-   */
+  // updating the categories and refreshing the page, the method return a Promise object
   public updateCategoriesArray(): Promise<CategoryClass[]> {
     this.allUserPhrases = []
     this.firebaseProvider.importCategories();
     return new Promise((resolve, reject) => {
       this.firebaseProvider.getCategoriesObservable.subscribe(a => {
         this.categories = a;
-        this.categories.forEach(element1 => {//initilize all user's phrases local array
+        this.categories.forEach(element1 => {
+
+          //initilize all user's phrases local array
           let promise = this.wordInfraService.getPhrases(element1);
           promise.then((data) => {
             data.forEach(element2 => {
@@ -57,13 +50,16 @@ export class CategoryInfraService {
     })
   }
 
+  // update category array by user's email 
   public updateCategoriesArrayByEmail(email:string): Promise<CategoryClass[]> {
     this.allUserPhrases = []
     this.firebaseProvider.importCategoriesByEmail(email);
     return new Promise((resolve, reject) => {
       this.firebaseProvider.getCategoriesObservable.subscribe(a => {
         this.categories = a;
-        this.categories.forEach(element1 => {//initilize all user's phrases local array
+        this.categories.forEach(element1 => {
+          
+          //initilize all user's phrases local array
           let promise = this.wordInfraService.getPhrases(element1);
           promise.then((data) => {
             data.forEach(element2 => {
@@ -77,40 +73,8 @@ export class CategoryInfraService {
       })
     })
   }
-  /**
-   * get sub-category of specific category by its name, the method return a Promise object.
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param parentCategory parent category id of the wanted sub-category
-   * @param name name of the wanted sub-category
-   * @returns Promise object
-   */
-  public getSubCategoryByName(parentCategoryID: string, name: string): Promise<CategoryClass> {
-    return new Promise((resolve, reject) => {
-      let temp = this.subCategories.filter(cat => cat.parentCategoryID == parentCategoryID);
-      let temp1 = temp.find(cat => cat.name == name);
-      if (temp1 == undefined)
-        reject(undefined)
-      resolve(temp1);
-    })
-  }
-
-  /**
-   * get sub-categories array of specific category, the method return a Promise object.
-   * for catching error use "promise.then().catch(e){...handling error...}"
-   * @param parentCategory parent category id of the wanted sub-categories array
-   * @returns Promise object
-   */
-  public getSubCategoriesOfParent(parentCategoryID: string): Promise<CategoryClass[]> {
-    return new Promise((resolve, reject) => {
-      let temp = this.subCategories.filter(cat => cat.parentCategoryID == parentCategoryID);
-      resolve(temp);
-    })
-  }
-
-  /**
-   * Rearrange all categories, and sub-categories by new order.
-   * usually used after adding or removing of category. 
-   */
+  
+  // rearrange all categories by new order.
   public arrangeCategoriesByOrder() {
     for (var i = 0; i < this.categories.length; i++) {
       this.setOrder(this.categories[i], i);
@@ -121,13 +85,9 @@ export class CategoryInfraService {
     }
   }
 
-  //GETTERS
+  // geeters
   public get getCategories() {
     return this.categories;
-  }
-
-  public get getSubCategories() {
-    return this.subCategories;
   }
 
   public get getAllUserPhrases() {
@@ -148,25 +108,25 @@ export class CategoryInfraService {
           resolve(temp);
       }
       catch (e) {
-        //this.error.simpleToast("The wanted category doesn't exist")
+        console.log(e)
       }
     })
   }
 
-  public addCategory(category: CategoryClass, callFromAppBuilder = false): Promise<void>|undefined {
+  // add category to firebase
+  public addCategory(category: CategoryClass, callFromAppBuilder = false): Promise<void>|undefined 
+  {
     let promise = this.firebaseProvider.addCategory(category);
     if(callFromAppBuilder == false) {
       if(this.authentication.user.userType==='patient')
       {
         this.updateCategoriesArray().then(res => {
-          // this.arrangeCategoriesByOrder();
         }).catch((err) =>{
           this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
         })
       }
       else{
         this.updateCategoriesArrayByEmail(this.authentication.patientOfTherapist.email).then(res => {
-          // this.arrangeCategoriesByOrder();
         }).catch((err) =>{
           this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
         })
@@ -175,13 +135,14 @@ export class CategoryInfraService {
     return promise;
   }
 
+  // tdl remove category from firebase
   public removeCategory(category: CategoryClass): Promise<any> {
     return new Promise((resolve, reject) => {
-      //let favoriteProvider = new FavoriteProvider(HomePage.favClass)
       let promise = this.wordInfraService.getPhrases(category);
       promise.then((data) => {
         let phrases = data;
-        if (category.parentCategoryID == "") {//if the wanted remove category isn't a sub-category.
+        if (category.parentCategoryID == "") {
+          //if the wanted remove category isn't a sub-category.
           let subCategories = this.subCategories.filter(cat => cat.parentCategoryID == category.id);
           subCategories.forEach(element => {
            // favoriteProvider.remove_fav_cat(element);
@@ -217,6 +178,7 @@ export class CategoryInfraService {
     })
   }
 
+  // update category in firebase
   UpdateCategory(category: CategoryClass, name:string, image:string) {
     const userRef: AngularFirestoreDocument<any> = this.firebaseProvider.afs.doc(
       `categories/${category.id}`
@@ -239,33 +201,37 @@ export class CategoryInfraService {
       merge: true,
     });
     this.updateCategoriesArray().then(res => {
-      // this.arrangeCategoriesByOrder();
     }).catch((err) =>{
       console.log(err);
     })
   }
 
-  //SETTERS
+  // seeters
   public setCurrentCategory(category: CategoryClass) {
     this.currentCategory = category;
   }
+
   public setName(category: CategoryClass, newName: string) {
     category.name = newName;
     this.firebaseProvider.updateCategory(category)
   }
+
   public setUrl(category: CategoryClass, newURL: string) {
     category.imageURL = newURL;
     this.firebaseProvider.updateCategory(category)
   }
+
   public setParentCategoryID(category: CategoryClass, newCategoryParent: string) {
     category.parentCategoryID = newCategoryParent;
     this.firebaseProvider.updateCategory(category)
   }
+
   public setIsFav(category: CategoryClass, isFav: boolean) {
     category.isFav = isFav;
     this.firebaseProvider.updateCategory(category)
   }
-  //each time a category is chosen, its views increase by 1.
+
+  // each time a category is chosen, its views increase by 1.
   public increaseViews(category: CategoryClass) {
     category.views++;
     this.firebaseProvider.updateCategory(category)

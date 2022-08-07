@@ -10,62 +10,55 @@ const DEFAULT_NUMBER = 372;
 @Injectable({
   providedIn: 'root'
 })
+
 export class AppInitService {
+
   public userEmail;
   public load_counter = 0;
   phraseCounter = 0;
   private time: number
-
-
   constructor(
-  public categoryInfra: CategoryInfraService,public wordInfra: WordInfraService,
-    public authentication: AuthService,
-  ) {
+  public categoryInfra: CategoryInfraService,
+  public wordInfra: WordInfraService,
+    public authentication: AuthService,) {
     this.time = 5000;
     this.userEmail = authentication.userData.email;
   }
 
-  add_new_cat_to_db(category: CategoryClass, phrases: WordClass[], subCat: CategoryClass[], subPhrases: WordClass[][], subFlag: boolean) {
+  // add new category to firebase
+  add_new_cat_to_db(category: CategoryClass, phrases: WordClass[], 
+    subCat: CategoryClass[], subPhrases: WordClass[][], subFlag: boolean) {
     let catId: string;
     this.categoryInfra.addCategory(category);
     let promise;
     setTimeout(() => {
-      if (subFlag) {
-        promise = this.categoryInfra.getSubCategoryByName(category.parentCategoryID, category.name)
-      }
-      else
         promise = this.categoryInfra.getCategoryByName(category.name);
-      promise.then((data) => {
+        promise.then((data) => {
         let cat = data;
         cat as CategoryClass;
         catId = cat.id;
-        for (let i = 0; i < phrases.length; i++) {
+        for (let i = 0; i < phrases.length; i++) 
+        {
           phrases[i].order = i;
           phrases[i].categoryID = catId;
           this.wordInfra.addPhrase(phrases[i]);
         }
-        for (let i = 0; i < subCat.length; i++) {
+        for (let i = 0; i < subCat.length; i++) 
+        {
           subCat[i].order = i;
           subCat[i].parentCategoryID = catId;
           this.add_new_cat_to_db(subCat[i], subPhrases[i], [], [], true)
         }
       })
     }, this.time);
-
   }
 
-
-  //===================================
-
-  /**this method fill the DB for the user with the default categories&phrases
-  */
+  // fill the database for the user with the default categories and words
   fillDB() {
     let cat;
     let words:WordClass[];
-    let subCats;
-    let subPhrases;
 
-    //FEELINGS CATEGORY
+    // feeling category
     cat = new CategoryClass("רגשות", "", "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Ffeelings%2Fimages%2F%25E2%2580%258F%25E2%2580%258Ffeelings.PNG?alt=media&token=55054802-6fd2-47e3-b839-dae16752a169", this.userEmail, "", 0, false, 3, true)
 
     words = [
@@ -85,8 +78,7 @@ export class AppInitService {
     ];
     this.add_new_cat_to_db(cat, words, [], [], false);
 
-
-    //HOLIDAYS
+    // holiday category
     cat = new CategoryClass("חגים", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/holidays.jpg?alt=media&token=0c6b3100-6291-45eb-b646-57cfb76be245", this.userEmail, "", 0, false, 4, true);
 
     words = [
@@ -108,7 +100,7 @@ export class AppInitService {
 
     this.add_new_cat_to_db(cat, words, [], [], false);
 
-    //EVENTS
+    // event category
     cat = new CategoryClass("אירועים", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/events.jpg?alt=media&token=079b2034-f89e-45e8-884f-ca17a846fcbd", this.userEmail, "", 0, false, 5, true);
 
     words =  [
@@ -128,12 +120,14 @@ export class AppInitService {
       new WordClass("", "גיוס לצבא", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/army.png?alt=media&token=acd02391-6b42-4ca9-a2df-493a2ff525f2", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Ftime%2Fevents%2Faudio%2F%D7%92%D7%99%D7%95%D7%A1%20%D7%9C%D7%A6%D7%91%D7%90.mp3?alt=media&token=85bc6bc7-6264-4771-9018-fa5953df31c0", false, 0, true),
       new WordClass("", "טקס סיום", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/graduation%20ceremony.jpg?alt=media&token=4c87d7cd-2fb0-4e51-a035-7fd810997c4e", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Ftime%2Fevents%2Faudio%2F%D7%98%D7%A7%D7%A1%20%D7%A1%D7%99%D7%95%D7%9D.mp3?alt=media&token=3a52dffe-57af-44e5-be4b-b39570572743", false, 0, true)
     ];
+
     this.add_new_cat_to_db(cat, words, [], [], false);
 
+    // numbers category
     cat = new CategoryClass("מספרים", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/numbers.jpg?alt=media&token=7ce920fd-3b2c-49e8-a5db-a4c89c650c19", this.userEmail, "", 0, false, 5, true);
 
     words =  [
-    new WordClass("", "1-אחד", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/1.webp?alt=media&token=5329d848-61e3-41e8-85b0-7e3d4a40c297", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fnumbers%2Faudio%2F%D7%90%D7%97%D7%93.mp3?alt=media&token=b84b9d66-0a6c-4d41-a43d-e6fdc91c19aa", false, 0, true),
+        new WordClass("", "1-אחד", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/1.webp?alt=media&token=5329d848-61e3-41e8-85b0-7e3d4a40c297", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fnumbers%2Faudio%2F%D7%90%D7%97%D7%93.mp3?alt=media&token=b84b9d66-0a6c-4d41-a43d-e6fdc91c19aa", false, 0, true),
         new WordClass("", "2-שתיים", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/2.jpg?alt=media&token=09aa087c-f9a7-4d49-bff5-11eee6c9d94a", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fnumbers%2Faudio%2F%D7%A9%D7%AA%D7%99%D7%99%D7%9D.mp3?alt=media&token=fc05f7c5-e475-4cf7-b627-fb608a494c84", false, 0, true),
         new WordClass("", "3-שלוש", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/3.jpg?alt=media&token=443eec37-f5e3-49e4-b235-b74e1e8347f9", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fnumbers%2Faudio%2F%D7%A9%D7%9C%D7%95%D7%A9.mp3?alt=media&token=7278486b-cb7d-4723-a8ab-2d61f31abf1b", false, 0, true),
         new WordClass("", "4-ארבע", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/4.webp?alt=media&token=8c36eceb-cf3e-49c0-96ae-049e864cc6b8", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fnumbers%2Faudio%2F%D7%90%D7%A8%D7%91%D7%A2.mp3?alt=media&token=5b92f457-ac22-4dc4-b4e4-46c7e77e2457", false, 0, true),
@@ -147,11 +141,10 @@ export class AppInitService {
 
     this.add_new_cat_to_db(cat, words, [], [], false);
 
-    //BODY PARTS
+    // body parts category
     cat = new CategoryClass("אברי גוף", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/Body.jpg?alt=media&token=94beb1d8-6215-4678-8753-8faf7245d716", this.userEmail, "", 0, false, 0, true);
 
-    words =
-     [ // אברי גוף
+    words =  [ 
       new WordClass("", "אצבעות", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/hand.webp?alt=media&token=b4b7786f-e6a7-467f-a8ed-bcf96514d3ba", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fmadical%2Faudio%2F%D7%90%D7%99%D7%91%D7%A8%D7%99%20%D7%92%D7%95%D7%A3%2F%D7%90%D7%A6%D7%91%D7%A2%D7%95%D7%AA.mp3?alt=media&token=9855dd26-3f35-406f-bb17-acc87a324846", false, 0, true),
       new WordClass("", "יד", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/hand.jpg?alt=media&token=caad814f-3556-4b3d-85a6-38c1fbaeda52", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fmadical%2Faudio%2F%D7%90%D7%99%D7%91%D7%A8%D7%99%20%D7%92%D7%95%D7%A3%2F%D7%99%D7%93.mp3?alt=media&token=f5089854-f9b9-4825-879b-5ad431f72cb9", false, 0, true),
       new WordClass("", "רגל", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/leg.jpg?alt=media&token=e55235ec-5d1c-4280-9c8a-4d522cdacbe5", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fmadical%2Faudio%2F%D7%90%D7%99%D7%91%D7%A8%D7%99%20%D7%92%D7%95%D7%A3%2F%D7%A8%D7%92%D7%9C.mp3?alt=media&token=70041eb4-fb65-456c-ab19-8d2472625387", false, 0, true),
@@ -170,11 +163,10 @@ export class AppInitService {
 
     this.add_new_cat_to_db(cat, words, [], [], false);
 
-    //PROFFESIONS
+    // profession category
     cat = new CategoryClass("אנשי מקצוע", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/professional.jpg?alt=media&token=f5f18821-e2d6-44f7-bdf3-25620f695436", this.userEmail, "", 0, false, 0, true);
 
-    words =
-    [ 
+    words =  [ 
       new WordClass("", "רופא משפחה", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/family_doctor.jpg?alt=media&token=dd2466cc-660e-4116-81ed-681c38fbcfe6", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fmadical%2Faudio%2F%D7%A8%D7%95%D7%A4%D7%90%D7%99%D7%9D%2F%D7%A8%D7%95%D7%A4%D7%90%20%D7%9E%D7%A9%D7%A4%D7%97%D7%94.mp3?alt=media&token=b874921f-cb12-47a5-aada-543f51e2ec13", false, 0, true),
       new WordClass("", "נוירולוג", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/neurologist.jpg?alt=media&token=4a7db216-7c8c-49c1-972c-bc00601afa23", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fmadical%2Faudio%2F%D7%A8%D7%95%D7%A4%D7%90%D7%99%D7%9D%2F%D7%A0%D7%95%D7%99%D7%A8%D7%95%D7%9C%D7%95%D7%92.mp3?alt=media&token=c5589221-c7cf-4a3f-a1d1-20a0b25b6d60", false, 0, true),
       new WordClass("", "קרדיולוג", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/cardiologist.jpg?alt=media&token=8bd56ae2-3b8a-477f-b94b-f66bdc70e950", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fmadical%2Faudio%2F%D7%A8%D7%95%D7%A4%D7%90%D7%99%D7%9D%2F%D7%A7%D7%A8%D7%93%D7%99%D7%95%D7%9C%D7%95%D7%92.mp3?alt=media&token=4850d5ce-5120-4fe3-8476-2b128df1fea9", false, 0, true),
@@ -189,20 +181,16 @@ export class AppInitService {
 
     this.add_new_cat_to_db(cat, words, [], [], false);
 
-    //PLACES
+    // places category
     cat = new CategoryClass("מקומות", "", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/places.png?alt=media&token=97113d17-28ab-43b0-beb6-bbb43c3792a0", this.userEmail, "", 0, false, 2, true);
 
-    words =
-    [
+    words =  [
       new WordClass("", "קונצרט", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/concert.jpg?alt=media&token=35a4a017-6a2a-476a-85d6-18556952b4f7", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%A7%D7%95%D7%A0%D7%A6%D7%A8%D7%98.mp3?alt=media&token=580fa79b-17df-4501-b503-15286403b0f7", false, 0, true),
       new WordClass("", "מוזיאון", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/museum.jpg?alt=media&token=97d662cb-1aa9-422b-b4a5-17c5a01627cb", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%9E%D7%95%D7%96%D7%99%D7%90%D7%95%D7%9F.mp3?alt=media&token=7f1200fa-118f-416b-a29c-cd02f7a8d50a", false, 0, true),
       new WordClass("", "תיאטרון", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/theater.jpg?alt=media&token=43012817-2f21-45f7-be31-1f1a524cd220", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%AA%D7%99%D7%90%D7%98%D7%A8%D7%95%D7%9F.mp3?alt=media&token=ea3e9124-63e5-459b-987f-1ce075705c8b", false, 0, true),
       new WordClass("", "הופעה", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/Performance.webp?alt=media&token=70fa4edb-0dab-4557-93ef-dcfd3ce4d3be", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%94%D7%95%D7%A4%D7%A2%D7%94.mp3?alt=media&token=dabc01a8-2cb2-47f0-a17a-2e00541e1667", false, 0, true),
       new WordClass("", "קןלנוע", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/cinema.jpg?alt=media&token=741f997e-bd39-40a8-a32a-7dcceb8e31a3", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%A7%D7%95%D7%9C%D7%A0%D7%95%D7%A2.mp3?alt=media&token=4b8dd6de-172b-4bb8-b526-234c3fd746f0", false, 0, true),
       new WordClass("", "מסעדה", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/Restaurant.jpg?alt=media&token=4cf74188-98b8-48b9-afcb-3065bbedaa19", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%9E%D7%A1%D7%A2%D7%93%D7%94.mp3?alt=media&token=a7af46a2-8a29-4b7f-a4f6-7c411037bf5e", false, 0, true),
-      //new WordClass("", "טיול", "", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%98%D7%99%D7%95%D7%9C.mp3?alt=media&token=6a907618-3979-459b-a62f-6882358da7ab", false, 0, true),
-     // new WordClass("", 'חו"ל', "", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%97%D7%95%D7%9C.mp3?alt=media&token=e5bb056e-9a5c-4633-9589-528984b38fa9", false, 0, true),
-    //new WordClass("", "קניות", "", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%A7%D7%A0%D7%99%D7%95%D7%AA.mp3?alt=media&token=16b8e15e-b0de-4063-9cb0-3001d2352c62", false, 0, true),
       new WordClass("", "פיקניק", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/picnic.jpg?alt=media&token=292475bf-cee7-49df-ab90-dce9bd72923b", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%A4%D7%99%D7%A7%D7%A0%D7%99%D7%A7.mp3?alt=media&token=b9e2ea0d-2fd6-4ab5-8702-c3c7ba1cee41", false, 0, true),
       new WordClass("", "פארק", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/park.jpg?alt=media&token=50f424f1-ca7d-4c46-b08a-4aa3a156c293", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%A4%D7%90%D7%A8%D7%A7.mp3?alt=media&token=01e85dc0-43ad-49c6-88c3-90b96b11ca8f", false, 0, true),
       new WordClass("", "ים", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/sea.jpg?alt=media&token=c98c2a3e-ecc2-4325-b82f-eab80902cc35", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2F%D7%91%D7%99%D7%9C%D7%95%D7%99%D7%99%D7%9D%2Faudio%2F%D7%99%D7%9D.mp3?alt=media&token=55746758-5e22-403e-992d-240c4fb09218", false, 0, true),
@@ -219,12 +207,6 @@ export class AppInitService {
       new WordClass("", "חדר כושר", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/gym.jpg?alt=media&token=bcb6a1d0-2031-498f-bd91-9437b60cf6be", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2Fplaces%20I%20go%2Faudio%2F%D7%97%D7%93%D7%A8%20%D7%9B%D7%95%D7%A9%D7%A8.mp3?alt=media&token=44b01dd3-ff01-4a5d-97a9-71f1481f3ef2", false, 0, true),
       new WordClass("", "בריכה", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/pool.jpg?alt=media&token=fe485932-c6cb-4c5b-b4d0-065e5e74d65d", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2Fplaces%20I%20go%2Faudio%2F%D7%91%D7%A8%D7%99%D7%9B%D7%94.mp3?alt=media&token=4588c5a9-b51e-430b-a76c-e0d3e43ba7eb", false, 0, true),
       new WordClass("", "בנק", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/bank.jpg?alt=media&token=9816f0f2-4085-4784-bff3-f3e3cd661d9d", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2Fplaces%20I%20go%2Faudio%2F%D7%91%D7%A0%D7%A7.mp3?alt=media&token=b4be1fa7-376e-4b97-bb8b-2331e8a0ac32", false, 0, true),
-      // new WordClass("", "סלון", "", "", 0, "", false, 0, true),
-      // new WordClass("", "מטבח", "", "", 0, "", false, 0, true),
-      // new WordClass("", "שירותים", "", "", 0, "", false, 0, true),
-      // new WordClass("", "אמבטיה", "", "", 0, "", false, 0, true),
-      // new WordClass("", "חדר שינה", "", "", 0, "", false, 0, true),
-      // new WordClass("", "חדר ילדים", "", "", 0, "", false, 0, true),
       new WordClass("", "גינה", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/garden.jpg?alt=media&token=a14b62c2-2812-4086-abc3-04582413859d", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2Froom%20at%20home%2Faudio%2F%D7%92%D7%99%D7%A0%D7%94.mp3?alt=media&token=79f9a8f2-9e01-4b02-af54-f4f0681bec9e", false, 0, true),
       new WordClass("", "מרפסת", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/balkani.jpg?alt=media&token=b0ca7fd2-4e9a-4a8f-893c-1027b28ad56f", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2Froom%20at%20home%2Faudio%2F%D7%9E%D7%A8%D7%A4%D7%A1%D7%AA.mp3?alt=media&token=8d27532c-7fbe-4235-b681-35c05645788f", false, 0, true),
       new WordClass("", "מחסן", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/Storage.jpg?alt=media&token=582c3b73-6f5d-41b8-b3f8-1ee3ebc04d0c", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Fplaces%2Froom%20at%20home%2Faudio%2F%D7%9E%D7%97%D7%A1%D7%9F.mp3?alt=media&token=d4240582-5752-491c-a6c3-a8ec9a0ba933", false, 0, true)
@@ -232,13 +214,10 @@ export class AppInitService {
 
     this.add_new_cat_to_db(cat, words, [], [], false);
 
-    //FOOD
+    // food category
     cat = new CategoryClass("אוכל", "", "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Ffood%2Fimages%2Ffood.PNG?alt=media&token=783e6cf9-688f-4a9c-afc4-4b5daec31023", this.userEmail, "", 0, false, 2, true);
 
-
-    words =
-    
-      [
+    words =  [
       new WordClass("", "חלב", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/milk.jpg?alt=media&token=002e1b44-f130-4192-b778-f658e32a86d3", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Ffood%2Faudio%2F%D7%9E%D7%95%D7%A6%D7%A8%D7%99%20%D7%97%D7%9C%D7%91%2F%D7%97%D7%9C%D7%91.mp3?alt=media&token=02cbe1ca-503b-402f-9a31-f3156f8985f2", false, 0, true),
       new WordClass("", "גבינה לבנה", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/cream_cheese.jpg?alt=media&token=486363d9-3208-4464-8850-161be307c0f5", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Ffood%2Faudio%2F%D7%9E%D7%95%D7%A6%D7%A8%D7%99%20%D7%97%D7%9C%D7%91%2F%D7%92%D7%91%D7%99%D7%A0%D7%94%20%D7%9C%D7%91%D7%A0%D7%94.mp3?alt=media&token=efc5e008-0ba3-4379-b8e7-f31749ccd03d", false, 0, true),
       new WordClass("", "יוגורט", "https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/yogurt.jpg?alt=media&token=1a920194-dc69-4648-aa0b-ff227a74ef6b", "", 0, "https://firebasestorage.googleapis.com/v0/b/lets-talk-b433e.appspot.com/o/app-builder%2Ffood%2Faudio%2F%D7%9E%D7%95%D7%A6%D7%A8%D7%99%20%D7%97%D7%9C%D7%91%2F%D7%99%D7%95%D7%92%D7%95%D7%A8%D7%98.mp3?alt=media&token=b99d6f8a-6f51-4199-a4dc-ba316e8c7fa9", false, 0, true),
@@ -285,7 +264,5 @@ export class AppInitService {
    ];
 
     this.add_new_cat_to_db(cat, words, [], [], false);
-
   }
-
 }
