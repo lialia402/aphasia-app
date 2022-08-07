@@ -3,10 +3,3 @@ export class Unit{
         return JSON.parse(JSON.stringify(unit));
     }
 }
-
-export class Punctuation
-{
-    name: string = "";
-    uniCode:string = "";
-    hebrewName: string = "";
-}
