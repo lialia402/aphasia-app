@@ -6,6 +6,7 @@ import {Location} from '@angular/common';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 import { GameSettings } from 'src/app/shared/models/game-settings.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 
 @Component({
   selector: 'app-game-settings',
@@ -23,6 +24,7 @@ export class GameSettingsComponent implements OnInit {
   constructor(
     public authService: AuthService,
     public categoryService: CategoryInfraService,
+    public messageInfra: ErrorInfra,
     private _location: Location,
     public gameService:GameInfraService,
     private _snackBar: MatSnackBar) { }
@@ -30,7 +32,6 @@ export class GameSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.allWords = [];
     this.allWords = this.categoryService.getAllUserPhrases;
-    console.log(this.allWords);
   }
 
   // sort the words in alphabetical order
@@ -57,6 +58,11 @@ export class GameSettingsComponent implements OnInit {
             'value':  data.value
          })
     })
+
+    if(this.checked.length > 10)
+    {
+      this.messageInfra.openSimleSnackBar('שים לב: בחרת יותר מ10 מילים!', 'סגור');
+    }
   }
 
   // create GameSettings object include list of 10 words 
@@ -70,6 +76,27 @@ export class GameSettingsComponent implements OnInit {
     this.gameService.addGameSettings(newGameSetting);
     this._snackBar.open('ההוספה הושלמה בהצלחה', 'סגור');
     this._location.back();
+  }
+
+  // filter words per category
+  filterPerCategory(categoryID: string){
+    let wordsArray = this.categoryService.getAllUserPhrases.filter((word) => {return word.categoryID === categoryID}).sort(function(a, b) {
+      return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
+    });
+    return wordsArray;
+  }
+
+  // count checked per category
+  countChecked(categoryID: string){
+    let count = 0;
+    let wordsArray = this.filterPerCategory(categoryID);
+    for(let i=0; i<wordsArray.length;i++){
+      if(this.checked.some( obj=> obj.value === wordsArray[i].name)){
+        count++;
+      }
+    }
+
+    return count;
   }
 
   cancel(){
