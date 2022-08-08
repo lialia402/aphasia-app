@@ -14,6 +14,7 @@ import firebase from 'firebase/compat/app';
 import { GameResult } from '../models/game-result.model';
 import { Game } from '../models/game.model';
 import { GameSettings } from '../models/game-settings.model';
+import { GameInfo } from '../models/game-info.model';
 
 
 
@@ -330,6 +331,10 @@ export class FirebaseInfraService {
   updateResult(result: GameResult){
     this.afs.doc('gameResults/' + result.id).update(result);
   }
+
+  updateGameSettings(result: GameSettings){
+    this.afs.doc('gameSettings/' + result.id).update(result);
+  }
   
   addPatient(email: string) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );
@@ -344,6 +349,13 @@ export class FirebaseInfraService {
     const addPatient= firebase.firestore.FieldValue.arrayRemove(email) as unknown as string[];
     userRef.update({ listOfPatients: addPatient });
   }
+
+  updateGameInfo(gameSettings: GameSettings) {
+    const userRef: AngularFirestoreDocument<GameSettings> = this.afs.doc( `gameSettings/${gameSettings.id}` );
+    return userRef.set(GameSettings.toObject(gameSettings));
+
+  }
+
 }
 
 

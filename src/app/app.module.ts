@@ -8,9 +8,6 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
-import { MatRadioModule } from '@angular/material/radio';
-import {MatCardModule} from '@angular/material/card';
-import {MatListModule} from '@angular/material/list';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
@@ -49,6 +46,7 @@ import { EditCategoryDialogComponent } from './components/utils/edit-category-di
 import { EditWordsDialogComponent } from './components/utils/edit-words-dialog/edit-words-dialog.component';
 import { AnalyticsPageComponent } from './components/analytics-page/analytics-page.component';
 import { GameSettingsComponent } from './components/game-settings/game-settings.component';
+import { CreateGameComponent } from './components/create-game/create-game.component';
 
 
 
@@ -82,6 +80,7 @@ import { GameSettingsComponent } from './components/game-settings/game-settings.
     EditWordsDialogComponent,
     AnalyticsPageComponent,
     GameSettingsComponent,
+    CreateGameComponent,
   ],
   imports: [
     BrowserModule,

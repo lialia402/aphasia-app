@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CategoryClass } from '../models/category-class.model';
+import { GameInfo } from '../models/game-info.model';
 import { GameResult } from '../models/game-result.model';
 import { GameSettings } from '../models/game-settings.model';
 import { Game } from '../models/game.model';
@@ -79,7 +80,8 @@ export class GameInfraService {
     while (this.customWordList.length < 10) {
 
       // Get word object by only string name
-      word = this.findWordByName(this.gameSettings[0].words[i]);
+      // TDL
+      word = this.findWordByName(this.gameSettings[0].listOfGames[i].listOfWords[i]);
   
       const checkCategory = (obj: CategoryClass) => obj.id === word.categoryID;
       category = this.categoryInfraService.categories.find(checkCategory);
@@ -319,6 +321,27 @@ export class GameInfraService {
         resolve(game);
       });
     })
+  }
+
+  public addGameInfo(gameInfo:GameInfo){
+    let gameSettings = this.gameSettings[0];
+    gameSettings.listOfGames.push(gameInfo);
+    this.firebaseInfraService.updateGameInfo(gameSettings);
+  }
+
+  public deleteGameInfo(gameInfo:GameInfo){
+    let gameSettings = this.gameSettings[0];
+    let newListOfGames = gameSettings.listOfGames.filter((e) => { return e.gameNum !== gameInfo.gameNum })
+    for(let i=0; i < newListOfGames.length; i++){
+      newListOfGames[i].gameNum = i;
+    }
+    gameSettings.listOfGames = newListOfGames;
+    this.firebaseInfraService.updateGameInfo(gameSettings);
+  }
+
+  public changeRandomGame(GameSetting: GameSettings) {
+    GameSetting.enableRandomGame = !GameSetting.enableRandomGame;
+    this.firebaseInfraService.updateGameSettings(GameSetting);
   }
 }
 
