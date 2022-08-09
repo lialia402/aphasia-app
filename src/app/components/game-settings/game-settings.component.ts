@@ -64,4 +64,19 @@ export class GameSettingsComponent implements OnInit {
     this.gameService.changeRandomGame(this.gameSetting);
   }
 
+  editGameInfo(game: GameInfo){
+    this.gameService.gameToEdit = game;
+    this.router.navigate(['create-game-page']);
+  }
+
+  calculateAverage(game:GameInfo){
+    if(game.numOfPlayed === 0){
+      return 0;
+    }
+    else{
+      return game.totalScore/game.numOfPlayed;
+    }
+  }
+
+
 }

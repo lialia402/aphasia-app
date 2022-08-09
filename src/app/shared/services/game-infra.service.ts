@@ -22,8 +22,12 @@ export class GameInfraService {
   public patientGames:Game[];
   public gameSettings:GameSettings[];
   public customGame = false; 
+  public gameToEdit:GameInfo = new GameInfo(-1,[]);
 
-  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService,public firebaseInfraService: FirebaseInfraService) {
+  constructor
+  ( public categoryInfraService: CategoryInfraService, 
+    public wordInfraService: WordInfraService,
+    public firebaseInfraService: FirebaseInfraService) {
 
    }
 
@@ -336,6 +340,12 @@ export class GameInfraService {
       newListOfGames[i].gameNum = i;
     }
     gameSettings.listOfGames = newListOfGames;
+    this.firebaseInfraService.updateGameInfo(gameSettings);
+  }
+
+  public editGameInfo(gameInfo:GameInfo){
+    let gameSettings = this.gameSettings[0];
+    gameSettings.listOfGames[gameInfo.gameNum] = gameInfo;
     this.firebaseInfraService.updateGameInfo(gameSettings);
   }
 

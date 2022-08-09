@@ -2,7 +2,6 @@
 <div class="title-bar">
     <div class="page-title">
       <div class="class-button">
-        <app-return-button></app-return-button>
       </div>
       <h4 class="h2">הגדרת משחק ל{{ authService.patientOfTherapist.firstName}}</h4>
     </div>
@@ -24,7 +23,7 @@
         <div class="mat-expansion-panel-body">
         <mat-card style="width:10rem;"  *ngFor="let word of filterPerCategory(category.id)">
             <mat-card-content>
-                <mat-checkbox dir="rtl" #checkBox [value]="word.name" (change)="getCheckbox(checkBox)">{{word.name}}</mat-checkbox>
+                <mat-checkbox dir="rtl" #checkBox [value]="word.name" [checked]="isAlreadyChecked(word.name)" (change)="getCheckbox(checkBox)">{{word.name}}</mat-checkbox>
             </mat-card-content>
      </mat-card>
         </div>

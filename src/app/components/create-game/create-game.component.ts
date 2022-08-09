@@ -8,6 +8,7 @@ import { GameSettings } from 'src/app/shared/models/game-settings.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
+import { Game } from 'src/app/shared/models/game.model';
 
 @Component({
   selector: 'app-create-game',
@@ -21,6 +22,7 @@ export class CreateGameComponent implements OnInit {
   selectedWords:string[] = [];
   showButton:boolean = false;
   allWords:WordClass[] = [];
+  isEditMode=false;
 
   constructor(
     public authService: AuthService,
@@ -33,7 +35,16 @@ export class CreateGameComponent implements OnInit {
   ngOnInit(): void {
     this.allWords = [];
     this.allWords = this.categoryService.getAllUserPhrases;
-    console.log(this.gameService.gameSettings);
+    this.isEditMode = this.gameService.gameToEdit.gameNum !== -1;
+    if(this.isEditMode){
+      for(let i=0;i<this.gameService.gameToEdit.listOfWords.length;i++)
+      {
+        this.checked.push ({
+          'checked' : true,
+          'value':  this.gameService.gameToEdit.listOfWords[i],
+       })
+      }
+    }
   }
 
   // sort the words in alphabetical order
@@ -67,16 +78,58 @@ export class CreateGameComponent implements OnInit {
     }
   }
 
-  // create GameSettings object include list of 10 words 
+  // create or edit GameSettings object include list of 10 words 
   createGameList(){
+    this.selectedWords = [];
     for(let i=0;i<10;i++)
     {
         this.selectedWords.push(this.checked[i].value);
     }
 
-    this.insertGameInfo(this.selectedWords);
-    this._snackBar.open('ההוספה הושלמה בהצלחה', 'סגור');
-    this._location.back();
+    if(!this.compareAll(this.selectedWords))
+    {
+      if(this.isEditMode){
+        let newGameInfo = new GameInfo(this.gameService.gameToEdit.gameNum,this.selectedWords);
+        this.gameService.editGameInfo(newGameInfo);
+        this.gameService.gameToEdit = new GameInfo(-1,[]);
+        this._snackBar.open('העריכה הושלמה בהצלחה', 'סגור');
+      }
+  
+      else{
+        this.insertGameInfo(this.selectedWords);
+        this._snackBar.open('ההוספה הושלמה בהצלחה', 'סגור');
+      }
+      
+      
+      this._location.back();
+    }
+
+    else{
+      this.messageInfra.openSimleSnackBar('שים לב: משחק זה קיים עבור המטופל במערכת אנא שנה רשימה מילים', 'סגור');
+    }
+    
+  }
+
+  // compare to all games
+  compareAll(newWords:string[])
+  {
+    let flag = false;
+    for(let i=0;i<this.gameService.gameSettings[0].listOfGames.length;i++){
+      if(this.compare(this.gameService.gameSettings[0].listOfGames[i].listOfWords,newWords)){
+        return true;
+      }
+    }
+    return flag;
+  }
+
+  // comare between two games
+  compare(array1:string[], array2:string[]){
+    array1.sort();
+    array2.sort();
+    for (var i = 0; i < array1.length; i++){
+      if (array1[i] !== array2[i]) return false;
+    }
+    return true;  
   }
 
   // Insert new game info 
@@ -120,7 +173,19 @@ export class CreateGameComponent implements OnInit {
     return count;
   }
 
+  // when you are in edit mode check if word needs to be checked
+  isAlreadyChecked(wordName: string){
+    let isWordInCheckedList = false;
+    if(this.isEditMode)
+    {
+      isWordInCheckedList = this.gameService.gameToEdit.listOfWords.some( word => word === wordName);
+    }
+
+    return isWordInCheckedList;
+  }
+
   cancel(){
     this._location.back();
+    this.gameService.gameToEdit = new GameInfo(-1,[]);
   }
 }
