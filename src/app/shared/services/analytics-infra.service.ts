@@ -10,8 +10,8 @@ import { WordInfraService } from './word-infra.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AnalyticsInfraService {
 
+export class AnalyticsInfraService {
   allWords:WordClass[];
   allCategories:CategoryClass[];
   allGameResults:GameResult[];
