@@ -10,7 +10,7 @@
 
 <!-- for normal mode -->
 <div class="stretch">
-    <p class="buttons" *ngIf="isTherapist && this.isCategoryEnabled">על מנת להסתיר את הקט מהמטופל אנא כבה את הכפתור</p>
+    <p class="buttons" *ngIf="isTherapist && this.isCategoryEnabled">על מנת להסתיר את הקטגוריה מהמטופל אנא כבה את הכפתור</p>
     <div class="card-deck" fxLayout.xs="row">
       <ng-container class="stretch" *ngFor="let item of this.categories">
         <mat-card style="width:10rem;" class="mat-card" *ngIf="item.visibility">

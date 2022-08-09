@@ -30,10 +30,17 @@ export class GameSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameSetting = this.gameService.gameSettings[0];
-    this.gamesInformation = this.gameSetting.listOfGames;
-    if(this.gamesInformation.length === 0){
+
+    if(this.gameSetting !== undefined){
+      this.gamesInformation = this.gameSetting.listOfGames;
+      if(this.gamesInformation.length === 0){
+        this.messageInfra.openSimleSnackBar('שים לב: כעת אין משחקים מותאמים אישית למטופל', 'סגור');
+      }
+    }
+    else{
       this.messageInfra.openSimleSnackBar('שים לב: כעת אין משחקים מותאמים אישית למטופל', 'סגור');
     }
+   
   }
 
   deleteGameInfo(game:GameInfo){
@@ -51,7 +58,7 @@ export class GameSettingsComponent implements OnInit {
   }
 
   navigateToCreateGame(){
-    if(this.gamesInformation.length === 3)
+    if(this.gamesInformation !== undefined && this.gamesInformation.length === 3)
     {
       this.messageInfra.openSimleSnackBar('כעת יש במערכת 3 משחקים מותאמים אישית למטופל עלייך למחוק אחד כדי לייצר אחד חדש', 'סגור');
     }
@@ -61,7 +68,14 @@ export class GameSettingsComponent implements OnInit {
   }
 
   changeRandomGameSetting(){
-    this.gameService.changeRandomGame(this.gameSetting);
+    if(this.gameSetting === undefined){
+      let newInfroArray: GameInfo[] = [];
+      let newGameSetting = new GameSettings("",this.authService.patientOfTherapist.email,false,newInfroArray);
+      this.gameService.addGameSettings(newGameSetting);
+    }
+    else{
+      this.gameService.changeRandomGame(this.gameSetting);
+    }
   }
 
   editGameInfo(game: GameInfo){
@@ -76,6 +90,22 @@ export class GameSettingsComponent implements OnInit {
     else{
       return game.totalScore/game.numOfPlayed;
     }
+  }
+
+  checkEnableRandomGame(){
+    if(this.gameSetting === undefined)
+    {
+      return true;
+    }
+    else{
+      return this.gameSetting.enableRandomGame;
+    }
+    
+  }
+
+  toDate(date: Date){ 
+    let dateNew = new Date(date).toLocaleDateString();
+    return dateNew;
   }
 
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameInfo } from 'src/app/shared/models/game-info.model';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 @Component({
@@ -10,6 +11,8 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 export class GameComponent implements OnInit {
 
   isCustonExists=false;
+  isRandomGameEnabled = false;
+  CustomGames:GameInfo[] = [];
 
   constructor(
     public router: Router,
@@ -23,8 +26,13 @@ export class GameComponent implements OnInit {
       let settings = await this.gameService.getGameSettings();
 
       if(settings.length === 1){
-        this.isCustonExists = true;
-        await this.gameService.giveCustomList();
+        this.isRandomGameEnabled = settings[0].enableRandomGame;
+        if(settings[0].listOfGames.length > 0)
+        {
+          this.CustomGames = settings[0].listOfGames;
+          this.isCustonExists = true;
+          await this.gameService.giveCustomList();
+        }
       }
 
    }, 500)

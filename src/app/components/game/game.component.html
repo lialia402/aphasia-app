@@ -6,36 +6,26 @@
       <h4 class="h2">על קצה הלשון</h4>
     </div>
 </div>
-
-<!-- Main content -->
-<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="width: 100%;">
-    <div class="inner-adjust">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="media" >
-            <div dir="rtl" class="media-body rtl">
-                <div class="pt-3 pb-2 mb-3">
-                    <h1 class="game-title">חוקי המשחק</h1>
-                  </div>
-                <div class="line-item">
-                    <span class="emoji">🤔</span>
-                    <p class="rules"> בחר את המילה המתארת את התמונה</p>
-                  </div>
-                  <div class="line-item">
-                    <span class="emoji">🔥</span>
-                    <p class="rules">כל סבב כולל 10 מילים ו4 אפשרויות</p>
-                  </div>
-                 
-                  <div class="line-item">
-                    <button class="start-button" mat-raised-button color="primary" (click) ="navigateToGame()">התחל משחק</button>
-                    <button *ngIf="isCustonExists" class="start-button" mat-raised-button color="primary" (click) ="navigateToCustomGame()">משחק מותאם אישית</button>
-                  </div>
-            </div>
-          </div>
-        </div>
+ 
+    <div class="stretch">
+      <div class="card-deck" fxLayout.xs="row">
+        <div class="line-item">
+          <h1 class="game-title">חוקי המשחק</h1>
+          <p class="rules"> בחר את המילה המתארת את התמונה</p>
+          <p class="rules">כל סבב כולל 10 מילים ו4 אפשרויות</p>
       </div>
+        <mat-card style="width:10rem;" *ngFor="let item of CustomGames;  let i = index"class="mat-card" >
+          <mat-card-subtitle class="details-of-game text-center" > (המשחק שוחק {{item.numOfPlayed}} פעמים)</mat-card-subtitle>
+          <mat-card-subtitle class="mat-card-title text-center" (click) ="navigateToCustomGame()" >משחק מותאם אישית {{i + 1}}</mat-card-subtitle>
+        </mat-card> 
+
+        <mat-card *ngIf="isRandomGameEnabled" style="width:10rem;" class="mat-card" >
+          <mat-card-subtitle  (click) ="navigateToGame()" class="mat-card-title text-center">התחל משחק כללי</mat-card-subtitle>
+        </mat-card> 
     </div>
-  </main>
+</div>
+<app-footer>
+</app-footer>
   
   
   

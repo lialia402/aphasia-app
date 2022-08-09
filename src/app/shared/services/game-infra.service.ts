@@ -22,7 +22,7 @@ export class GameInfraService {
   public patientGames:Game[];
   public gameSettings:GameSettings[];
   public customGame = false; 
-  public gameToEdit:GameInfo = new GameInfo(-1,[]);
+  public gameToEdit:GameInfo = new GameInfo(-1,[], new Date);
 
   constructor
   ( public categoryInfraService: CategoryInfraService, 
@@ -303,6 +303,11 @@ export class GameInfraService {
     if(this.gameSettings.length === 1)
     {
       this.firebaseInfraService.removeSettings(this.gameSettings[0]);
+    }
+
+    if(this.gameSettings[0] === undefined)
+    {
+      this.gameSettings[0] = result;
     }
 
     return new Promise((resolve, reject) => {

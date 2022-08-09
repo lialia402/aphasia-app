@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameInfo } from 'src/app/shared/models/game-info.model';
+import { GameSettings } from 'src/app/shared/models/game-settings.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';

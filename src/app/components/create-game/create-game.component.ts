@@ -86,12 +86,12 @@ export class CreateGameComponent implements OnInit {
         this.selectedWords.push(this.checked[i].value);
     }
 
-    if(!this.compareAll(this.selectedWords))
+    if((this.gameService.gameSettings[0]=== undefined) || (!this.compareAll(this.selectedWords)))
     {
       if(this.isEditMode){
-        let newGameInfo = new GameInfo(this.gameService.gameToEdit.gameNum,this.selectedWords);
+        let newGameInfo = new GameInfo(this.gameService.gameToEdit.gameNum,this.selectedWords,new Date());
         this.gameService.editGameInfo(newGameInfo);
-        this.gameService.gameToEdit = new GameInfo(-1,[]);
+        this.gameService.gameToEdit = new GameInfo(-1,[],new Date());
         this._snackBar.open('העריכה הושלמה בהצלחה', 'סגור');
       }
   
@@ -137,7 +137,7 @@ export class CreateGameComponent implements OnInit {
     if(this.gameService.gameSettings.length === 0)
     {
       let newInfroArray: GameInfo[] = [];
-      let newGameInfo = new GameInfo(0,words);
+      let newGameInfo = new GameInfo(0,words, new Date());
       newInfroArray.push(newGameInfo);
       let newGameSetting = new GameSettings("",this.authService.patientOfTherapist.email,true,newInfroArray);
       this.gameService.addGameSettings(newGameSetting);
@@ -146,7 +146,7 @@ export class CreateGameComponent implements OnInit {
     else
     {
       let numOfGame =  this.gameService.gameSettings[0].listOfGames.length;
-      let newGameInfo = new GameInfo(numOfGame,words);
+      let newGameInfo = new GameInfo(numOfGame,words, new Date());
       this.gameService.addGameInfo(newGameInfo);
     }
 
@@ -186,6 +186,6 @@ export class CreateGameComponent implements OnInit {
 
   cancel(){
     this._location.back();
-    this.gameService.gameToEdit = new GameInfo(-1,[]);
+    this.gameService.gameToEdit = new GameInfo(-1,[], new Date());
   }
 }
