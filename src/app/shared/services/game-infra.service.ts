@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CategoryClass } from '../models/category-class.model';
+import { GameInfo } from '../models/game-info.model';
 import { GameResult } from '../models/game-result.model';
 import { GameSettings } from '../models/game-settings.model';
 import { Game } from '../models/game.model';
@@ -21,8 +22,13 @@ export class GameInfraService {
   public patientGames:Game[];
   public gameSettings:GameSettings[];
   public customGame = false; 
+  public currentCustomGame = -1;
+  public gameToEdit:GameInfo = new GameInfo(-1,[], new Date);
 
-  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService,public firebaseInfraService: FirebaseInfraService) {
+  constructor
+  ( public categoryInfraService: CategoryInfraService, 
+    public wordInfraService: WordInfraService,
+    public firebaseInfraService: FirebaseInfraService) {
 
    }
 
@@ -68,7 +74,7 @@ export class GameInfraService {
     return this.randomWordList;
   }
 
-  public async giveCustomList(){
+  public giveCustomList(customWords: string[]){
     let category:CategoryClass;
     let words: WordClass[] = [];
     let word:WordClass;
@@ -78,17 +84,17 @@ export class GameInfraService {
     let i=0;
     while (this.customWordList.length < 10) {
 
-      // Get word object by only string name
-      word = this.findWordByName(this.gameSettings[0].words[i]);
+      word = this.findWordByName(customWords[i]);
   
       const checkCategory = (obj: CategoryClass) => obj.id === word.categoryID;
       category = this.categoryInfraService.categories.find(checkCategory);
+      words = this.categoryInfraService.getAllUserPhrases.filter((word) => {return word.categoryID === category.id})
 
-      let promiseOfWords= this.wordInfraService.getPhrases(category);
+      // let promiseOfWords= this.wordInfraService.getPhrases(category);
 
-      await promiseOfWords.then((data) => {
-        words = data;
-      })
+      // await promiseOfWords.then((data) => {
+      //   words = data;
+      // })
 
       this.customWordList.push(word);
       this.customrandomSelectionWords.push(word);
@@ -231,7 +237,6 @@ export class GameInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
         this.gameSettings = settings;
-        console.log( this.gameSettings);
         resolve(this.gameSettings);
       })
     })
@@ -242,7 +247,6 @@ export class GameInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
         this.gameSettings = settings;
-        console.log(this.gameSettings);
         resolve(this.gameSettings);
       })
     })
@@ -301,6 +305,11 @@ export class GameInfraService {
       this.firebaseInfraService.removeSettings(this.gameSettings[0]);
     }
 
+    if(this.gameSettings[0] === undefined)
+    {
+      this.gameSettings[0] = result;
+    }
+
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.addGameSettings(result)?.then(() => {
         resolve(result);
@@ -321,6 +330,41 @@ export class GameInfraService {
         resolve(game);
       });
     })
+  }
+
+  public addGameInfo(gameInfo:GameInfo){
+    let gameSettings = this.gameSettings[0];
+    gameSettings.listOfGames.push(gameInfo);
+    this.firebaseInfraService.updateGameInfo(gameSettings);
+  }
+
+  public deleteGameInfo(gameInfo:GameInfo){
+    let gameSettings = this.gameSettings[0];
+    let newListOfGames = gameSettings.listOfGames.filter((e) => { return e.gameNum !== gameInfo.gameNum })
+    for(let i=0; i < newListOfGames.length; i++){
+      newListOfGames[i].gameNum = i;
+    }
+    gameSettings.listOfGames = newListOfGames;
+    this.firebaseInfraService.updateGameInfo(gameSettings);
+  }
+
+  public editGameInfo(gameInfo:GameInfo){
+    let gameSettings = this.gameSettings[0];
+    gameSettings.listOfGames[gameInfo.gameNum] = gameInfo;
+    this.firebaseInfraService.updateGameInfo(gameSettings);
+  }
+
+  public updateGameInfo(score:number){
+    let gameSettings = this.gameSettings[0];
+    gameSettings.listOfGames[this.currentCustomGame].isPlayed = true;
+    gameSettings.listOfGames[this.currentCustomGame].numOfPlayed++;
+    gameSettings.listOfGames[this.currentCustomGame].totalScore+=score;
+    this.firebaseInfraService.updateGameInfo(gameSettings);
+  }
+
+  public changeRandomGame(GameSetting: GameSettings) {
+    GameSetting.enableRandomGame = !GameSetting.enableRandomGame;
+    this.firebaseInfraService.updateGameSettings(GameSetting);
   }
 }
 

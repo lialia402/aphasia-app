@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameInfo } from 'src/app/shared/models/game-info.model';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 @Component({
@@ -10,12 +11,17 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 export class GameComponent implements OnInit {
 
   isCustonExists=false;
+  isRandomGameEnabled = false;
+  CustomGames:GameInfo[] = [];
+  isLoading:boolean=true;
 
   constructor(
     public router: Router,
     public gameService: GameInfraService) {}
 
   ngOnInit(): void {
+    this.gameService.currentCustomGame = -1;
+    this.gameService.customGame = false;
     setTimeout(async () => {
       await this.gameService.giveRandomList()
       await this.gameService.getGameResults();
@@ -23,9 +29,14 @@ export class GameComponent implements OnInit {
       let settings = await this.gameService.getGameSettings();
 
       if(settings.length === 1){
-        this.isCustonExists = true;
-        await this.gameService.giveCustomList();
+        this.isRandomGameEnabled = settings[0].enableRandomGame;
+        if(settings[0].listOfGames.length > 0)
+        {
+          this.CustomGames = settings[0].listOfGames;
+          this.isCustonExists = true;
+        }
       }
+      this.isLoading = false;
 
    }, 500)
   }
@@ -33,14 +44,17 @@ export class GameComponent implements OnInit {
   // navigate to diffult game
   navigateToGame()
   {
+    
     this.gameService.customGame = false;
     this.router.navigate(['question-page']);
   }
 
   // navigate to game created by the therapist
-  navigateToCustomGame()
+  navigateToCustomGame(game:GameInfo)
   {
     this.gameService.customGame = true;
+    this.gameService.currentCustomGame = game.gameNum;
+    this.gameService.giveCustomList(game.listOfWords);
     this.router.navigate(['question-page']);
   }
 }

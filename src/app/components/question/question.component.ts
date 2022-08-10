@@ -20,6 +20,8 @@ export class QuestionComponent implements OnInit {
   correctAnswers:number=0;
   public cardQuestion:WordClass;
   public cardAnswers:WordClass[];
+  imageLoaded = false;
+
   constructor(
     public gameService: GameInfraService,
     public router: Router,
@@ -58,6 +60,7 @@ export class QuestionComponent implements OnInit {
       setTimeout(() => {
       this.gameService.increaseRightAnswer(this.cardQuestion.categoryID);
         this.nextRound(answer);
+        this.imageLoaded = false;
       }, 1000);
     }
     else{
@@ -65,6 +68,7 @@ export class QuestionComponent implements OnInit {
       setTimeout(() => {
         this.gameService.increaseWrongAnswer(this.cardQuestion.categoryID);
         this.nextRound(answer);
+        this.imageLoaded = false;
       }, 2000);
     }
   }
@@ -84,11 +88,21 @@ export class QuestionComponent implements OnInit {
       this.gameService.finalScoreCurrentGame=this.correctAnswers;
       const currentGame = new Game("",this.correctAnswers, this.authService.user.email,new Date());
       this.gameService.addGame(currentGame);
+      if(this.gameService.customGame)
+      {
+        this.gameService.updateGameInfo(this.gameService.finalScoreCurrentGame);
+      }
       this.router.navigate(['result-page']);
     }
   }
 
   navigateHomePage(){
+    this.gameService.currentCustomGame = -1;
+    this.gameService.customGame = false;
     this.router.navigate(['dashboard']);
+  }
+
+  showQuestionAndAnswer(){
+    this.imageLoaded = true;
   }
 }

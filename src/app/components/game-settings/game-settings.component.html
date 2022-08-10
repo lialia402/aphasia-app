@@ -1,35 +1,50 @@
-
 <div class="title-bar">
     <div class="page-title">
       <div class="class-button">
         <app-return-button></app-return-button>
       </div>
-      <h4 class="h2">הגדרת משחק ל{{ authService.patientOfTherapist.firstName}}</h4>
+      <h4 class="h2 font">הגדרת משחק ל{{ authService.patientOfTherapist.firstName}}</h4>
     </div>
   </div>
 
 <div class="stretch">
-    <p class="chosen-words" style="text-decoration: underline;" *ngIf="this.gameService.gameSettings.length === 1"> :רשימת המילים הנוכחית</p>
-    <div style="background-color: #85aee6;" dir="rtl" class="chosen-words" *ngIf="this.gameService.gameSettings.length === 1">
-        <div style="width:10rem;" *ngFor="let word of this.gameService.gameSettings[0].words">
+  
+  <div dir="rtl" class="main">
+    <mat-slide-toggle [checked]="checkEnableRandomGame()" class="font"
+    (change)="changeRandomGameSetting();">מתן אפשרות למשחק רנדומלי למטופל {{ authService.patientOfTherapist.firstName}}
+    </mat-slide-toggle>
+    <mat-expansion-panel *ngFor="let game of this.gamesInformation">
+        <mat-expansion-panel-header style="background-color: ghostwhite;">
+            <mat-panel-title dir="rtl" style="max-width: 200px;" class="font">
+            משחק מספר {{game.gameNum + 1}} 
+            </mat-panel-title>
+            <mat-panel-description dir="rtl" class="font">
+                המשחק שוחק {{game.numOfPlayed}} פעמים                           
+           </mat-panel-description>
+           <mat-panel-description dir="rtl" class="font">                       
+            ציון ממוצע {{calculateAverage(game)}}
+       </mat-panel-description>
+           <mat-panel-description dir="rtl" class="font">
+            תאריך יצירת משחק {{ toDate(game.createDateOfGame)}}
+       </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="mat-expansion-panel-body">
+        <mat-card style="width: 10rem;flex: 5 0 18%;"  *ngFor="let word of game.listOfWords">
+            <mat-card-content class="font">
                 {{word}}
-        </div>
+            </mat-card-content>
+     </mat-card>
+     <div class="line-item">
+        <button class="create-button font" mat-raised-button color="warn" (click)="deleteGameInfo(game)"> מחיקה</button>
+        <button class="create-button font" mat-raised-button color="primary" (click)="editGameInfo(game)"> עריכה</button>
     </div>
-
-    <p class="chosen-words" > :אם ברצונך לבחור מילים בהתאה אישית עבור משחק למטופל אנא בחר 10 מילים מבין רשימת המילים הבאה</p>
-<div dir="rtl" class="main">
-    <mat-card style="width:10rem;"  *ngFor="let word of this.sortedWordsList()">
-        <mat-card-content>
-            <mat-checkbox dir="rtl" #checkBox [value]="word.name" (change)="getCheckbox(checkBox)">{{word.name}}</mat-checkbox>
-        </mat-card-content>
-    </mat-card>
+        </div>
+    </mat-expansion-panel>
 </div>
-<div class="line-item">
-    <button class="create-button" mat-raised-button color="warn" (click) ="cancel()"> ביטול</button>
-    <button *ngIf="showButton" class="create-button" mat-raised-button color="primary" (click) ="createGameList()"> אישור</button>
+<div class="line-item" style="margin-bottom: 10px;">
+    <button class="create-button font" mat-raised-button color="primary" (click)="navigateToCreateGame()"> יצירת משחק חדש</button>
 </div>
 </div>
 
 <app-footer>
 </app-footer>
-

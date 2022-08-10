@@ -1,11 +1,14 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { WordClass } from 'src/app/shared/models/word-class.model';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { GameInfo } from 'src/app/shared/models/game-info.model';
+import { GameSettings } from 'src/app/shared/models/game-settings.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
-import {Location} from '@angular/common';
+import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
-import { GameSettings } from 'src/app/shared/models/game-settings.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-game-settings',
@@ -14,65 +17,96 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 
 export class GameSettingsComponent implements OnInit {
-  @ViewChildren ('checkBox') checkBox:QueryList<any>;
-  checked:any[] = [];
-  selectedWords:string[] = [];
-  showButton:boolean = false;
-  allWords:WordClass[] = [];
+  gameSetting: GameSettings;
+  gamesInformation: GameInfo[];
 
   constructor(
     public authService: AuthService,
     public categoryService: CategoryInfraService,
-    private _location: Location,
     public gameService:GameInfraService,
-    private _snackBar: MatSnackBar) { }
+    public router: Router,
+    public dialog: MatDialog,
+    public messageInfra: ErrorInfra) { }
 
   ngOnInit(): void {
-    this.allWords = [];
-    this.allWords = this.categoryService.getAllUserPhrases;
-    console.log(this.allWords);
-  }
+    this.gameSetting = this.gameService.gameSettings[0];
 
-  // sort the words in alphabetical order
-  sortedWordsList() : Array<WordClass>{
-    this.allWords.sort(function(a, b) {
-      return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
-    });
-    return this.allWords;
-  }
-
-  // allows you to mark exactly 10 words
-  getCheckbox(checkbox:any){
-    this.checked = [];
-    const checked = this.checkBox.filter(checkbox => checkbox.checked);
-    if(checked.length === 10){
-      this.showButton = true;
+    if(this.gameSetting !== undefined){
+      this.gamesInformation = this.gameSetting.listOfGames;
+      if(this.gamesInformation.length === 0){
+        this.messageInfra.openSimleSnackBar('שים לב: כעת אין משחקים מותאמים אישית למטופל', 'סגור');
+      }
     }
     else{
-      this.showButton = false;
+      this.messageInfra.openSimleSnackBar('שים לב: כעת אין משחקים מותאמים אישית למטופל', 'סגור');
     }
-    checked.forEach((data:any) => {
-         this.checked.push ({
-            'checked' : data.checked,
-            'value':  data.value
-         })
-    })
+   
   }
 
-  // create GameSettings object include list of 10 words 
-  createGameList(){
-    for(let i=0;i<10;i++)
+  deleteGameInfo(game:GameInfo){
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
+    dialogRef.afterClosed().subscribe(result => {
+      if(result)
+      {
+        this.gameService.deleteGameInfo(game);
+        this.gameSetting = this.gameService.gameSettings[0];
+        this.gamesInformation = this.gameSetting.listOfGames;
+      }
+    });
+
+  }
+
+  navigateToCreateGame(){
+    if(this.gamesInformation !== undefined && this.gamesInformation.length === 3)
     {
-        this.selectedWords.push(this.checked[i].value);
+      this.messageInfra.openSimleSnackBar('כעת יש במערכת 3 משחקים מותאמים אישית למטופל עלייך למחוק אחד כדי לייצר אחד חדש', 'סגור');
     }
-
-    let newGameSetting = new GameSettings("",this.authService.patientOfTherapist.email,this.selectedWords);
-    this.gameService.addGameSettings(newGameSetting);
-    this._snackBar.open('ההוספה הושלמה בהצלחה', 'סגור');
-    this._location.back();
+    else{
+      this.router.navigate(['create-game-page']);
+    }
   }
 
-  cancel(){
-    this._location.back();
+  changeRandomGameSetting(){
+    if(this.gameSetting === undefined){
+      let newInfroArray: GameInfo[] = [];
+      let newGameSetting = new GameSettings("",this.authService.patientOfTherapist.email,false,newInfroArray);
+      this.gameService.addGameSettings(newGameSetting);
+    }
+    else{
+      this.gameService.changeRandomGame(this.gameSetting);
+    }
   }
+
+  editGameInfo(game: GameInfo){
+    this.gameService.gameToEdit = game;
+    this.router.navigate(['create-game-page']);
+  }
+
+  calculateAverage(game:GameInfo){
+    if(game.numOfPlayed === 0){
+      return 0;
+    }
+    else{
+      return game.totalScore/game.numOfPlayed;
+    }
+  }
+
+  checkEnableRandomGame(){
+    if(this.gameSetting === undefined)
+    {
+      return true;
+    }
+    else{
+      return this.gameSetting.enableRandomGame;
+    }
+    
+  }
+
+  toDate(date: Date){ 
+    let dateNew = new Date(date).toLocaleDateString();
+    return dateNew;
+  }
+
+
 }

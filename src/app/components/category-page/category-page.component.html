@@ -10,14 +10,14 @@
 
 <!-- for normal mode -->
 <div class="stretch">
-    <p class="buttons" *ngIf="isTherapist && this.isCategoryEnabled">על מנת להסתיר את הקט מהמטופל אנא כבה את הכפתור</p>
+    <p class="buttons font" *ngIf="isTherapist && this.isCategoryEnabled">על מנת להסתיר את הקטגוריה מהמטופל אנא כבה את הכפתור</p>
     <div class="card-deck" fxLayout.xs="row">
       <ng-container class="stretch" *ngFor="let item of this.categories">
         <mat-card style="width:10rem;" class="mat-card" *ngIf="item.visibility">
         <mat-card-header *ngIf="isTherapist"> 
           <mat-slide-toggle *ngIf="isTherapist" [checked]="item.visibility" (change)="updateVisibility(item);">
           </mat-slide-toggle>
-          <mat-card-title style=" font-size: 1rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
+          <mat-card-title style=" font-size: 0.8rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
         </mat-card-header>
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image"  (click)="openCategoryWords(item);"/>
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
@@ -37,14 +37,14 @@
       </button>
 </div>
 <div class="stretch" *ngIf="isTherapist && this.isCategoryDisabled">
-    <p class="buttons" *ngIf="isTherapist && this.isCategoryDisabled">על מנת להציג את הקטגוריה למטופל אנא הדלק את הכפתור</p>
+    <p class="buttons font" *ngIf="isTherapist && this.isCategoryDisabled">על מנת להציג את הקטגוריה למטופל אנא הדלק את הכפתור</p>
     <div class="card-deck" fxLayout.xs="row" *ngIf="isTherapist">
       <ng-container *ngFor="let item of this.categories">
         <mat-card style="width:10rem;" class="mat-card" *ngIf="!item.visibility">
         <mat-card-header *ngIf="isTherapist"> 
           <mat-slide-toggle *ngIf="isTherapist" [checked]="item.visibility" (change)="updateVisibility(item);">
           </mat-slide-toggle>
-          <mat-card-title style=" font-size: 1rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
+          <mat-card-title style=" font-size: 0.8rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
         </mat-card-header>
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image"  (click)="openCategoryWords(item);"/>
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>

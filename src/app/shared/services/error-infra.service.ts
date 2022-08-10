@@ -12,7 +12,7 @@ export class ErrorInfra {
   // Opens a error message with given message and a close button
   openSimleSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
-       duration: 2000,
+       duration: 3500,
        verticalPosition: 'top',
        direction: 'rtl'
     });

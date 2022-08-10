@@ -10,13 +10,13 @@
 <div class="stretch">
   <mat-toolbar style="justify-content: center;" >
     <mat-nav-list class="list-horizontal" *ngFor="let item of this.categoryService.categories">
-      <mat-list-item (click)="updateWordsList(item);"> 
+      <mat-list-item style="font-family: system-ui; font-weight: normal;"(click)="updateWordsList(item);"> 
         <a>{{ item.name }}</a>
       </mat-list-item>
     </mat-nav-list>
   </mat-toolbar>
     
-  <p class="buttons" *ngIf="isTherapist && this.isWordEnabled">על מנת להסתיר את המילה מהמטופל אנא כבה את הכפתור</p>
+  <p class="buttons font" *ngIf="isTherapist && this.isWordEnabled">על מנת להסתיר את המילה מהמטופל אנא כבה את הכפתור</p>
     <div class="card-deck" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px">
       <ng-container class="stretch" *ngFor="let item of this.words">
       <mat-card fxFlex="0 1 calc(20% - 20px)" style="width:10rem;" *ngIf="item.visibility"
@@ -24,7 +24,7 @@
         <mat-card-header *ngIf="isTherapist"> 
         <mat-slide-toggle *ngIf="isTherapist" [checked]="item.visibility" (change)="updateVisibility(item);">
         </mat-slide-toggle>
-        <mat-card-title style=" font-size: 1rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
+        <mat-card-title style=" font-size: 0.8rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
         </mat-card-header>
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image" />
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
@@ -46,7 +46,7 @@
         </button>
   </div>
 
-  <p class="buttons" *ngIf="isTherapist && this.isWordDisabled">על מנת לציג את המילה למטופל אנא הדלק את הכפתור</p>
+  <p class="buttons font" *ngIf="isTherapist && this.isWordDisabled">על מנת לציג את המילה למטופל אנא הדלק את הכפתור</p>
     <div class="card-deck" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px"*ngIf="isTherapist">
       <ng-container class="stretch" *ngFor="let item of this.words">
       <mat-card fxFlex="0 1 calc(20% - 20px)" style="width:10rem;" *ngIf="!item.visibility"
@@ -54,7 +54,7 @@
         <mat-card-header *ngIf="isTherapist"> 
         <mat-slide-toggle *ngIf="isTherapist" [checked]="item.visibility" (change)="updateVisibility(item);">
         </mat-slide-toggle>
-        <mat-card-title style=" font-size: 1rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
+        <mat-card-title style=" font-size: 0.8rem; " *ngIf="isTherapist">הצג למטופל</mat-card-title>
         </mat-card-header>
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image" />
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>

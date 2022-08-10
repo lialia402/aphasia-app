@@ -77,7 +77,6 @@ export class TherapistPanelComponent implements OnInit {
 
   // option to therapist adding new patient
   async addNewPatient() {
-    console.log(this.userService.users);
     const dialogRef = this.dialog.open(AddDialogPatientComponent, {
       height: '220px',
       width: '300px',

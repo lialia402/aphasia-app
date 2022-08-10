@@ -66,8 +66,16 @@
   
   .mat-card-title{
     font-size: 1.3rem;
-    font-family: serif;
+    font-family: system-ui;
     color: rgb(0 0 0);
+    font-weight: normal;
+  }
+
+  .mat-card-id{
+    font-size: 1.2rem;
+    font-family: system-ui;
+    color: rgb(62, 62, 62);
+    font-weight: normal;
   }
   
   .stretch{

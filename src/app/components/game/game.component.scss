@@ -1,71 +1,129 @@
+
+ .mat-card {
+  min-width: -webkit-fill-available; /* adjust as desired */
+  height: 50px;
+  margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
+  background-color: #f8f9fa;
+  display: grid;
+  position: relative;
+  padding: 16px;
+  border-radius: 4px;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-around;
+  background-color: lavender;
+  cursor: pointer;
+}
+  
+.card-deck{
+  display: flex;
+  height: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  cursor: pointer;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-bottom:20px;
+  gap: 15px;
+}
+
+.title-bar {
+  position: relative;
+}
+
+.class-button{
+  position:absolute;
+  top:0;
+  left:0;
+}
+
 .page-title{
-    padding-top: 3px;
-    padding-bottom: 2px;
-    margin-bottom: 3px;
-    background-size: 100%;
-    background-color: black;
-    display: flex;
-  }
+  padding-top: 3px;
+  padding-bottom: 2px;
+  margin-bottom: 3px;
+  background-size: 100%;
+  background-color: black;
+  display: flex;
+}
 
 .h2{
-    display: block;
-    margin: auto;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    font-family: system-ui;
-    color: white;
-    }
+  display: block;
+  margin: auto;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-family: system-ui;
+  color: white;
+}
+
+.mat-card-image{
+height: 170px; /* adjust as needed */
+}
+
+.middle-button{
+  margin-left: 16px;
+}
   
-.title-bar {
-    position: relative;
-  }
+.right-button{
+  margin-left: 10px;
+}
+
+.mat-card-title{
+  font-size: 1.3rem;
+  font-family: serif;
+  color: rgb(0 0 0);
+}
+
+.stretch{
+  height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
+  height : 100%;            /* Internet Explorer treats as min-height. */
+  min-height : 100%;
+  background-image:url("https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/istockphoto-1257643062-612x612.jpg?alt=media&token=ed363bf3-d2c2-4be7-8602-11deff7296ec");
+}
+
+.add-button{
+  margin-left: 60px;
+}
   
-.class-button{
-    position:absolute;
-    top:0;
-    left:0;
-  }
+.exit-button{
+  display: flex;
+  justify-content: end;
+}
 
-  main{
-    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
-    height : 100%;            /* Internet Explorer treats as min-height. */
-    min-height : 100%;
-    background-image: url("https://img.freepik.com/free-photo/white-jigsaw-puzzle-piece-blue-textured-surface_23-2148207325.jpg?w=2000");
-    background-size: cover;
-  }
+.details-of-game{
+  font-size: 1rem;
+  color: darkslategray;
+  font-family: serif;
+}
 
-  .rtl{
-    direction:rtl;
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, 0%);
-  }
+.line-item{
+  display: flex;
+  flex-direction: column;
+}
+
+.rules{
+  text-align-last: center;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: system-ui;
+}
+
+.game-title{
+  text-decoration: underline;
+  font-weight: 500;
+  font-family: system-ui;
+}
   
-  .line-item{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 30px;
-    gap: 20px;
-  }
+.loader{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .emoji{
-    font-size: xxx-large;
-  }
+.font{
+  font-family: system-ui;
+  font-weight: normal;
+}
 
-  .rules{
-    font-size: xx-large;
-    font-weight: bold;
-  }
-
-  .game-title{
-    font-weight: bold;
-    font-size: xxx-large;
-  }
-
-  .start-button{
-    height: 51px !important;
-    width: 200px !important;
-    font-size: 20px !important;
-  }

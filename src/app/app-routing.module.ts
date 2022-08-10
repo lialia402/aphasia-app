@@ -19,6 +19,7 @@ import { QuestionComponent } from './components/question/question.component';
 import { ResultPageComponent } from './components/result-page/result-page.component';
 import { AnalyticsPageComponent } from './components/analytics-page/analytics-page.component';
 import { GameSettingsComponent } from './components/game-settings/game-settings.component';
+import { CreateGameComponent } from './components/create-game/create-game.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
@@ -38,6 +39,7 @@ const routes: Routes = [
   {path: 'result-page', component: ResultPageComponent},
   {path: 'analytics-page', component:AnalyticsPageComponent},
   {path: 'game-settings-page', component:GameSettingsComponent},
+  {path: 'create-game-page', component:CreateGameComponent},
 
 ];
 
