@@ -3,46 +3,46 @@
       <div class="class-button">
         <app-return-button></app-return-button>
       </div>
-      <h4 class="h2">הגדרת משחק ל{{ authService.patientOfTherapist.firstName}}</h4>
+      <h4 class="h2 font">הגדרת משחק ל{{ authService.patientOfTherapist.firstName}}</h4>
     </div>
   </div>
 
 <div class="stretch">
   
   <div dir="rtl" class="main">
-    <mat-slide-toggle [checked]="checkEnableRandomGame()" 
+    <mat-slide-toggle [checked]="checkEnableRandomGame()" class="font"
     (change)="changeRandomGameSetting();">מתן אפשרות למשחק רנדומלי למטופל {{ authService.patientOfTherapist.firstName}}
     </mat-slide-toggle>
     <mat-expansion-panel *ngFor="let game of this.gamesInformation">
         <mat-expansion-panel-header style="background-color: ghostwhite;">
-            <mat-panel-title dir="rtl" style="max-width: 200px;">
+            <mat-panel-title dir="rtl" style="max-width: 200px;" class="font">
             משחק מספר {{game.gameNum + 1}} 
             </mat-panel-title>
-            <mat-panel-description dir="rtl">
+            <mat-panel-description dir="rtl" class="font">
                 המשחק שוחק {{game.numOfPlayed}} פעמים                           
            </mat-panel-description>
-           <mat-panel-description dir="rtl">                       
+           <mat-panel-description dir="rtl" class="font">                       
             ציון ממוצע {{calculateAverage(game)}}
        </mat-panel-description>
-           <mat-panel-description dir="rtl">
+           <mat-panel-description dir="rtl" class="font">
             תאריך יצירת משחק {{ toDate(game.createDateOfGame)}}
        </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="mat-expansion-panel-body">
-        <mat-card style="width:10rem;"  *ngFor="let word of game.listOfWords">
-            <mat-card-content>
+        <mat-card style="width: 10rem;flex: 5 0 18%;"  *ngFor="let word of game.listOfWords">
+            <mat-card-content class="font">
                 {{word}}
             </mat-card-content>
      </mat-card>
      <div class="line-item">
-        <button class="create-button" mat-raised-button color="warn" (click)="deleteGameInfo(game)"> מחיקה</button>
-        <button class="create-button" mat-raised-button color="primary" (click)="editGameInfo(game)"> עריכה</button>
+        <button class="create-button font" mat-raised-button color="warn" (click)="deleteGameInfo(game)"> מחיקה</button>
+        <button class="create-button font" mat-raised-button color="primary" (click)="editGameInfo(game)"> עריכה</button>
     </div>
         </div>
     </mat-expansion-panel>
 </div>
 <div class="line-item" style="margin-bottom: 10px;">
-    <button class="create-button" mat-raised-button color="primary" (click)="navigateToCreateGame()"> יצירת משחק חדש</button>
+    <button class="create-button font" mat-raised-button color="primary" (click)="navigateToCreateGame()"> יצירת משחק חדש</button>
 </div>
 </div>
 

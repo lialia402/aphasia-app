@@ -1,3 +1,4 @@
+
 <div class="title-bar">
     <div class="page-title">
       <div class="class-button">
@@ -12,16 +13,16 @@
 <main class="design-trivia">
   <div class="round-number">
     <mat-card class="round-number-text">
-      <mat-card-subtitle style="color: black;" dir="rtl">סיבוב {{ this.currentRound+1 }}/10 </mat-card-subtitle>
+      <mat-card-subtitle style="color: white;" dir="rtl">סיבוב {{ this.currentRound+1 }}/10 </mat-card-subtitle>
     </mat-card>
   </div>
 
 <div class="question-div">
-  <img class="question" src={{this.cardQuestion?.imageURL}}/>
+  <img class="question" [hidden]="!this.imageLoaded" (load)="this.showQuestionAndAnswer()" src={{this.cardQuestion?.imageURL}}/>
 </div>
 
-<div class="answer-div">
-  <mat-card [ngClass]="{'wrong': wrong && i === activeIndex, 'right':right && i === activeIndex}" style="width:300px;height: 70px;" *ngFor="let item of this.cardAnswers;  let i = index" (click)="validateAnswer(item); activeIndex=i">
+<div class="answer-div" [hidden]="!this.imageLoaded">
+  <mat-card [ngClass]="{'wrong': wrong && i === activeIndex, 'right':right && i === activeIndex, 'simple': (!right && !wrong) || (i !== activeIndex)}" style="width:300px;height: 70px;" *ngFor="let item of this.cardAnswers;  let i = index" (click)="validateAnswer(item); activeIndex=i">
     <mat-card-content class="card-design">
         <mat-card-subtitle dir="rtl" class="answer-text">{{ item.name }} </mat-card-subtitle>
             <button mat-icon-button mat-button class="sound-button" (click)="playVoice(item, $event);">
@@ -31,3 +32,4 @@
   </mat-card>   
 </div>
 </main>
+

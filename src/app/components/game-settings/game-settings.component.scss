@@ -64,10 +64,18 @@ mat-card{
 
 }
 
+.font{
+    font-family: system-ui;
+}
+
 :host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-    background-color: #66a369 ;
+    background-color: #608162;
   }
   
   :host ::ng-deep  .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-    background-color: #66a369 ;
+    background-color: #a0c9a2;
+  }
+  
+  :host ::ng-deep .mat-slide-toggle-content{
+    font-family: system-ui;
   }

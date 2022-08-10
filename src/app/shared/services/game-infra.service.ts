@@ -22,6 +22,7 @@ export class GameInfraService {
   public patientGames:Game[];
   public gameSettings:GameSettings[];
   public customGame = false; 
+  public currentCustomGame = -1;
   public gameToEdit:GameInfo = new GameInfo(-1,[], new Date);
 
   constructor
@@ -73,7 +74,7 @@ export class GameInfraService {
     return this.randomWordList;
   }
 
-  public async giveCustomList(){
+  public giveCustomList(customWords: string[]){
     let category:CategoryClass;
     let words: WordClass[] = [];
     let word:WordClass;
@@ -83,18 +84,17 @@ export class GameInfraService {
     let i=0;
     while (this.customWordList.length < 10) {
 
-      // Get word object by only string name
-      // TDL
-      word = this.findWordByName(this.gameSettings[0].listOfGames[i].listOfWords[i]);
+      word = this.findWordByName(customWords[i]);
   
       const checkCategory = (obj: CategoryClass) => obj.id === word.categoryID;
       category = this.categoryInfraService.categories.find(checkCategory);
+      words = this.categoryInfraService.getAllUserPhrases.filter((word) => {return word.categoryID === category.id})
 
-      let promiseOfWords= this.wordInfraService.getPhrases(category);
+      // let promiseOfWords= this.wordInfraService.getPhrases(category);
 
-      await promiseOfWords.then((data) => {
-        words = data;
-      })
+      // await promiseOfWords.then((data) => {
+      //   words = data;
+      // })
 
       this.customWordList.push(word);
       this.customrandomSelectionWords.push(word);
@@ -351,6 +351,14 @@ export class GameInfraService {
   public editGameInfo(gameInfo:GameInfo){
     let gameSettings = this.gameSettings[0];
     gameSettings.listOfGames[gameInfo.gameNum] = gameInfo;
+    this.firebaseInfraService.updateGameInfo(gameSettings);
+  }
+
+  public updateGameInfo(score:number){
+    let gameSettings = this.gameSettings[0];
+    gameSettings.listOfGames[this.currentCustomGame].isPlayed = true;
+    gameSettings.listOfGames[this.currentCustomGame].numOfPlayed++;
+    gameSettings.listOfGames[this.currentCustomGame].totalScore+=score;
     this.firebaseInfraService.updateGameInfo(gameSettings);
   }
 

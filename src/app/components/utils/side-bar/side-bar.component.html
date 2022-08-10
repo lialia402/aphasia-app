@@ -2,7 +2,7 @@
 <div class="example-container">
     <mat-toolbar class="example-toolbar" dir="rtl">
       <button mat-icon-button (click)="snav.toggle()"><mat-icon class="mat-icon-outside">menu</mat-icon></button>
-      <h1 class="example-app-name">על קצה הלשון</h1>
+      <h1 class="example-app-name font">על קצה הלשון</h1>
     </mat-toolbar>
   
     <mat-sidenav-container class="example-sidenav-container">
@@ -15,7 +15,7 @@
                 <mat-expansion-panel>
                   <mat-expansion-panel-header>
                     <mat-panel-title >
-                      <div class="bar-option" fxLayout="row" fxLayoutAlign="space-between center" dir="rtl" > 
+                      <div class="bar-option font" fxLayout="row" fxLayoutAlign="space-between center" dir="rtl" > 
                         <mat-icon class="icon-menu-option" >{{item.iconName}}</mat-icon>
                         {{item.displayName}}
                       </div>
@@ -23,7 +23,7 @@
                   </mat-expansion-panel-header>
                   <span *ngFor="let child of item.children">
                     <mat-list-item routerLinkActive="active" routerLink="[child.route]" (click)="handleClick(item);">
-                      <div class="bar-option" fxLayout="row" fxLayoutAlign="space-between center" dir="rtl" > 
+                      <div class="bar-option font" fxLayout="row" fxLayoutAlign="space-between center" dir="rtl" > 
                         <mat-icon class="icon-menu-option">{{child.iconName}}</mat-icon>
                         {{child.displayName}}
                       </div>
@@ -35,7 +35,7 @@
             <span *ngIf="!item.children || item.children.length === 0">
               <mat-list-item routerLinkActive="active" [routerLink]="[item.route]" (click)="handleClick(item);">
                 <!-- Entradas principales -->
-                <div class="bar-option" fxLayout="row" fxLayoutAlign="space-between center" dir="rtl">
+                <div class="bar-option font" fxLayout="row" fxLayoutAlign="space-between center" dir="rtl">
                   <mat-icon class="icon-menu-option">{{item.iconName}}</mat-icon>
                   {{item.displayName}}
                 </div>
@@ -46,7 +46,7 @@
       </mat-sidenav>
       <mat-sidenav-content>
         <div class="pt-3 pb-2 mb-3 border-bottom">
-          <h1>שלום {{this.user.firstName}}</h1>
+          <h1 class="font">שלום {{this.user.firstName}}</h1>
         </div>
         <div class="loader">
         <mat-spinner [diameter]="200" *ngIf="isLoading"></mat-spinner>
@@ -58,12 +58,12 @@
               <mat-card *ngIf="!isLoading" style="width:10rem;" (click) = "navigateToGame();"
                        class="mat-card">
                 <img md-card-image=""  src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/WhatsApp%20Image%202022-07-22%20at%2016.55.03.jpeg?alt=media&token=9586db84-5bdd-437f-9ca1-ffd20d05589c" class="mat-card-image" />
-                <mat-card-subtitle  class="mat-card-title text-center">על קצה הלשון</mat-card-subtitle>
+                <mat-card-subtitle  class="mat-card-title text-center font">על קצה הלשון</mat-card-subtitle>
               </mat-card>
               <mat-card *ngIf="!isLoading" style="width:10rem;" (click) = "navigateToCategory();"
                         class="mat-card">
                 <img md-card-image=""  src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/category.jpg?alt=media&token=15533869-f056-4586-bb3c-5e0785c8ee8d" class="mat-card-image" />
-                <mat-card-subtitle  class="mat-card-title text-center"> קטגוריות </mat-card-subtitle>
+                <mat-card-subtitle  class="mat-card-title text-center font"> קטגוריות </mat-card-subtitle>
               </mat-card>
           </div>
         </div>

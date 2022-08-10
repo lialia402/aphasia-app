@@ -13,12 +13,15 @@ export class GameComponent implements OnInit {
   isCustonExists=false;
   isRandomGameEnabled = false;
   CustomGames:GameInfo[] = [];
+  isLoading:boolean=true;
 
   constructor(
     public router: Router,
     public gameService: GameInfraService) {}
 
   ngOnInit(): void {
+    this.gameService.currentCustomGame = -1;
+    this.gameService.customGame = false;
     setTimeout(async () => {
       await this.gameService.giveRandomList()
       await this.gameService.getGameResults();
@@ -31,9 +34,9 @@ export class GameComponent implements OnInit {
         {
           this.CustomGames = settings[0].listOfGames;
           this.isCustonExists = true;
-          await this.gameService.giveCustomList();
         }
       }
+      this.isLoading = false;
 
    }, 500)
   }
@@ -41,14 +44,17 @@ export class GameComponent implements OnInit {
   // navigate to diffult game
   navigateToGame()
   {
+    
     this.gameService.customGame = false;
     this.router.navigate(['question-page']);
   }
 
   // navigate to game created by the therapist
-  navigateToCustomGame()
+  navigateToCustomGame(game:GameInfo)
   {
     this.gameService.customGame = true;
+    this.gameService.currentCustomGame = game.gameNum;
+    this.gameService.giveCustomList(game.listOfWords);
     this.router.navigate(['question-page']);
   }
 }

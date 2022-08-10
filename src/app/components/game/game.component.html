@@ -14,15 +14,19 @@
           <p class="rules"> בחר את המילה המתארת את התמונה</p>
           <p class="rules">כל סבב כולל 10 מילים ו4 אפשרויות</p>
       </div>
-        <mat-card style="width:10rem;" *ngFor="let item of CustomGames;  let i = index"class="mat-card" >
-          <mat-card-subtitle class="details-of-game text-center" > (המשחק שוחק {{item.numOfPlayed}} פעמים)</mat-card-subtitle>
-          <mat-card-subtitle class="mat-card-title text-center" (click) ="navigateToCustomGame()" >משחק מותאם אישית {{i + 1}}</mat-card-subtitle>
-        </mat-card> 
-
-        <mat-card *ngIf="isRandomGameEnabled" style="width:10rem;" class="mat-card" >
-          <mat-card-subtitle  (click) ="navigateToGame()" class="mat-card-title text-center">התחל משחק כללי</mat-card-subtitle>
-        </mat-card> 
     </div>
+    <div class="loader">
+      <mat-spinner [diameter]="75" *ngIf="isLoading"></mat-spinner>
+   </div> 
+    <div *ngIf="!isLoading">
+      <mat-card style="width:10rem;" *ngFor="let item of CustomGames;  let i = index" >
+        <mat-card-subtitle class="details-of-game text-center font" > (המשחק שוחק {{item.numOfPlayed}} פעמים)</mat-card-subtitle>
+        <mat-card-subtitle class="mat-card-title text-center font" (click) ="navigateToCustomGame(item)" >משחק מותאם אישית {{i + 1}}</mat-card-subtitle>
+      </mat-card> 
+      <mat-card *ngIf="isRandomGameEnabled" style="width:10rem;" class="mat-card" >
+        <mat-card-subtitle  (click) ="navigateToGame()" class="mat-card-title text-center font">התחל משחק כללי</mat-card-subtitle>
+      </mat-card> 
+      </div>
 </div>
 <app-footer>
 </app-footer>

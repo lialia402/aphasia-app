@@ -1,7 +1,6 @@
 .page-title{
     padding-top: 3px;
     padding-bottom: 2px;
-    margin-bottom: 3px;
     background-size: 100%;
     background-color: black;
     display: flex;
@@ -18,7 +17,6 @@
 
 .design-trivia{
   display: flex;
-  justify-content: center;
   flex-direction: column;
 }
 
@@ -31,8 +29,8 @@
   margin-top: 20px;
   margin-bottom: 50px;
   border: 5px solid #555;
-  max-width: 300px;
-  max-height: 300px;
+  width: 300px;
+  height: 300px;
 }
 
 .answer-div{
@@ -72,14 +70,18 @@
 }
 
 .round-number-text{
-  width: 100%;
+  width: 10%;
   height: 50px;
   text-align: center;
+  background-color: black;
+  font-family: system-ui;
 }
 
 .answer-text{
   cursor: pointer;
   font-size: x-large;
+  color: white;
+  font-family: system-ui;
 }
 
 .wrong{
@@ -90,12 +92,16 @@ background-color: rgb(233, 115, 115);
 background-color: rgb(150, 231, 150);
 }
 
+.simple{
+   background-color: rgb(10 10 10 / 73%);
+  }
+
 main{
   height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
   height : 100%;            /* Internet Explorer treats as min-height. */
   min-height : 100%;
   background-size: cover;
-  background-color:  rgb(109, 204, 204);
+  background-image:url("https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/istockphoto-1291062411-612x612.jpg?alt=media&token=817b1bd5-5f00-4e2a-bf57-5482385917cb");
 }
 
   

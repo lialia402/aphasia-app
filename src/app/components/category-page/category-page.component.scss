@@ -65,9 +65,10 @@ height: 170px;
 }
 
 .mat-card-title{
-  font-size: 1.3rem;
-  font-family: serif;
-  color: rgb(0 0 0);
+  font-size: 1.1rem;
+  font-family: system-ui;
+  color: #3b3b3b;
+  font-weight: 400;
 }
 
 .stretch{
@@ -80,13 +81,18 @@ height: 170px;
   display: flex;
   justify-content: center;
 }
+
+.font{
+  font-family: system-ui;
+  font-weight: normal;
+}
   
 :host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-  background-color: #66a369 ;
+  background-color: #608162;
 }
 
 :host ::ng-deep  .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-  background-color: #66a369 ;
+  background-color: #a0c9a2;
 }
 
   

@@ -8,11 +8,13 @@
   position: relative;
   padding: 16px;
   border-radius: 4px;
-  margin-left: 5px;
+  margin-left: 60px;
+  margin-right: 60px;
   margin-bottom: 8px;
   display: flex;
   justify-content: space-around;
-  background-color: darkseagreen;
+  background-color: lavender;
+  cursor: pointer;
 }
   
 .card-deck{
@@ -25,7 +27,7 @@
   margin-left: 60px;
   margin-right: 60px;
   margin-bottom:20px;
-  gap: 4px;
+  gap: 15px;
 }
 
 .title-bar {
@@ -104,9 +106,24 @@ height: 170px; /* adjust as needed */
 .rules{
   text-align-last: center;
   font-size: 20px;
+  font-weight: 500;
+  font-family: system-ui;
 }
 
 .game-title{
   text-decoration: underline;
+  font-weight: 500;
+  font-family: system-ui;
 }
   
+.loader{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.font{
+  font-family: system-ui;
+  font-weight: normal;
+}
+
