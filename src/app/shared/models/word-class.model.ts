@@ -10,6 +10,7 @@ export class WordClass extends Unit{
     public isFav: boolean// tdl
     public order: number//tdl
     public visibility: boolean;//TRUE if the phrase is visible to the user
+    public viewPerDate:Date[]; //date array of views
 
     constructor(
         id: string, 
@@ -31,5 +32,6 @@ export class WordClass extends Unit{
         this.isFav = isFav;
         this.order = order;
         this.visibility = visibility;
+        this.viewPerDate=[];
     }
 }

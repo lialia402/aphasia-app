@@ -10,6 +10,7 @@ export class CategoryClass extends Unit{
     public isFav: boolean;// tdl
     public order: number;//tdl
     public visibility: boolean;//TRUE if the category is visible to the user
+    public viewPerDate:Date[]; //date array of views
 
     constructor(
         name: string, 
@@ -31,5 +32,6 @@ export class CategoryClass extends Unit{
         this.isFav = isFav;
         this.order = order;
         this.visibility = visibility;
+        this.viewPerDate=[];
     }
 }

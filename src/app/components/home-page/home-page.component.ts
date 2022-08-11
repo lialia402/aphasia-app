@@ -24,12 +24,12 @@ export class HomePageComponent implements OnInit {
       setTimeout(async () => {
       let email= this.authService.userData.email;
       let promise= this.userInfaService.getUserByEmail(email);
-      await promise.then((data) => {
+       promise.then((data) => {
         this.user = data;
         this.authService.user = this.user;
         this.isLoading = false;
       });     
-    }, 1500)
+    }, 3000)
     }
     else{
       this.isLoading = false;

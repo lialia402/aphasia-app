@@ -237,6 +237,17 @@ export class CategoryInfraService {
     this.firebaseProvider.updateCategory(category)
   }
 
+  // add to array of viewPerDate the current date of click
+  public updateViewsPerDate(category: CategoryClass) {
+    if(category.viewPerDate===undefined)
+    {
+      category.viewPerDate=[];
+    }
+    let date=new Date();
+    category.viewPerDate.push(date);
+    this.firebaseProvider.updateCategory(category)
+  }
+
   public updateCategory(category: CategoryClass) {
     this.firebaseProvider.updateCategory(category);
   }

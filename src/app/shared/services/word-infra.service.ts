@@ -87,6 +87,19 @@ export class WordInfraService {
     phrase.views++;
     this.firebaseProvider.updateWord(phrase)
   }
+
+  // add to array of viewPerDate the current date of click
+  public updateViewsPerDate(phrase: WordClass) {
+    if(phrase.viewPerDate===undefined)
+    {
+      phrase.viewPerDate=[];
+    }
+
+    let date=new Date();
+    phrase.viewPerDate.push(date);
+    this.firebaseProvider.updateWord(phrase)
+  }
+
   public setOrder(phrase: WordClass, order: number) {
     phrase.order = order;
     this.firebaseProvider.updateWord(phrase);
