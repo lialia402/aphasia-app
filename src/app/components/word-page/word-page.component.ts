@@ -48,6 +48,8 @@ export class WordPageComponent implements OnInit {
   updateWordsList(category: CategoryClass){
     this.categoryService.currentCategory = category;
     this.category = category;
+    this.categoryService.increaseViews(category);
+    this.categoryService.updateViewsPerDate(category);
     this.getwords();
   }
 
