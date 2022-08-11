@@ -35,6 +35,7 @@ export class CategoryPageComponent implements OnInit {
   public openCategoryWords(category: CategoryClass) {
     this.categoryService.setCurrentCategory(category);
     this.categoryService.increaseViews(category);
+    this.categoryService.updateViewsPerDate(category);
     this.router.navigate(['word-page']);
   }
   

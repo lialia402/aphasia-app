@@ -325,7 +325,7 @@ export class FirebaseInfraService {
   }
 
   updateCategory(category: CategoryClass){
-    this.afs.doc('categories/' + category.id).update(category);
+    this.afs.doc('categories/' + category.id).update(CategoryClass.toObject(category));
   }
 
   updateResult(result: GameResult){

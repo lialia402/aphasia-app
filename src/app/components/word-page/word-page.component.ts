@@ -67,6 +67,7 @@ export class WordPageComponent implements OnInit {
     voice.load();
     voice.play();
     this.wordService.increaseViews(word);
+    this.wordService.updateViewsPerDate(word);
   }
 
    public deleteWord(word: WordClass) {
