@@ -320,13 +320,13 @@ export class GameInfraService {
 
   // change lofic to accomidate custom and random
   public addGame(game: Game) : Promise<any> {
+      let tempArray = this.patientGames.filter(a=> a.gameType === game.gameType);
+      tempArray.sort((b, a) => new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime());
 
-    if(this.patientGames.length === 10)
+    if(tempArray.length === 10)
     {
-      this.patientGames.sort((b, a) => new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime());
       this.firebaseInfraService.removeGame(this.patientGames[0]);
     }
-
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.addGame(game)?.then(() => {
         resolve(game);
