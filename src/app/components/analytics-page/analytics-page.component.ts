@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import Chart from 'chart.js/auto';
 import { AnalyticsInfraService } from 'src/app/shared/services/analytics-infra.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -12,9 +13,20 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 })
 export class AnalyticsPageComponent implements OnInit {
 
-  weekCategory: boolean = false;
-  monthCategory: boolean = false;
-  allTimeCategory: boolean = true;
+
+  rangeChart1 = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
+  rangeChart2 = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
+  chart1: Chart<"bar", number[], string>;
+  chart2:Chart<"doughnut", number[], string>;
+ 
 
   constructor(
       public authService: AuthService, 
@@ -31,7 +43,7 @@ export class AnalyticsPageComponent implements OnInit {
     this.analytics.getCategoriesAnalytics();
    
     // bar graph of the 10 most viewed words by the user
-    let myChart1 = new Chart("myChart1", {
+    this.chart1 = new Chart("myChart1", {
       type: 'bar',
       data: {
           labels: this.analytics.topTenWordsNames,
@@ -56,62 +68,8 @@ export class AnalyticsPageComponent implements OnInit {
       }
   });
 
-  // doughnut graph of the 5 most viewed categories by the user for week
-  let myChart2week = new Chart("myChart2week", {
-    type: 'doughnut',
-    data: {
-        labels: this.analytics.topFiveCategoriesNamesWeek,
-        datasets: [{
-            label: 'כמות צפיות',
-            data: this.analytics.topFiveCategoriesViewsWeek,
-            backgroundColor: [
-                '#A984E6',
-                '#F16B5C',
-                '#81E988',
-                '#83DDE7',
-                '#0F9BD0',
-            ],
-            borderColor: [
-                '#FFFFFF',
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        aspectRatio: 1,
-        maintainAspectRatio : false,
-    }
-});
-
-// doughnut graph of the 5 most viewed categories by the user for week
-let myChart2month = new Chart("myChart2month", {
-  type: 'doughnut',
-  data: {
-      labels: this.analytics.topFiveCategoriesNamesMonth,
-      datasets: [{
-          label: 'כמות צפיות',
-          data: this.analytics.topFiveCategoriesViewsMonth,
-          backgroundColor: [
-              '#A984E6',
-              '#F16B5C',
-              '#81E988',
-              '#83DDE7',
-              '#0F9BD0',
-          ],
-          borderColor: [
-              '#FFFFFF',
-          ],
-          borderWidth: 1
-      }]
-  },
-  options: {
-      aspectRatio: 1,
-      maintainAspectRatio : false,
-  }
-});
-
 // doughnut graph of the 5 most viewed categories by the user for all time
-let myChart2 = new Chart("myChart2", {
+this.chart2 = new Chart("myChart2", {
   type: 'doughnut',
   data: {
       labels: this.analytics.topFiveCategoriesNames,
@@ -189,9 +147,33 @@ let myChart4 = new Chart("myChart4", {
     await this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
   }
 
-  public openDialog(){
-    this.allTimeCategory = false;
-    this.weekCategory= true;
-    
+  filterByDataCategory(){
+    if(this.rangeChart2.value.start !== undefined && this.rangeChart2.value.start !== null && this.rangeChart2.value.end !== undefined && this.rangeChart2.value.end !== null){
+      this.analytics.getSortedCategoriesListByStartAndEndDate(this.analytics.topFiveCategoriesNames,
+        this.analytics.topFiveCategoriesViews,this.rangeChart2.value.start,this.rangeChart2.value.end);
+    }
+
+    this.chart2.update();
+  }
+
+  filterByDataWords(){
+  if(this.rangeChart2.value.start !== undefined && this.rangeChart2.value.start !== null && this.rangeChart2.value.end !== undefined && this.rangeChart2.value.end !== null){
+      this.analytics.getSortedWordsListByStartAndEndDate(this.analytics.topTenWordsNames,
+        this.analytics.topTenWordsViews,this.rangeChart2.value.start,this.rangeChart2.value.end);
+    }
+
+    this.chart2.update();
+  }
+
+  resetWords(){
+    this.analytics.getSortedWordsListByViewsDesc();
+    this.rangeChart1.reset();
+    this.chart1.update();
+  }
+
+  resetCategory(){
+    this.analytics.getSortedCategoriesListByViewsDesc();
+    this.rangeChart2.reset();
+    this.chart2.update();
   }
 }

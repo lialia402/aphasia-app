@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {Location} from '@angular/common';
 import { Game } from 'src/app/shared/models/game.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -86,7 +85,8 @@ export class QuestionComponent implements OnInit {
     else
     {
       this.gameService.finalScoreCurrentGame=this.correctAnswers;
-      const currentGame = new Game("",this.correctAnswers, this.authService.user.email,new Date());
+      const gameType = this.gameService.customGame ? 1 : 0;
+      const currentGame = new Game("",this.correctAnswers, this.authService.user.email,new Date(),gameType);
       this.gameService.addGame(currentGame);
       if(this.gameService.customGame)
       {
