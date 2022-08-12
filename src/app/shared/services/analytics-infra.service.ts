@@ -185,8 +185,8 @@ export class AnalyticsInfraService {
 
   getGameImprovment(){
 
-    this.dateArray = [];
-    this.gameRightAnswers = [];
+    this.dateArray.splice(0, this.dateArray.length);
+    this.gameRightAnswers.splice(0, this.gameRightAnswers.length);
   
     this.allGames.sort((b, a) => new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime());
 
@@ -196,6 +196,24 @@ export class AnalyticsInfraService {
      
     }
     
+  }
+
+  filterAllGameByType(type:number){
+    this.dateArray.splice(0, this.dateArray.length);
+    this.gameRightAnswers.splice(0, this.gameRightAnswers.length);
+
+    console.log(this.dateArray);
+    console.log(this.gameRightAnswers);
+    console.log(this.allGames)
+
+
+    let tempArray = this.allGames.filter(game => game.gameType === type);
+    console.log(tempArray);
+    for(let i=0; i<tempArray.length;i++){
+      this.dateArray.push(new Date(tempArray[i].dateOfGame).toLocaleDateString());
+      this.gameRightAnswers.push(tempArray[i].right);
+     }
+
   }
 }
 

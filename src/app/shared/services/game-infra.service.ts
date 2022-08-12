@@ -317,6 +317,8 @@ export class GameInfraService {
     })
   }
 
+
+  // change lofic to accomidate custom and random
   public addGame(game: Game) : Promise<any> {
 
     if(this.patientGames.length === 10)

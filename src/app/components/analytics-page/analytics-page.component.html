@@ -27,8 +27,8 @@
               <mat-date-range-picker #picker1></mat-date-range-picker>
             </mat-form-field>
             <div class="button-row">
-              <button mat-raised-button (click)="filterByDataWords()">סנן</button>
-              <button mat-raised-button (click)="resetWords()">אתחל</button>
+              <button class="button" mat-raised-button (click)="filterByDataWords()">סנן</button>
+              <button class="button" mat-raised-button (click)="resetWords()">אתחל</button>
             </div>
           </mat-card-actions>
       </mat-card>
@@ -58,8 +58,8 @@
           <mat-date-range-picker #picker2></mat-date-range-picker>
         </mat-form-field>
         <div class="button-row">
-          <button mat-raised-button (click)="filterByDataCategory()">סנן</button>
-          <button mat-raised-button (click)="resetCategory()">אתחל</button>
+          <button class="button" mat-raised-button (click)="filterByDataCategory()">סנן</button>
+          <button class="button" mat-raised-button (click)="resetCategory()">אתחל</button>
         </div>
       </mat-card-actions>
   </mat-card>
@@ -70,6 +70,13 @@
       <mat-card-content>
         <canvas class="canvas1" id="myChart4"> </canvas>
       </mat-card-content>
+      <mat-card-actions class="date-picker">
+        <div class="button-row">
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterAll()">כלל המשחקים</button>
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterCustom()">מותאמים אישית</button>
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterRandom()">רנדומליים</button>
+        </div>
+      </mat-card-actions>
   </mat-card>
 </div>
 </div>

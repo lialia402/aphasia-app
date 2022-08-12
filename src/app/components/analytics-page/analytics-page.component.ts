@@ -25,7 +25,8 @@ export class AnalyticsPageComponent implements OnInit {
   });
 
   chart1: Chart<"bar", number[], string>;
-  chart2:Chart<"doughnut", number[], string>;
+  chart2: Chart<"doughnut", number[], string>;
+  chart4: Chart<"line", number[], string>
  
 
   constructor(
@@ -127,7 +128,7 @@ let myChart3 = new Chart("myChart3", {
 });
 
 // line graph of results for up to the last 10 games the user has played
-let myChart4 = new Chart("myChart4", {
+this.chart4 = new Chart("myChart4", {
     type: 'line',
     data: {
         labels: this.analytics.dateArray,
@@ -175,5 +176,22 @@ let myChart4 = new Chart("myChart4", {
     this.analytics.getSortedCategoriesListByViewsDesc();
     this.rangeChart2.reset();
     this.chart2.update();
+  }
+
+  filterAll(){
+    this.analytics.getGameImprovment();
+    this.chart4.update();
+
+  }
+
+  filterCustom(){
+    this.analytics.filterAllGameByType(1);
+    this.chart4.update();
+    
+  }
+
+  filterRandom(){
+    this.analytics.filterAllGameByType(0);
+    this.chart4.update();
   }
 }
