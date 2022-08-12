@@ -321,7 +321,7 @@ export class FirebaseInfraService {
   }
 
   updateWord(word: WordClass){
-    this.afs.doc('words/' + word.id).update(word);
+    this.afs.doc('words/' + word.id).update(WordClass.toObject(word));
   }
 
   updateCategory(category: CategoryClass){

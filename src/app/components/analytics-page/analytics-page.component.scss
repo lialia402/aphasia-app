@@ -78,4 +78,15 @@
     justify-content: center;
   }
 
+  .button-row{
+    display: flex;
+    margin-right: 17px;
+    margin-top: 10px;
+    gap: 1px;
+  }
+
+  button{
+    height: 34px;
+    width: 50px;
+  }
     

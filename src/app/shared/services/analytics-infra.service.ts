@@ -12,21 +12,24 @@ import { WordInfraService } from './word-infra.service';
 })
 
 export class AnalyticsInfraService {
-  //graph category view
+  // graph category view
   topFiveCategoriesViews:number[]=[];
-  topFiveCategoriesViewsWeek:number[]=[];
-  topFiveCategoriesViewsMonth:number[]=[];
   topFiveCategoriesNames:string[]=[];
-  topFiveCategoriesNamesWeek:string[]=[];
-  topFiveCategoriesNamesMonth:string[]=[];
+  fiveCategoryMinDate:Date;
+  fiveCategoryMaxDate:Date;
+
 
 
   allWords:WordClass[];
   allCategories:CategoryClass[];
   allGameResults:GameResult[];
   allGames:Game[];
+
+  // graph word view
   topTenWordsViews:number[]=[];
   topTenWordsNames:string[]=[];
+  topTenWordsMinDate:Date;
+  topTenWordsMaxDate:Date;
   
   categoriesNamesInGame:string[] = [];
   rightAnswers:number[] = [];
@@ -59,10 +62,44 @@ export class AnalyticsInfraService {
     }
   }
 
+  public getMinMaxDateValues(){
+    let datesArray:Date[] = [];
+    for(let i=0;i<this.allCategories.length;i++){
+      if(this.allCategories[i].viewPerDate !== undefined)
+      {
+        datesArray = datesArray.concat(this.allCategories[i].viewPerDate.map(date => new Date(date)));
+      }
+    }
+
+    datesArray.sort((b, a) => new Date(b).getTime() - new Date(a).getTime());
+
+    this.fiveCategoryMinDate = datesArray[0];
+    this.fiveCategoryMaxDate = datesArray[datesArray.length-1];
+
+    datesArray = [];
+
+    for(let i=0;i<this.allCategories.length;i++){
+      if(this.allWords[i].viewPerDate !== undefined)
+      {
+        datesArray = datesArray.concat(this.allWords[i].viewPerDate.map(date => new Date(date)));
+      }
+    }
+
+    datesArray.sort((b, a) => new Date(b).getTime() - new Date(a).getTime());
+
+    this.topTenWordsMinDate = datesArray[0];
+    this.topTenWordsMaxDate = datesArray[datesArray.length-1];
+
+    console.log(this.topTenWordsMinDate);
+    console.log(this.topTenWordsMaxDate);
+  
+  }
+
+
   // create a list of the 5 most viewed categories by the user for all time
   public getSortedCategoriesListByViewsDesc() {
-    this.topFiveCategoriesNames = [];
-    this.topFiveCategoriesViews = [];
+    this.topFiveCategoriesNames.splice(0, this.topFiveCategoriesNames.length);
+    this.topFiveCategoriesViews.splice(0, this.topFiveCategoriesViews.length);
     let listFiveCategories= this.allCategories.sort((a,b) => (a.views < b.views) ? 1 : ((b.views < a.views) ? -1 : 0)).slice(0,5);
     for(let i=0; i<5; i++)
     {
@@ -71,27 +108,16 @@ export class AnalyticsInfraService {
     }
   }
 
-  // get category analytics for view category graph
-  public getCategoriesAnalytics()
-  {
-    this.topFiveCategoriesNamesWeek=[]
-    this.topFiveCategoriesViewsWeek=[]
-    this.topFiveCategoriesNamesMonth=[]
-    this.topFiveCategoriesViewsMonth=[]
-    this.getSortedCategoriesListByViewsDescForSpecificDates(this.topFiveCategoriesNamesWeek,this.topFiveCategoriesViewsWeek,'week');
-    this.getSortedCategoriesListByViewsDescForSpecificDates(this.topFiveCategoriesNamesMonth,this.topFiveCategoriesViewsMonth,'month');
-    this.getSortedCategoriesListByViewsDesc();
-  }
-
-  // create a list of the 5 most viewed categories by the user for 7 days
-  public getSortedCategoriesListByViewsDescForSpecificDates(axis_x:string[],axis_y:number[],dateTime:string) {
+  public getSortedCategoriesListByStartAndEndDate(axis_x:string[],axis_y:number[],start:Date ,end:Date) {
+    axis_x.splice(0, axis_x.length);
+    axis_y.splice(0,axis_y.length);
 
     let copyOfCategories = this.allCategories.map(a => {return {...a}});
     
     for(let i=0; i<this.allCategories.length;i++){
       if(copyOfCategories[i].viewPerDate!==undefined)
       {
-        copyOfCategories[i].viewPerDate= this.filterByDate(dateTime, copyOfCategories[i].viewPerDate.map(date => new Date(date)));
+        copyOfCategories[i].viewPerDate= this.filterByStartAndEnd(start, end, copyOfCategories[i].viewPerDate.map(date => new Date(date)));
       }
     }
 
@@ -104,42 +130,40 @@ export class AnalyticsInfraService {
      }
   }
 
-  public filterByDate(date:string, dates:Date[])
-  {
-    let array:Date[]=[];
-    if(date==='week')
-    {
-      let [start, end] = this.getWeekDates();
-      return dates.filter(d => +new Date(d) >= +start && +new Date(d) < +end);
+  public getSortedWordsListByStartAndEndDate(axis_x:string[],axis_y:number[],start:Date ,end:Date) {
+    axis_x.splice(0, axis_x.length);
+    axis_y.splice(0,axis_y.length);
+
+    let copyOfWords = this.allWords.map(a => {return {...a}});
+    
+    for(let i=0; i<this.allGames.length;i++){
+      if(copyOfWords[i].viewPerDate!==undefined)
+      {
+        copyOfWords[i].viewPerDate= this.filterByStartAndEnd(start, end, copyOfWords[i].viewPerDate.map(date => new Date(date)));
+      }
     }
 
-    else if(date==='month')
-    {
-      let now = new Date();
-      let end = new Date(now);
-      let start =  new Date(now.setDate(now.getDate() - 30));
-      return dates.filter(d => +new Date(d) >= +start && +new Date(d) < +end);
-
-    }
-    else{
-      return array;
-    }
+    copyOfWords= copyOfWords.filter(a=> a.viewPerDate!==undefined);
+     let listTenWords= copyOfWords.sort((a,b) => (a.viewPerDate.length < b.viewPerDate.length) ? 1 : ((b.viewPerDate.length < a.viewPerDate.length) ? -1 : 0)).slice(0,10);
+     for(let i=0; i<10; i++)
+     {
+       axis_x.push(listTenWords[i].name);
+       axis_y.push(listTenWords[i].viewPerDate.length);
+     }
   }
 
-  public getWeekDates()
+  filterByStartAndEnd(start:Date,end:Date,dates: Date[]){
+    let tempArray = dates.filter((item: any) =>
+    item.getTime() >= start.getTime() && item.getTime() <= end.getTime()
+    );
+    return tempArray;
+  }
+
+  // get category analytics for view category graph
+  public getCategoriesAnalytics()
   {
-    let now = new Date();
-    let dayOfWeek = now.getDay(); //0-6
-    let numDay = now.getDate();
-
-    let start = new Date(now); //copy
-    start.setDate(numDay - dayOfWeek);
-    start.setHours(0, 0, 0, 0);
-
-    let end = new Date(now); //copy
-    end.setDate(numDay + (7 - dayOfWeek));
-    end.setHours(0, 0, 0, 0);
-    return [start, end];
+    this.getMinMaxDateValues();
+    this.getSortedCategoriesListByViewsDesc();
   }
 
    getGameAnswers(){

@@ -105,5 +105,7 @@
       }
     }
   },
-  "defaultProject": "aphasia-app"
+  "cli": {
+    "analytics": false
+  }
 }
