@@ -7,6 +7,8 @@
     </div>
   </div>
 
+<p>Selected range: {{range.value.start | json}}</p>
+<p>Selected range: {{range.value.end | json}}</p>
 <div class="stretch">
   <div class="display"> 
   <div class="card-deck" ></div>
@@ -16,6 +18,17 @@
           <mat-card-content>
             <canvas class="canvas1" id="myChart1"> </canvas>
           </mat-card-content>
+          <mat-card-actions class="date-picker">
+            <mat-form-field appearance="fill">
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate placeholder="Start date">
+                <input matEndDate placeholder="End date">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+          </mat-card-actions>
       </mat-card>
   </div>
   <div dir="rtl" class="main">
@@ -29,7 +42,7 @@
 <div dir="rtl" class="main">
   <mat-card style="width:500px; height:400px;">
     <p style="text-align: center;" > חמש הקטגוריות הנצפות ביותר</p>
-      <mat-card-content *ngIf="allTimeCategory">
+      <mat-card-content>
         <canvas clas="canvas" id="myChart2" style="width:250px; height:250px;"> </canvas>
       </mat-card-content>
       <!-- <mat-card-content *ngIf="weekCategory">
@@ -38,9 +51,6 @@
       <mat-card-content *ngIf="monthCategory">
         <canvas class="canvas" id="myChart2month" style="width:250px; height:250px;"> </canvas>
       </mat-card-content> -->
-      <mat-card-actions> 
-        <button class="right-button" mat-icon-button mat-button (click)="openDialog();"></button> 
-      </mat-card-actions>
   </mat-card>
 </div>
 <div dir="rtl" class="main">

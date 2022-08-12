@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormGroup, FormControl} from '@angular/forms';
 import Chart from 'chart.js/auto';
 import { AnalyticsInfraService } from 'src/app/shared/services/analytics-infra.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -12,9 +13,14 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 })
 export class AnalyticsPageComponent implements OnInit {
 
-  weekCategory: boolean = false;
-  monthCategory: boolean = false;
-  allTimeCategory: boolean = true;
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
+  // weekCategory: boolean = false;
+  // monthCategory: boolean = false;
+  // allTimeCategory: boolean = true;
 
   constructor(
       public authService: AuthService, 
@@ -57,58 +63,58 @@ export class AnalyticsPageComponent implements OnInit {
   });
 
   // doughnut graph of the 5 most viewed categories by the user for week
-  let myChart2week = new Chart("myChart2week", {
-    type: 'doughnut',
-    data: {
-        labels: this.analytics.topFiveCategoriesNamesWeek,
-        datasets: [{
-            label: 'כמות צפיות',
-            data: this.analytics.topFiveCategoriesViewsWeek,
-            backgroundColor: [
-                '#A984E6',
-                '#F16B5C',
-                '#81E988',
-                '#83DDE7',
-                '#0F9BD0',
-            ],
-            borderColor: [
-                '#FFFFFF',
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        aspectRatio: 1,
-        maintainAspectRatio : false,
-    }
-});
+//   let myChart2week = new Chart("myChart2week", {
+//     type: 'doughnut',
+//     data: {
+//         labels: this.analytics.topFiveCategoriesNamesWeek,
+//         datasets: [{
+//             label: 'כמות צפיות',
+//             data: this.analytics.topFiveCategoriesViewsWeek,
+//             backgroundColor: [
+//                 '#A984E6',
+//                 '#F16B5C',
+//                 '#81E988',
+//                 '#83DDE7',
+//                 '#0F9BD0',
+//             ],
+//             borderColor: [
+//                 '#FFFFFF',
+//             ],
+//             borderWidth: 1
+//         }]
+//     },
+//     options: {
+//         aspectRatio: 1,
+//         maintainAspectRatio : false,
+//     }
+// });
 
 // doughnut graph of the 5 most viewed categories by the user for week
-let myChart2month = new Chart("myChart2month", {
-  type: 'doughnut',
-  data: {
-      labels: this.analytics.topFiveCategoriesNamesMonth,
-      datasets: [{
-          label: 'כמות צפיות',
-          data: this.analytics.topFiveCategoriesViewsMonth,
-          backgroundColor: [
-              '#A984E6',
-              '#F16B5C',
-              '#81E988',
-              '#83DDE7',
-              '#0F9BD0',
-          ],
-          borderColor: [
-              '#FFFFFF',
-          ],
-          borderWidth: 1
-      }]
-  },
-  options: {
-      aspectRatio: 1,
-      maintainAspectRatio : false,
-  }
-});
+// let myChart2month = new Chart("myChart2month", {
+//   type: 'doughnut',
+//   data: {
+//       labels: this.analytics.topFiveCategoriesNamesMonth,
+//       datasets: [{
+//           label: 'כמות צפיות',
+//           data: this.analytics.topFiveCategoriesViewsMonth,
+//           backgroundColor: [
+//               '#A984E6',
+//               '#F16B5C',
+//               '#81E988',
+//               '#83DDE7',
+//               '#0F9BD0',
+//           ],
+//           borderColor: [
+//               '#FFFFFF',
+//           ],
+//           borderWidth: 1
+//       }]
+//   },
+//   options: {
+//       aspectRatio: 1,
+//       maintainAspectRatio : false,
+//   }
+// });
 
 // doughnut graph of the 5 most viewed categories by the user for all time
 let myChart2 = new Chart("myChart2", {
@@ -189,9 +195,9 @@ let myChart4 = new Chart("myChart4", {
     await this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
   }
 
-  public openDialog(){
-    this.allTimeCategory = false;
-    this.weekCategory= true;
+  // public openDialog(){
+  //   this.allTimeCategory = false;
+  //   this.weekCategory= true;
     
-  }
+  // }
 }
