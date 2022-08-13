@@ -61,9 +61,9 @@
     <p style="text-align: center;"> מספר התשובות השגויות והנכונות מכל קטגוריה</p>
       <mat-card-content>
         <div class="button-row-b">
-          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterByDataWrongRight(); this.rightWrongType=0">כלל המשחקים</button>
-          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterByDataWrongRight(); this.rightWrongType=1">מותאמים אישית</button>
-          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterByDataWrongRight(); this.rightWrongType=2">רנדומליים</button>
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="this.rightWrongType=0;filterByDataWrongRight(); ">כלל המשחקים</button>
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="this.rightWrongType=1;filterByDataWrongRight(); ">מותאמים אישית</button>
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="this.rightWrongType=2;filterByDataWrongRight(); ">רנדומליים</button>
         </div>
         <canvas class="canvas1" id="myChart3"> </canvas>
       </mat-card-content>

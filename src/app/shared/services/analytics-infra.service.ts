@@ -57,8 +57,8 @@ export class AnalyticsInfraService {
    }
 
   public getSortedWordsListByViewsDesc() {
-    this.topTenWordsNames = [];
-    this.topTenWordsViews = [];
+    this.topTenWordsNames.splice(0, this.topTenWordsNames.length);
+    this.topTenWordsViews.splice(0, this.topTenWordsViews.length);
     let listTenWords= this.allWords.sort((a,b) => (a.views < b.views) ? 1 : ((b.views < a.views) ? -1 : 0)).slice(0,10);
     for(let i=0; i<10; i++)
     {
@@ -96,6 +96,7 @@ export class AnalyticsInfraService {
 
     this.fiveCategoryMinDate = datesArray[0];
     this.fiveCategoryMaxDate = datesArray[datesArray.length-1];
+    this.fiveCategoryMaxDate.setDate(this.fiveCategoryMaxDate.getDate() + 1);
 
     datesArray = [];
 
@@ -110,6 +111,7 @@ export class AnalyticsInfraService {
 
     this.topTenWordsMinDate = datesArray[0];
     this.topTenWordsMaxDate = datesArray[datesArray.length-1];
+    this.topTenWordsMaxDate.setDate(this.topTenWordsMaxDate.getDate() + 1);
 
     console.log(this.topTenWordsMinDate);
     console.log(this.topTenWordsMaxDate);
@@ -221,7 +223,7 @@ export class AnalyticsInfraService {
     }
   }
 
-   getGameAnswers(){
+   getGameAnswers(type:number){
     this.categoriesNamesInGame.splice(0, this.categoriesNamesInGame.length);
     this.rightAnswers.splice(0, this.rightAnswers.length);
     this.wrongAnswers.splice(0, this.wrongAnswers.length);
@@ -233,8 +235,23 @@ export class AnalyticsInfraService {
       {
         this.categoriesNamesInGame.push(category?.name);
       }
-      this.rightAnswers.push(this.allGameResults[i].rightCustom.length + this.allGameResults[i].rightRandom.length);
-      this.wrongAnswers.push(this.allGameResults[i].wrongCustom.length + this.allGameResults[i].wrongRandom.length);
+
+      if(type === 0)
+      {
+        this.rightAnswers.push(this.allGameResults[i].rightCustom.length + this.allGameResults[i].rightRandom.length);
+        this.wrongAnswers.push(this.allGameResults[i].wrongCustom.length + this.allGameResults[i].wrongRandom.length);
+      }
+
+      else if(type === 1){
+        this.rightAnswers.push(this.allGameResults[i].rightCustom.length);
+        this.wrongAnswers.push(this.allGameResults[i].wrongCustom.length);
+      }
+
+      else{
+        this.rightAnswers.push(this.allGameResults[i].rightRandom.length);
+        this.wrongAnswers.push(this.allGameResults[i].wrongRandom.length);
+      }
+      
     }
   }
 

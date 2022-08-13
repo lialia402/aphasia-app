@@ -47,7 +47,7 @@ export class AnalyticsPageComponent implements OnInit {
     this.analytics.updateData();
     this.analytics.getSortedWordsListByViewsDesc();
     this.analytics.getGameImprovment();
-    this.analytics.getGameAnswers();
+    this.analytics.getGameAnswers(0);
     this.analytics.getCategoriesAnalytics();
    
     // bar graph of the 10 most viewed words by the user
@@ -165,11 +165,11 @@ this.chart4 = new Chart("myChart4", {
   }
 
   filterByDataWords(){
-  if(this.rangeChart2.value.start !== undefined && this.rangeChart2.value.start !== null && this.rangeChart2.value.end !== undefined && this.rangeChart2.value.end !== null){
+  if(this.rangeChart1.value.start !== undefined && this.rangeChart1.value.start !== null && 
+    this.rangeChart1.value.end !== undefined && this.rangeChart1.value.end !== null){
       this.analytics.getSortedWordsListByStartAndEndDate(this.analytics.topTenWordsNames,
-        this.analytics.topTenWordsViews,this.rangeChart2.value.start,this.rangeChart2.value.end);
+        this.analytics.topTenWordsViews,this.rangeChart1.value.start,this.rangeChart1.value.end);
     }
-
     this.chart1.update();
   }
 
@@ -187,8 +187,7 @@ this.chart4 = new Chart("myChart4", {
   }
 
   resetWrongRight(){
-    this.rightWrongType=0;
-    this.analytics.getGameAnswers();
+    this.analytics.getGameAnswers(this.rightWrongType);
     this.rangeChart3.reset();
     this.chart3.update();
   }
@@ -198,6 +197,10 @@ this.chart4 = new Chart("myChart4", {
        this.rangeChart3.value.end !== undefined && this.rangeChart3.value.end !== null)
        {
         this.analytics.filterWrongRightByEndStart(this.rangeChart3.value.start,this.rangeChart3.value.end,this.rightWrongType);
+       }
+
+       else{
+        this.analytics.getGameAnswers(this.rightWrongType);
        }
 
     this.chart3.update();
