@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import Chart from 'chart.js/auto';
 import { AnalyticsInfraService } from 'src/app/shared/services/analytics-infra.service';
@@ -41,6 +41,11 @@ export class AnalyticsPageComponent implements OnInit {
       public categoryService:CategoryInfraService, 
       public analytics:AnalyticsInfraService,
       public gameService: GameInfraService) { }
+
+
+  // @ViewChild('buttonAll') button;
+  // @ViewChild('button') button;
+  // @ViewChild('button') button;
 
   ngOnInit(): void {
     

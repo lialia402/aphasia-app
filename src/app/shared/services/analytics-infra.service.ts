@@ -132,6 +132,7 @@ export class AnalyticsInfraService {
   }
 
   public getSortedCategoriesListByStartAndEndDate(axis_x:string[],axis_y:number[],start:Date ,end:Date) {
+    end.setDate(end.getDate() + 1);
     axis_x.splice(0, axis_x.length);
     axis_y.splice(0,axis_y.length);
 
@@ -154,6 +155,7 @@ export class AnalyticsInfraService {
   }
 
   public getSortedWordsListByStartAndEndDate(axis_x:string[],axis_y:number[],start:Date ,end:Date) {
+    end.setDate(end.getDate() + 1);
     axis_x.splice(0, axis_x.length);
     axis_y.splice(0,axis_y.length);
 
@@ -191,6 +193,7 @@ export class AnalyticsInfraService {
   }
 
   filterWrongRightByEndStart(start:Date,end:Date,type:number){
+    end.setDate(end.getDate() + 1);
     this.categoriesNamesInGame.splice(0, this.categoriesNamesInGame.length);
     this.rightAnswers.splice(0, this.rightAnswers.length);
     this.wrongAnswers.splice(0, this.wrongAnswers.length);
