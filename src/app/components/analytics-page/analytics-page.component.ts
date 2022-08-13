@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 import Chart from 'chart.js/auto';
 import { AnalyticsInfraService } from 'src/app/shared/services/analytics-infra.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -14,6 +15,7 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 export class AnalyticsPageComponent implements OnInit {
 
   rightWrongType:number = 0;
+  tenGamesType:number = 0;
 
   rangeChart1 = new FormGroup({
     start: new FormControl<Date | null>(null),
@@ -34,6 +36,9 @@ export class AnalyticsPageComponent implements OnInit {
   chart2: Chart<"doughnut", number[], string>;
   chart3: Chart<"bar", number[], string>
   chart4: Chart<"line", number[], string>
+  gameTypeName3:string = "";
+  gameTypeName4:string = "";
+
  
 
   constructor(
@@ -42,11 +47,6 @@ export class AnalyticsPageComponent implements OnInit {
       public analytics:AnalyticsInfraService,
       public gameService: GameInfraService) { }
 
-
-  // @ViewChild('buttonAll') button;
-  // @ViewChild('button') button;
-  // @ViewChild('button') button;
-
   ngOnInit(): void {
     
     this.analytics.updateData();
@@ -54,7 +54,9 @@ export class AnalyticsPageComponent implements OnInit {
     this.analytics.getGameImprovment();
     this.analytics.getGameAnswers(0);
     this.analytics.getCategoriesAnalytics();
-   
+    this.gameTypeName3='כלל המשחקים';
+    this.gameTypeName4='כלל המשחקים';
+
     // bar graph of the 10 most viewed words by the user
     this.chart1 = new Chart("myChart1", {
       type: 'bar',

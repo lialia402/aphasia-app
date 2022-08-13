@@ -58,12 +58,12 @@
 </div>
 <div dir="rtl" class="main">
   <mat-card style="width:500px; height:450px;">
-    <p style="text-align: center;"> מספר התשובות השגויות והנכונות מכל קטגוריה</p>
+    <p style="text-align: center;"> מספר התשובות השגויות והנכונות מכל קטגוריה - {{this.gameTypeName3}}</p>
       <mat-card-content>
         <div class="button-row-b">
-          <button  #buttonAll style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="this.rightWrongType=0;filterByDataWrongRight(); ">כלל המשחקים</button>
-          <button  #buttonCustom style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="this.rightWrongType=1;filterByDataWrongRight(); ">מותאמים אישית</button>
-          <button  #buttonRandom style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="this.rightWrongType=2;filterByDataWrongRight(); ">רנדומליים</button>
+          <button  #buttonAll style=" margin-left: 6px; margin-right: 6px;height: 35px; " [disabled] = "(this.rightWrongType===0)" mat-raised-button (click)="this.gameTypeName3 = 'כלל המשחקים'; this.rightWrongType=0;filterByDataWrongRight(); ">כלל המשחקים</button>
+          <button  #buttonCustom style=" margin-left: 6px; margin-right: 6px;height: 35px; " [disabled] = "(this.rightWrongType===1)" mat-raised-button (click)="this.gameTypeName3='מותאמים אישית';  this.rightWrongType=1;filterByDataWrongRight(); ">מותאמים אישית</button>
+          <button  #buttonRandom style=" margin-left: 6px; margin-right: 6px;height: 35px; " [disabled] = "(this.rightWrongType===2)" mat-raised-button (click)="this.gameTypeName3='רנדומליים'; this.rightWrongType=2;filterByDataWrongRight(); ">רנדומליים</button>
         </div>
         <canvas class="canvas1" id="myChart3"> </canvas>
       </mat-card-content>
@@ -86,12 +86,12 @@
 </div>
 <div dir="rtl" class="main">
   <mat-card style="width:500px; height:450px;">
-    <p style="text-align: center;" > תוצאות עשרת המשחקים האחרונים</p>
+    <p style="text-align: center;" > תוצאות עשרת המשחקים האחרונים - {{this.gameTypeName4}}</p>
       <mat-card-content>
         <div class="button-row-b">
-          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterAll()">כלל המשחקים</button>
-          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterCustom()">מותאמים אישית</button>
-          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " mat-raised-button (click)="filterRandom()">רנדומליים</button>
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " [disabled] = "(this.tenGamesType===0)" mat-raised-button (click)="this.gameTypeName4 = 'כלל המשחקים'; this.tenGamesType =0; filterAll()">כלל המשחקים</button>
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " [disabled] = "(this.tenGamesType===1)" mat-raised-button (click)="this.gameTypeName4='מותאמים אישית';this.tenGamesType =1;filterCustom()">מותאמים אישית</button>
+          <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " [disabled] = "(this.tenGamesType===2)" mat-raised-button (click)="this.gameTypeName4='רנדומליים';this.tenGamesType =2;filterRandom()">רנדומליים</button>
         </div>
         <canvas class="canvas1" id="myChart4" style="margin-top: 34px;"> </canvas>
       </mat-card-content>
