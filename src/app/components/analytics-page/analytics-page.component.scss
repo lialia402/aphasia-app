@@ -59,7 +59,6 @@
     min-width: 250px; 
     min-height: 250px;
     margin-bottom: 20px; 
-    display: grid;
     position: relative;
     padding: 16px;
     border-radius: 4px;
@@ -83,6 +82,16 @@
     margin-right: 17px;
     margin-top: 10px;
     gap: 1px;
+    justify-content: center;
+  }
+
+  .button-row-b{
+    display: flex;
+    margin-right: 17px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    gap: 1px;
+    justify-content: center;
   }
 
   .button{
@@ -93,4 +102,10 @@
   .button-chart-4{
     margin-left: 6px;
     margin-right: 6px;
+  }
+
+  p{
+    text-align: center;
+    font-family: system-ui;
+    font-weight: 500;
   }

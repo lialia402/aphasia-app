@@ -259,14 +259,15 @@ export class GameInfraService {
     if(this.resultGameArray.some(checkCategory)){
      let currentResult = this.resultGameArray.find(checkCategory);
      if(currentResult !== undefined){
-       currentResult.right++;
+       this.customGame ? currentResult.rightCustom.push(new Date()) : currentResult.rightRandom.push(new Date());
        this.firebaseInfraService.updateResult(currentResult);
      }
 
     }
     else
     {
-      const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,1,0);
+      const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,"");
+      this.customGame ? result.rightCustom.push(new Date()) : result.rightRandom.push(new Date());
       this.addResult(result);
     }
   
@@ -278,14 +279,15 @@ export class GameInfraService {
     if(this.resultGameArray.some(checkCategory)){
       let currentResult = this.resultGameArray.find(checkCategory);
       if(currentResult !== undefined){
-        currentResult.wrong++;
+        this.customGame ? currentResult.wrongCustom.push(new Date()) : currentResult.wrongRandom.push(new Date());
         this.firebaseInfraService.updateResult(currentResult);
       }
 
     }
     else
     {
-      const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,0,1);
+      const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,"");
+      this.customGame ? result.wrongCustom.push(new Date()) : result.wrongRandom.push(new Date());
       this.addResult(result);
     }
   

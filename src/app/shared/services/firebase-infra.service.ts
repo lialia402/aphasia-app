@@ -329,7 +329,7 @@ export class FirebaseInfraService {
   }
 
   updateResult(result: GameResult){
-    this.afs.doc('gameResults/' + result.id).update(result);
+    this.afs.doc('gameResults/' + result.id).update(GameResult.toObject(result));
   }
 
   updateGameSettings(result: GameSettings){
