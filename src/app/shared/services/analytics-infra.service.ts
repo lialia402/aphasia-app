@@ -12,18 +12,18 @@ import { WordInfraService } from './word-infra.service';
 })
 
 export class AnalyticsInfraService {
+
+  // All data
+  allWords:WordClass[];
+  allCategories:CategoryClass[];
+  allGameResults:GameResult[];
+  allGames:Game[];
+
   // graph category view
   topFiveCategoriesViews:number[]=[];
   topFiveCategoriesNames:string[]=[];
   fiveCategoryMinDate:Date;
   fiveCategoryMaxDate:Date;
-
-
-
-  allWords:WordClass[];
-  allCategories:CategoryClass[];
-  allGameResults:GameResult[];
-  allGames:Game[];
 
   // graph word view
   topTenWordsViews:number[]=[];
@@ -31,9 +31,14 @@ export class AnalyticsInfraService {
   topTenWordsMinDate:Date;
   topTenWordsMaxDate:Date;
   
+  // graph wrong start
   categoriesNamesInGame:string[] = [];
   rightAnswers:number[] = [];
   wrongAnswers:number[] = [];
+  wrongRightMinDate:Date;
+  wrongRightMaxDate:Date;
+
+  // games graph
   dateArray: string [] = [];
   gameRightAnswers: number[] =[];
 
@@ -62,7 +67,23 @@ export class AnalyticsInfraService {
     }
   }
 
-  public getMinMaxDateValues(){
+  public getWrongRightMinMaxValues(){
+    let datesArray:Date[] = [];
+    for(let i=0;i<this.allGameResults.length;i++){
+        datesArray = datesArray.concat(this.allGameResults[i].rightCustom.map(date => new Date(date)));
+        datesArray = datesArray.concat(this.allGameResults[i].wrongCustom.map(date => new Date(date)));
+        datesArray = datesArray.concat(this.allGameResults[i].rightRandom.map(date => new Date(date)));
+        datesArray = datesArray.concat(this.allGameResults[i].wrongRandom.map(date => new Date(date)));
+    }
+    datesArray.sort((b, a) => new Date(b).getTime() - new Date(a).getTime());
+    this.wrongRightMinDate = datesArray[0];
+    this.wrongRightMaxDate = datesArray[datesArray.length-1];
+    this.wrongRightMaxDate.setDate(this.wrongRightMaxDate.getDate() + 1);
+    console.log(this.wrongRightMinDate);
+    console.log(this.wrongRightMaxDate);
+  }
+
+  public getCategoriesMinMaxDateValues(){
     let datesArray:Date[] = [];
     for(let i=0;i<this.allCategories.length;i++){
       if(this.allCategories[i].viewPerDate !== undefined)
@@ -78,7 +99,7 @@ export class AnalyticsInfraService {
 
     datesArray = [];
 
-    for(let i=0;i<this.allCategories.length;i++){
+    for(let i=0;i<this.allWords.length;i++){
       if(this.allWords[i].viewPerDate !== undefined)
       {
         datesArray = datesArray.concat(this.allWords[i].viewPerDate.map(date => new Date(date)));
@@ -136,7 +157,7 @@ export class AnalyticsInfraService {
 
     let copyOfWords = this.allWords.map(a => {return {...a}});
     
-    for(let i=0; i<this.allGames.length;i++){
+    for(let i=0; i<this.allWords.length;i++){
       if(copyOfWords[i].viewPerDate!==undefined)
       {
         copyOfWords[i].viewPerDate= this.filterByStartAndEnd(start, end, copyOfWords[i].viewPerDate.map(date => new Date(date)));
@@ -162,14 +183,48 @@ export class AnalyticsInfraService {
   // get category analytics for view category graph
   public getCategoriesAnalytics()
   {
-    this.getMinMaxDateValues();
+    this.getCategoriesMinMaxDateValues();
+    this.getWrongRightMinMaxValues();
     this.getSortedCategoriesListByViewsDesc();
   }
 
+  filterWrongRightByEndStart(start:Date,end:Date,type:number){
+    this.categoriesNamesInGame.splice(0, this.categoriesNamesInGame.length);
+    this.rightAnswers.splice(0, this.rightAnswers.length);
+    this.wrongAnswers.splice(0, this.wrongAnswers.length);
+
+    for(let i=0; i<this.allGameResults.length;i++){
+      const checkCategory = (obj: CategoryClass) => obj.id === this.allGameResults[i].categoryID;
+      let category = this.allCategories.find(checkCategory);
+      if(category !== undefined)
+      {
+        this.categoriesNamesInGame.push(category?.name);
+      }
+
+      if(type === 0)
+      {
+        this.rightAnswers.push(this.filterByStartAndEnd(start,end,this.allGameResults[i].rightCustom.map(date => new Date(date))).length +
+        this.filterByStartAndEnd(start,end,this.allGameResults[i].rightRandom.map(date => new Date(date))).length);
+        this.wrongAnswers.push(this.filterByStartAndEnd(start,end,this.allGameResults[i].wrongCustom.map(date => new Date(date))).length +
+        this.filterByStartAndEnd(start,end,this.allGameResults[i].wrongRandom.map(date => new Date(date))).length);
+      }
+      else if(type === 1){
+        this.rightAnswers.push(this.filterByStartAndEnd(start,end,this.allGameResults[i].rightCustom.map(date => new Date(date))).length);
+        this.wrongAnswers.push(this.filterByStartAndEnd(start,end,this.allGameResults[i].wrongCustom.map(date => new Date(date))).length);
+      }
+
+      else{
+        this.rightAnswers.push(this.filterByStartAndEnd(start,end,this.allGameResults[i].rightRandom.map(date => new Date(date))).length);
+        this.wrongAnswers.push(this.filterByStartAndEnd(start,end,this.allGameResults[i].wrongRandom.map(date => new Date(date))).length);
+      }
+     
+    }
+  }
+
    getGameAnswers(){
-    this.categoriesNamesInGame = [];
-    this.rightAnswers = [];
-    this.wrongAnswers = [];
+    this.categoriesNamesInGame.splice(0, this.categoriesNamesInGame.length);
+    this.rightAnswers.splice(0, this.rightAnswers.length);
+    this.wrongAnswers.splice(0, this.wrongAnswers.length);
     
     for(let i=0; i<this.allGameResults.length;i++){
       const checkCategory = (obj: CategoryClass) => obj.id === this.allGameResults[i].categoryID;
@@ -178,15 +233,15 @@ export class AnalyticsInfraService {
       {
         this.categoriesNamesInGame.push(category?.name);
       }
-      this.rightAnswers.push(this.allGameResults[i].right);
-      this.wrongAnswers.push(this.allGameResults[i].wrong);
+      this.rightAnswers.push(this.allGameResults[i].rightCustom.length + this.allGameResults[i].rightRandom.length);
+      this.wrongAnswers.push(this.allGameResults[i].wrongCustom.length + this.allGameResults[i].wrongRandom.length);
     }
   }
 
   getGameImprovment(){
 
-    this.dateArray = [];
-    this.gameRightAnswers = [];
+    this.dateArray.splice(0, this.dateArray.length);
+    this.gameRightAnswers.splice(0, this.gameRightAnswers.length);
   
     this.allGames.sort((b, a) => new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime());
 
@@ -196,6 +251,24 @@ export class AnalyticsInfraService {
      
     }
     
+  }
+
+  filterAllGameByType(type:number){
+    this.dateArray.splice(0, this.dateArray.length);
+    this.gameRightAnswers.splice(0, this.gameRightAnswers.length);
+
+    console.log(this.dateArray);
+    console.log(this.gameRightAnswers);
+    console.log(this.allGames)
+
+
+    let tempArray = this.allGames.filter(game => game.gameType === type);
+    console.log(tempArray);
+    for(let i=0; i<tempArray.length;i++){
+      this.dateArray.push(new Date(tempArray[i].dateOfGame).toLocaleDateString());
+      this.gameRightAnswers.push(tempArray[i].right);
+     }
+
   }
 }
 

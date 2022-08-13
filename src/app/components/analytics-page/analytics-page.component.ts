@@ -13,6 +13,7 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 })
 export class AnalyticsPageComponent implements OnInit {
 
+  rightWrongType:number = 0;
 
   rangeChart1 = new FormGroup({
     start: new FormControl<Date | null>(null),
@@ -24,8 +25,15 @@ export class AnalyticsPageComponent implements OnInit {
     end: new FormControl<Date | null>(null),
   });
 
+  rangeChart3 = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   chart1: Chart<"bar", number[], string>;
-  chart2:Chart<"doughnut", number[], string>;
+  chart2: Chart<"doughnut", number[], string>;
+  chart3: Chart<"bar", number[], string>
+  chart4: Chart<"line", number[], string>
  
 
   constructor(
@@ -96,7 +104,7 @@ this.chart2 = new Chart("myChart2", {
 });
 
 // bar graph of the number of wrong answers against the number of correct answers given by the user from each category
-let myChart3 = new Chart("myChart3", {
+this.chart3 = new Chart("myChart3", {
     type: 'bar',
     data: {
         labels: this.analytics.categoriesNamesInGame,
@@ -127,7 +135,7 @@ let myChart3 = new Chart("myChart3", {
 });
 
 // line graph of results for up to the last 10 games the user has played
-let myChart4 = new Chart("myChart4", {
+this.chart4 = new Chart("myChart4", {
     type: 'line',
     data: {
         labels: this.analytics.dateArray,
@@ -162,7 +170,7 @@ let myChart4 = new Chart("myChart4", {
         this.analytics.topTenWordsViews,this.rangeChart2.value.start,this.rangeChart2.value.end);
     }
 
-    this.chart2.update();
+    this.chart1.update();
   }
 
   resetWords(){
@@ -171,9 +179,44 @@ let myChart4 = new Chart("myChart4", {
     this.chart1.update();
   }
 
+
   resetCategory(){
     this.analytics.getSortedCategoriesListByViewsDesc();
     this.rangeChart2.reset();
     this.chart2.update();
+  }
+
+  resetWrongRight(){
+    this.rightWrongType=0;
+    this.analytics.getGameAnswers();
+    this.rangeChart3.reset();
+    this.chart3.update();
+  }
+
+  filterByDataWrongRight(){
+    if(this.rangeChart3.value.start !== undefined && this.rangeChart3.value.start !== null &&
+       this.rangeChart3.value.end !== undefined && this.rangeChart3.value.end !== null)
+       {
+        this.analytics.filterWrongRightByEndStart(this.rangeChart3.value.start,this.rangeChart3.value.end,this.rightWrongType);
+       }
+
+    this.chart3.update();
+  }
+
+  filterAll(){
+    this.analytics.getGameImprovment();
+    this.chart4.update();
+
+  }
+
+  filterCustom(){
+    this.analytics.filterAllGameByType(1);
+    this.chart4.update();
+    
+  }
+
+  filterRandom(){
+    this.analytics.filterAllGameByType(0);
+    this.chart4.update();
   }
 }
