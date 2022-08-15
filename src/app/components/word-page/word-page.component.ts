@@ -48,8 +48,11 @@ export class WordPageComponent implements OnInit {
   updateWordsList(category: CategoryClass){
     this.categoryService.currentCategory = category;
     this.category = category;
-    this.categoryService.increaseViews(category);
-    this.categoryService.updateViewsPerDate(category);
+    if(this.authService.user.userType === 'patient')
+    {
+      this.categoryService.increaseViews(category);
+      this.categoryService.updateViewsPerDate(category);
+    }
     this.getwords();
   }
 
@@ -68,8 +71,12 @@ export class WordPageComponent implements OnInit {
     voice.src= word.audio;
     voice.load();
     voice.play();
+
+    if(this.authService.user.userType === 'patient')
+    {
     this.wordService.increaseViews(word);
     this.wordService.updateViewsPerDate(word);
+    }
   }
 
    public deleteWord(word: WordClass) {

@@ -9,7 +9,10 @@
   
   <!-- for normal mode -->
   <div class="stretch">
-      <div class="card-deck" fxLayout.xs="row">
+    <div class="loader">
+      <mat-spinner [diameter]="200" *ngIf="isLoading"></mat-spinner>
+      </div>
+      <div class="card-deck" fxLayout.xs="row" *ngIf="!isLoading">
         <mat-card style="width:10rem;" (click) = "navigateToPatientAnalytics();"
                  class="mat-card">
           <img md-card-image=""  src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/reposts.jpg?alt=media&token=7e4e2ad7-f476-4028-a82e-35e2edf3223e" class="mat-card-image" />

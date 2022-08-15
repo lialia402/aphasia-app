@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 import { User } from 'src/app/shared/services/user';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
+import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 
 @Component({
   selector: 'app-therapist-panel',
@@ -27,12 +28,14 @@ export class TherapistPanelComponent implements OnInit {
     public dialog: MatDialog, 
     public storageService: StorageInfraProvider,
     public userInfaService: UserInfaService,
-    public errorService: ErrorInfra) 
+    public errorService: ErrorInfra,
+    public categoryService: CategoryInfraService) 
   {
     this.getPatients();
   }
 
   ngOnInit(): void {
+    this.categoryService.categories.splice(0,this.categoryService.categories.length);
     if(this.authService.user === undefined)
     {
       setTimeout(async () => {

@@ -14,11 +14,13 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 })
 
 export class PatientTherpistPageComponent implements OnInit {
+    isLoading:boolean;
     constructor(
       public authService: AuthService,
       public categoryService: CategoryInfraService, 
       public router: Router,
       public gameService:GameInfraService) { 
+        
         this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
         this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
         this.gameService.getGamesByEmail(this.authService.patientOfTherapist.email);
@@ -26,6 +28,11 @@ export class PatientTherpistPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.categoryService.categories.length === 0)
+    {
+      this.isLoading = true;
+      setTimeout(() => this.isLoading = false, 2000);
+    }
   }
 
   navigateToPatientCategories()
