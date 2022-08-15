@@ -47,8 +47,7 @@ export class AnalyticsPageComponent implements OnInit {
       public analytics:AnalyticsInfraService,
       public gameService: GameInfraService) { }
 
-  ngOnInit(): void {
-    
+  ngOnInit(): void { 
     this.analytics.updateData();
     this.analytics.getSortedWordsListByViewsDesc();
     this.analytics.getGameImprovment();
