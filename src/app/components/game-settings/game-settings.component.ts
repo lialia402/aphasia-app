@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
 import { GameSettings } from 'src/app/shared/models/game-settings.model';

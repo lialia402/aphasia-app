@@ -1,4 +1,3 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { WordClass } from 'src/app/shared/models/word-class.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
@@ -9,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
 import { Game } from 'src/app/shared/models/game.model';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 
 @Component({
   selector: 'app-create-game',

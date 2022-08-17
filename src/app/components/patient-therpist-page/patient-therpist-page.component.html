@@ -25,6 +25,11 @@
           <img md-card-image=""  src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/WhatsApp%20Image%202022-07-22%20at%2016.55.03.jpeg?alt=media&token=9586db84-5bdd-437f-9ca1-ffd20d05589c" class="mat-card-image" />
           <mat-card-subtitle  class="mat-card-title text-center">הגדרת משחק ל{{ authService.patientOfTherapist.firstName}}</mat-card-subtitle>
         </mat-card>
+        <mat-card style="width:10rem;" (click) = "navigateToTestSettings();"
+                  class="mat-card">
+          <img md-card-image=""  src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/%D7%98%D7%A1%D7%98.jpg?alt=media&token=450a3d75-78f4-4454-bb67-b445f965da87" class="mat-card-image" />
+          <mat-card-subtitle  class="mat-card-title text-center">הגדרת מבחן ל{{ authService.patientOfTherapist.firstName}}</mat-card-subtitle>
+        </mat-card>
     </div>
   </div>
   <app-footer>

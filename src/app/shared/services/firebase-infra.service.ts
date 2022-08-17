@@ -15,6 +15,7 @@ import { GameResult } from '../models/game-result.model';
 import { Game } from '../models/game.model';
 import { GameSettings } from '../models/game-settings.model';
 import { GameInfo } from '../models/game-info.model';
+import { TestInfo } from '../models/test-info.model';
 
 
 
@@ -44,6 +45,9 @@ export class FirebaseInfraService {
 
   gameSettingsCollection: AngularFirestoreCollection<GameSettings> | undefined;
   gameSettings: Observable<GameSettings[]> = new Observable<GameSettings[]>();
+
+  testInfoCollection:AngularFirestoreCollection<TestInfo> | undefined;
+  testInfo:Observable<TestInfo[]> = new Observable<TestInfo[]> ();
 
 
   constructor(public afs: AngularFirestore, public authentication: AuthService, //public error: ErrorInfra
@@ -150,6 +154,23 @@ export class FirebaseInfraService {
     }
   }
 
+  public importTestInfo(){
+    try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
+      this.testInfoCollection = this.afs.collection<TestInfo>('tests', ref => ref.where('userEmail', '==', this.authentication.userData.email));
+      this.testInfo = this.testInfoCollection.snapshotChanges().pipe(map((result:any[]) => {
+        console.log("import Test")
+      return result.map(a => {
+          let temp = a.payload.doc.data() as TestInfo;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
   public importGamesByEmail(email:string){
     try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
       this.gamesCollection = this.afs.collection<Game>('games', ref => ref.where('userEmail', '==', email));
@@ -165,6 +186,23 @@ export class FirebaseInfraService {
      // this.error.simpleToast("Connection error");
     }
   }
+
+  public importTestsByEmail(email:string){
+    try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
+      this.testInfoCollection = this.afs.collection<TestInfo>('tests', ref => ref.where('userEmail', '==', email));
+      this.testInfo = this.testInfoCollection.snapshotChanges().pipe(map((result:any[]) => {
+      return result.map(a => {
+          let temp = a.payload.doc.data() as TestInfo;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
 
   public importCategories()
   {
@@ -241,6 +279,14 @@ export class FirebaseInfraService {
      })
   }
 
+  addTestResult(testInfo:TestInfo)
+  {
+    return this.testInfoCollection?.add(TestInfo.toObject(testInfo)).then(function(){
+    }).catch((e) =>{
+         console.log("הוספה נכשלה");
+     })
+  }
+
   addGameSettings(category: GameSettings) {   
     return this.gameSettingsCollection?.add(GameSettings.toObject(category)).then(function(){
     }).catch((e) =>{
@@ -274,6 +320,10 @@ export class FirebaseInfraService {
   
   get getGamesObservable() {
     return this.games;
+  }
+
+  get getTestInfosObservable() {
+    return this.testInfo;
   }
 
   get getGameSettingsObservable() {

@@ -42,4 +42,9 @@ export class PatientTherpistPageComponent implements OnInit {
   {
     this.router.navigate(['game-settings-page']);
   }
+
+  navigateToTestSettings()
+  {
+    this.router.navigate(['test-settings']);
+  }
 }
