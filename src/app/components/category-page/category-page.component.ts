@@ -34,8 +34,11 @@ export class CategoryPageComponent implements OnInit {
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
     this.categoryService.setCurrentCategory(category);
-    this.categoryService.increaseViews(category);
-    this.categoryService.updateViewsPerDate(category);
+    if(this.authService.user.userType === 'patient')
+    {
+      this.categoryService.increaseViews(category);
+      this.categoryService.updateViewsPerDate(category);
+    }
     this.router.navigate(['word-page']);
   }
   
