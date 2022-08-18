@@ -4,6 +4,7 @@ import { GameInfo } from 'src/app/shared/models/game-info.model';
 import { GameSettings } from 'src/app/shared/models/game-settings.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
+import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 
@@ -19,12 +20,15 @@ export class PatientTherpistPageComponent implements OnInit {
       public authService: AuthService,
       public categoryService: CategoryInfraService, 
       public router: Router,
-      public gameService:GameInfraService) { 
+      public gameService:GameInfraService,
+      public testService:EquizInfraService,) { 
         
         this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
         this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
         this.gameService.getGamesByEmail(this.authService.patientOfTherapist.email);
         this.gameService.getGameSettingsByEmail(this.authService.patientOfTherapist.email);
+        this.testService.getTestsByEmail(this.authService.patientOfTherapist.email);
+        this.testService.getTestResultByEmail(this.authService.patientOfTherapist.email);
   }
 
   ngOnInit(): void {
@@ -48,5 +52,10 @@ export class PatientTherpistPageComponent implements OnInit {
   navigateToGameSettings()
   {
     this.router.navigate(['game-settings-page']);
+  }
+
+  navigateToTestSettings()
+  {
+    this.router.navigate(['test-settings']);
   }
 }

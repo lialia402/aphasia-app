@@ -90,12 +90,6 @@ export class GameInfraService {
       category = this.categoryInfraService.categories.find(checkCategory);
       words = this.categoryInfraService.getAllUserPhrases.filter((word) => {return word.categoryID === category.id})
 
-      // let promiseOfWords= this.wordInfraService.getPhrases(category);
-
-      // await promiseOfWords.then((data) => {
-      //   words = data;
-      // })
-
       this.customWordList.push(word);
       this.customrandomSelectionWords.push(word);
       this.pushAnotherThreeWords(word,words,this.customrandomSelectionWords);

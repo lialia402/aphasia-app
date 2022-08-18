@@ -1,6 +1,7 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 
 export interface NavItem {
@@ -46,14 +47,11 @@ export class SideBarComponent implements  OnInit {
         },
       ];
 
-  fillerContent = Array.from({length: 10}, () =>
-      `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-       labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-       laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-       voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-       cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`);
-
-  constructor(public authService: AuthService,public userInfaService: UserInfaService,  public router: Router) {
+  constructor(
+    public authService: AuthService,
+    public userInfaService: UserInfaService,  
+    public router: Router,
+    public testInfra:EquizInfraService) {
   }
   ngOnInit(): void{
     if(this.authService.user === undefined)
@@ -86,13 +84,15 @@ export class SideBarComponent implements  OnInit {
     this.router.navigate(['category-page']);
   }
 
-  public handleClick(item:any){
+  public navigateToTest(){
+    this.router.navigate(['test-questions-page']);
+  }
 
+  public handleClick(item:any){
     if(item.displayName === 'התנתקות'){
       this.authService.SignOut();
       window.location.reload();
     }
   }
-
 }
 

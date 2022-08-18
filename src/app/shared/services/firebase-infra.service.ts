@@ -15,8 +15,8 @@ import { GameResult } from '../models/game-result.model';
 import { Game } from '../models/game.model';
 import { GameSettings } from '../models/game-settings.model';
 import { GameInfo } from '../models/game-info.model';
-
-
+import { TestInfo } from '../models/test-info.model';
+import { TestResult } from '../models/test-result.model';
 
 
 @Injectable({
@@ -44,6 +44,12 @@ export class FirebaseInfraService {
 
   gameSettingsCollection: AngularFirestoreCollection<GameSettings> | undefined;
   gameSettings: Observable<GameSettings[]> = new Observable<GameSettings[]>();
+
+  testInfoCollection:AngularFirestoreCollection<TestInfo> | undefined;
+  testInfo:Observable<TestInfo[]> = new Observable<TestInfo[]> ();
+
+  testResultCollection:AngularFirestoreCollection<TestResult> | undefined;
+  testResult:Observable<TestResult[]> = new Observable<TestResult[]> ();
 
 
   constructor(public afs: AngularFirestore, public authentication: AuthService, //public error: ErrorInfra
@@ -117,6 +123,38 @@ export class FirebaseInfraService {
     }
   }
 
+  public importTestResult(){
+    try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
+      this.testResultCollection = this.afs.collection<TestResult>('testResults', ref => ref.where('userEmail', '==', this.authentication.userData.email));
+      this.testResult = this.testResultCollection.snapshotChanges().pipe(map((result:any[]) => {
+      return result.map(a => {
+          let temp = a.payload.doc.data() as TestResult;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
+  public imporTestResultByEmail(email:string){
+    try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
+      this.testResultCollection = this.afs.collection<TestResult>('testResults', ref => ref.where('userEmail', '==', email));
+      this.testResult = this.testResultCollection.snapshotChanges().pipe(map((result:any[]) => {
+      return result.map(a => {
+          let temp = a.payload.doc.data() as TestResult;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
   public importGameResultsByEmail(email:string){
     try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
       this.gameResultsCollection = this.afs.collection<GameResult>('gameResults', ref => ref.where('userEmail', '==', email));
@@ -150,6 +188,23 @@ export class FirebaseInfraService {
     }
   }
 
+  public importTestInfo(){
+    try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
+      this.testInfoCollection = this.afs.collection<TestInfo>('tests', ref => ref.where('userEmail', '==', this.authentication.userData.email));
+      this.testInfo = this.testInfoCollection.snapshotChanges().pipe(map((result:any[]) => {
+        console.log("import Test")
+      return result.map(a => {
+          let temp = a.payload.doc.data() as TestInfo;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
   public importGamesByEmail(email:string){
     try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
       this.gamesCollection = this.afs.collection<Game>('games', ref => ref.where('userEmail', '==', email));
@@ -165,6 +220,23 @@ export class FirebaseInfraService {
      // this.error.simpleToast("Connection error");
     }
   }
+
+  public importTestsByEmail(email:string){
+    try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
+      this.testInfoCollection = this.afs.collection<TestInfo>('tests', ref => ref.where('userEmail', '==', email));
+      this.testInfo = this.testInfoCollection.snapshotChanges().pipe(map((result:any[]) => {
+      return result.map(a => {
+          let temp = a.payload.doc.data() as TestInfo;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
 
   public importCategories()
   {
@@ -225,6 +297,14 @@ export class FirebaseInfraService {
     return this.users
   }
 
+  get getTestResultsObservable() {
+    return this.testResult
+  }
+
+  addTestResult(testResult: TestResult) {
+    return this.testResultCollection?.add(TestResult.toObject(testResult));
+  }
+
   addUser(user: User) {
     return this.usersCollection?.add(UserClass.toObject(user));
   }
@@ -237,6 +317,14 @@ export class FirebaseInfraService {
     return this.categoriesCollection?.add(CategoryClass.toObject(category)).then(function(){
     }).catch((e) =>{
       // this.error.simpleToast("הוספה נכשלה");
+         console.log("הוספה נכשלה");
+     })
+  }
+
+  addTestInfo(testInfo:TestInfo)
+  {
+    return this.testInfoCollection?.add(TestInfo.toObject(testInfo)).then(function(){
+    }).catch((e) =>{
          console.log("הוספה נכשלה");
      })
   }
@@ -263,6 +351,14 @@ export class FirebaseInfraService {
   });
   }
 
+  removeTestInfo(test:TestInfo)
+  {
+    this.testInfoCollection?.doc(test.id ).delete().then(function() {
+    }).catch((e) => {
+       // this.error.simpleToast("מחיקה נכשלה");
+    });
+  }
+
   get getwordsObservable() {
     return this.words;
   }
@@ -276,6 +372,10 @@ export class FirebaseInfraService {
     return this.games;
   }
 
+  get getTestInfosObservable() {
+    return this.testInfo;
+  }
+
   get getGameSettingsObservable() {
     return this.gameSettings;
   }
@@ -283,7 +383,6 @@ export class FirebaseInfraService {
   addWord(word: WordClass) {
     return this.wordsCollection?.add(WordClass.toObject(word)).then(function(){
     }).catch((e) =>{
-     // this.error.simpleToast("הוספה נכשלה");
         console.log("הוספה נכשלה");
     })
   }
@@ -291,7 +390,6 @@ export class FirebaseInfraService {
   addGameResult(gameResult: GameResult) {
     return this.gameResultsCollection?.add(WordClass.toObject(gameResult)).then(function(){
     }).catch((e) =>{
-     // this.error.simpleToast("הוספה נכשלה");
         console.log("הוספה נכשלה");
     })
   }
@@ -322,6 +420,11 @@ export class FirebaseInfraService {
 
   updateWord(word: WordClass){
     this.afs.doc('words/' + word.id).update(WordClass.toObject(word));
+  }
+
+  updateTestInfo(test:TestInfo)
+  {
+    this.afs.doc('tests/' + test.id).update(TestInfo.toObject(test));
   }
 
   updateCategory(category: CategoryClass){

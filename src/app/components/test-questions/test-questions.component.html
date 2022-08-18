@@ -1,0 +1,35 @@
+
+<div class="title-bar">
+    <div class="page-title">
+      <div class="class-button">
+        <button mat-icon-button  style="color: white;" (click)="navigateHomePage();">
+          <mat-icon>home</mat-icon>
+        </button>
+      </div>
+      <h4 class="h2">מבחן {{testInfra.getActiveTest().nameOfTest}}  </h4>
+    </div>
+</div>
+
+<main class="design-trivia">
+  <div class="round-number">
+    <mat-card class="round-number-text">
+      <mat-card-subtitle style="color: white;" dir="rtl">סיבוב {{ this.currentRound+1 }}/10 </mat-card-subtitle>
+    </mat-card>
+  </div>
+
+<div class="question-div">
+  <img class="question" [hidden]="!this.imageLoaded" (load)="this.showQuestionAndAnswer()" src={{this.cardQuestion?.imageURL}}/>
+</div>
+
+<div class="answer-div" [hidden]="!this.imageLoaded">
+  <mat-card [ngClass]="{'wrong': wrong && i === activeIndex, 'right':right && i === activeIndex, 'simple': (!right && !wrong) || (i !== activeIndex)}" style="width:300px;height: 70px;" *ngFor="let item of this.cardAnswers;  let i = index" (click)="validateAnswer(item); activeIndex=i">
+    <mat-card-content class="card-design">
+        <mat-card-subtitle dir="rtl" class="answer-text">{{ item.name }} </mat-card-subtitle>
+            <button mat-icon-button mat-button class="sound-button" (click)="playVoice(item, $event);">
+                <mat-icon>mic</mat-icon>
+            </button>
+    </mat-card-content>
+  </mat-card>   
+</div>
+</main>
+

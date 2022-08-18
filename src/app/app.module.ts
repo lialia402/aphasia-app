@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -47,6 +46,10 @@ import { EditWordsDialogComponent } from './components/utils/edit-words-dialog/e
 import { AnalyticsPageComponent } from './components/analytics-page/analytics-page.component';
 import { GameSettingsComponent } from './components/game-settings/game-settings.component';
 import { CreateGameComponent } from './components/create-game/create-game.component';
+import { NgModule } from '@angular/core';
+import { TestSettingsComponent } from './components/test-settings/test-settings.component';
+import { CreateTestComponent } from './components/create-test/create-test.component';
+import { TestQuestionsComponent } from './components/test-questions/test-questions.component';
 
 
 
@@ -80,6 +83,9 @@ import { CreateGameComponent } from './components/create-game/create-game.compon
         AnalyticsPageComponent,
         GameSettingsComponent,
         CreateGameComponent,
+        TestSettingsComponent,
+        CreateTestComponent,
+        TestQuestionsComponent,
     ],
     imports: [
         BrowserModule,

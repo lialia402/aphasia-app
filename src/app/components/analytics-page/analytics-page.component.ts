@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import Chart from 'chart.js/auto';
@@ -38,7 +38,6 @@ export class AnalyticsPageComponent implements OnInit {
   chart4: Chart<"line", number[], string>
   gameTypeName3:string = "";
   gameTypeName4:string = "";
-
  
 
   constructor(
