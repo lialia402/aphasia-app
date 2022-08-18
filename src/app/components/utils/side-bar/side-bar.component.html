@@ -66,6 +66,14 @@
                 <mat-card-subtitle  class="mat-card-title text-center font"> קטגוריות </mat-card-subtitle>
               </mat-card>
           </div>
+          <div class="test">
+            <p *ngIf="(testInfra.getActiveTest()!==undefined) && (!isLoading)" class="title-comment font" dir="rtl"> שים לב, לפנייך מבחן שהמטפל יצר עבורך. אנא השתדל לענות עליו בהקדם.</p>
+            <mat-card *ngIf="(testInfra.getActiveTest()!==undefined) && (!isLoading)" style="width:10rem; cursor: pointer;" (click) = "navigateToTest();"
+                        class="mat-card">
+                <img md-card-image=""  src="https://firebasestorage.googleapis.com/v0/b/auth-development-599b0.appspot.com/o/%D7%98%D7%A1%D7%98.jpg?alt=media&token=450a3d75-78f4-4454-bb67-b445f965da87" class="mat-card-image" />
+                <mat-card-subtitle  class="mat-card-title text-center font"> מבחן {{testInfra.getActiveTest().nameOfTest}} </mat-card-subtitle>
+              </mat-card>
+          </div>
         </div>
       </mat-sidenav-content>
     </mat-sidenav-container>

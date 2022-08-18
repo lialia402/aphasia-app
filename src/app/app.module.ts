@@ -49,6 +49,7 @@ import { CreateGameComponent } from './components/create-game/create-game.compon
 import { NgModule } from '@angular/core';
 import { TestSettingsComponent } from './components/test-settings/test-settings.component';
 import { CreateTestComponent } from './components/create-test/create-test.component';
+import { TestQuestionsComponent } from './components/test-questions/test-questions.component';
 
 
 
@@ -84,6 +85,7 @@ import { CreateTestComponent } from './components/create-test/create-test.compon
         CreateGameComponent,
         TestSettingsComponent,
         CreateTestComponent,
+        TestQuestionsComponent,
     ],
     imports: [
         BrowserModule,

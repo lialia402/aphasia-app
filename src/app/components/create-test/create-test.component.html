@@ -7,7 +7,12 @@
   </div>
 
 <div class="stretch">
-
+    <div class="name-input" dir="rtl">
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>שם המבחן</mat-label>
+        <input matInput [(ngModel)]='this.nameOfTest'>
+    </mat-form-field>
+    </div>
     <p class="chosen-words font" dir="rtl"> בחר 10 מילים מתוך מאגר מילים הבא עבור משחק מותאם אישית:</p>
 <div dir="rtl" class="main">
     <mat-expansion-panel *ngFor="let category of this.categoryService.categories">
