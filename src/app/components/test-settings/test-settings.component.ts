@@ -36,7 +36,7 @@ export class TestSettingsComponent implements OnInit {
   getTests()
   {
     this.currentTest=this.testService.getActiveTest();
-    this.disableTests=this.testService.getDisactiveTest();
+    this.disableTests=this.testService.getDisactiveTest().sort((a,b) => (this.wasPlayed(a) < this.wasPlayed(b)) ? 1 : ((this.wasPlayed(a) > this.wasPlayed(b)) ? -1 : 0));
   }
 
   updateTest()
@@ -97,6 +97,57 @@ export class TestSettingsComponent implements OnInit {
     {
       this.messageInfra.openSimleSnackBar('לא ניתן להוסיף את המבחן, כבר קיים מבחן מופעל במערכת ', 'סגור');
     }
+  }
+
+  wasPlayed(test: TestInfo){
+    return this.testService.testResult.filter(a => a.testId === test.id).length > 0;
+  }
+
+  isWrong(test: TestInfo, word:string){
+    if(this.wasPlayed(test) === false)
+    {
+      return false;
+    }
+
+    let testResult = this.testService.testResult.find(a => a.testId === test.id);
+    console.log("wrong", testResult);
+    console.log(testResult?.wrongList)
+    return testResult?.wrongList.some(a=> a === word);
+  }
+
+  isRight(test: TestInfo, word:string){
+    if(this.wasPlayed(test) === false)
+    {
+      return false;
+    }
+
+    let testResult = this.testService.testResult.find(a => a.testId === test.id);
+    console.log("right", testResult);
+    console.log(testResult?.rightList);
+    return testResult?.rightList.some(a=> a === word);
+  }
+
+  getTestDuration(testId: string){
+    let minutes = "";
+    this.testService.testResult.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
+    let testResult = this.testService.testResult.find((test) => test.testId === testId);
+
+    if(testResult !== undefined)
+    {
+      minutes = testResult.duration.toPrecision(2);
+    }
+    return minutes;
+  }
+
+  getTestGrade(testId: string){
+    let grade = 0;
+    this.testService.testResult.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
+    let testResult = this.testService.testResult.find((test) => test.testId === testId);
+    if(testResult !== undefined)
+    {
+      grade = testResult.rightList.length;
+    }
+    return grade;
   }
 
   toDate(date: Date){ 

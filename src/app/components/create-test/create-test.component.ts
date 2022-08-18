@@ -124,16 +124,8 @@ export class CreateTestComponent implements OnInit {
     }
     else if(this.hasDuplicates(this.selectedWords))
     {
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: `לשנות רשימת מילים למבחן ${'\n'}כעת קיימות מילים שמופיעות מספר פעמים`}});
-     dialogRef.afterClosed().subscribe(result => {
-       if(result)
-      {
-        this.insertTestInfo(this.selectedWords, this.nameOfTest);
-        this._snackBar.open('ההוספה הושלמה בהצלחה', 'סגור');
-        this._location.back();
-      }
-        });
-      }   
+      this.messageInfra.openSimleSnackBar('לא ניתן להוסיף את המבחן, יש מילים שמופיעות מספר פעמים  ', 'סגור');
+    }   
     else
     {
       this.insertTestInfo(this.selectedWords, this.nameOfTest);

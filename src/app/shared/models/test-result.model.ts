@@ -6,10 +6,10 @@ export class TestResult extends Unit {
     public userEmail:string;
     public wrongList:string[];
     public rightList:string[];
-    public duration: Date;
+    public duration: number;
     public answerDate:Date;
 
-    constructor(id: string, userEmail: string,testId:string, duration:Date, wrongList:string[], rightList:string[]) {
+    constructor(id: string, userEmail: string,testId:string, duration:number, wrongList:string[], rightList:string[]) {
         super();
         this.testId = testId;
         this.duration = duration;
