@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { TestResult } from 'src/app/shared/models/test-result.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 
 @Component({
@@ -12,21 +15,26 @@ export class TestQuestionsComponent implements OnInit {
 
   wrong:boolean;
   right:boolean;
-  wrongList:string[];
-  rightList:string[];
+  wrongList:string[] = [];
+  rightList:string[] = [];
   activeIndex: number;
   currentRound:number=0;
   correctAnswers:number=0;
   public cardQuestion:WordClass;
   public cardAnswers:WordClass[];
   imageLoaded = false;
+  startDate:Date;
+  endDate:Date;
   
   constructor(
     public testInfra:EquizInfraService,
     public router: Router,
+    public authService: AuthService,
+    private _snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
+    this.startDate = new Date();
     this.testInfra.giveTestList();
     this.creatAnswersList();
     this.getQuestionWord();
@@ -59,7 +67,7 @@ export class TestQuestionsComponent implements OnInit {
       this.right=true;
       this.correctAnswers++;
       setTimeout(() => {
-        this.rightList.push(answer.name)
+        this.rightList.push(this.cardQuestion.name)
         this.nextRound(answer);
         this.imageLoaded = false;
       }, 1000);
@@ -67,7 +75,7 @@ export class TestQuestionsComponent implements OnInit {
     else{
       this.wrong=true;
       setTimeout(() => {
-        this.wrongList.push(answer.name)
+        this.wrongList.push(this.cardQuestion.name)
         this.nextRound(answer);
         this.imageLoaded = false;
       }, 2000);
@@ -86,7 +94,15 @@ export class TestQuestionsComponent implements OnInit {
       }
     else
     {
-      //creat test result
+      this.endDate = new Date();
+      let currentActiveTest = this.testInfra.getActiveTest();
+      let myEmail = this.authService.user.email;
+      let duration = (this.endDate.getTime() - this.startDate.getTime())/60000;
+      let testResult = new TestResult("",myEmail,currentActiveTest.id,duration,this.wrongList,this.rightList);
+      this.testInfra.addTestResult(testResult);
+      this.testInfra.updateDisActivateTest(currentActiveTest);
+      this._snackBar.open('המבחן הושלם בהצלחה!', 'סגור');
+      this.router.navigate(['dashboard']);
     }
   }
 
