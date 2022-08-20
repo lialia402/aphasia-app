@@ -93,8 +93,54 @@
           <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " [disabled] = "(this.tenGamesType===1)" mat-raised-button (click)="this.gameTypeName4='מותאמים אישית';this.tenGamesType =1;filterCustom()">מותאמים אישית</button>
           <button  style=" margin-left: 6px; margin-right: 6px;height: 35px; " [disabled] = "(this.tenGamesType===2)" mat-raised-button (click)="this.gameTypeName4='רנדומליים';this.tenGamesType =2;filterRandom()">רנדומליים</button>
         </div>
-        <canvas class="canvas1" id="myChart4" style="margin-top: 34px;"> </canvas>
+        <canvas class="canvas1" id="myChart4" style="margin-top: 20px;"> </canvas>
       </mat-card-content>
+  </mat-card>
+</div>
+<div dir="rtl" class="main">
+  <mat-card  style="width:500px; height:450px;">
+    <p style="text-align: center;" >משך זמן מענה על המבחן</p>
+      <mat-card-content  style="margin-top: 77px;">
+        <canvas class="canvas" id="myChart5"> </canvas>
+      </mat-card-content>
+      <mat-card-actions class="date-picker" style="margin-top: 16px;">
+        <mat-form-field appearance="fill">
+          <mat-label>אנא בחר טווח תאריכים</mat-label>
+          <mat-date-range-input [formGroup]="this.rangeChart5" [rangePicker]="picker5" [min]="this.analytics.testMinDate" [max]="this.analytics.testMaxDate" >
+            <input matStartDate formControlName="start" placeholder="Start date"  >
+            <input matEndDate formControlName="end" placeholder="End date"  >
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker5></mat-date-range-picker>
+        </mat-form-field>
+        <div class="button-row">
+          <button class="button" mat-raised-button (click)="filterTestDuration()">סנן</button>
+          <button class="button" mat-raised-button (click)="resetTestDuration()">אתחל</button>
+        </div>
+      </mat-card-actions>
+  </mat-card>
+</div>
+<div dir="rtl" class="main">
+  <mat-card  style="width:500px; height:450px;">
+    <p style="text-align: center;" > תוצאות המבחנים</p>
+      <mat-card-content  style="margin-top: 77px;">
+        <canvas class="canvas" id="myChart6"> </canvas>
+      </mat-card-content>
+      <mat-card-actions class="date-picker" style="margin-top: 16px;">
+        <mat-form-field appearance="fill">
+          <mat-label>אנא בחר טווח תאריכים</mat-label>
+          <mat-date-range-input [formGroup]="this.rangeChart6" [rangePicker]="picker6" [min]="this.analytics.testMinDate" [max]="this.analytics.testMaxDate" >
+            <input matStartDate formControlName="start" placeholder="Start date"  >
+            <input matEndDate formControlName="end" placeholder="End date"  >
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker6></mat-date-range-picker>
+        </mat-form-field>
+        <div class="button-row">
+          <button class="button" mat-raised-button (click)="filterTestGrade()">סנן</button>
+          <button class="button" mat-raised-button (click)="resetTestGrade()">אתחל</button>
+        </div>
+      </mat-card-actions>
   </mat-card>
 </div>
 </div>

@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { CategoryClass } from '../models/category-class.model';
 import { GameResult } from '../models/game-result.model';
 import { Game } from '../models/game.model';
+import { TestInfo } from '../models/test-info.model';
+import { TestResult } from '../models/test-result.model';
 import { WordClass } from '../models/word-class.model';
 import { CategoryInfraService } from './category-infra.service';
+import { EquizInfraService } from './equiz-infra.service';
 import { GameInfraService } from './game-infra.service';
 import { WordInfraService } from './word-infra.service';
 
@@ -18,6 +21,8 @@ export class AnalyticsInfraService {
   allCategories:CategoryClass[];
   allGameResults:GameResult[];
   allGames:Game[];
+  allTestResults:TestResult[];
+  allTests:TestInfo[];
 
   // graph category view
   topFiveCategoriesViews:number[]=[];
@@ -42,11 +47,30 @@ export class AnalyticsInfraService {
   dateArray: string [] = [];
   gameRightAnswers: number[] =[];
 
-  constructor(public categoryInfraService: CategoryInfraService, public wordInfraService: WordInfraService, public gameInfraService: GameInfraService) {
+  // test min/max
+  testMinDate:Date;
+  testMaxDate:Date;
+
+  // test time spent graph
+  timeSpentArray: number [] = [];
+  timeSpentName: string [] = [];
+
+  // test grade graph
+  testGradeArray: number[] = [];
+  testGradeNames: string [] = [];
+  
+
+  constructor(
+    public categoryInfraService: CategoryInfraService,
+    public wordInfraService: WordInfraService, 
+    public gameInfraService: GameInfraService,
+    public testInfraService: EquizInfraService) {
     this.allWords=this.categoryInfraService.getAllUserPhrases;
     this.allCategories=this.categoryInfraService.getCategories;
     this.allGameResults = this.gameInfraService.resultGameArray;
     this.allGames=this.gameInfraService.patientGames;
+    this.allTestResults=this.testInfraService.testResult;
+    this.allTests=this.testInfraService.tests;
    }
 
    public updateData(){
@@ -54,6 +78,8 @@ export class AnalyticsInfraService {
     this.allCategories=this.categoryInfraService.getCategories;
     this.allGameResults = this.gameInfraService.resultGameArray;
     this.allGames=this.gameInfraService.patientGames;
+    this.allTestResults=this.testInfraService.testResult;
+    this.allTests=this.testInfraService.tests;
    }
 
   public getSortedWordsListByViewsDesc() {
@@ -79,9 +105,23 @@ export class AnalyticsInfraService {
     this.wrongRightMinDate = datesArray[0];
     this.wrongRightMaxDate = datesArray[datesArray.length-1];
     this.wrongRightMaxDate.setDate(this.wrongRightMaxDate.getDate() + 1);
-    console.log(this.wrongRightMinDate);
-    console.log(this.wrongRightMaxDate);
   }
+
+  public getTestMinMaxValues(){
+    let datesArray:Date[] = [];
+    datesArray.splice(1,datesArray.length);
+    for(let i=0;i<this.allTestResults.length;i++){
+      let date = new Date(this.allTestResults[i].answerDate);
+      datesArray.push(date);
+    }
+
+    datesArray.sort((b, a) => new Date(b).getTime() - new Date(a).getTime());
+
+    this.testMinDate = datesArray[0];
+    this.testMaxDate = datesArray[datesArray.length-1];
+    this.testMaxDate.setDate(this.testMaxDate.getDate() + 1);
+  }
+
 
   public getCategoriesMinMaxDateValues(){
     let datesArray:Date[] = [];
@@ -112,10 +152,6 @@ export class AnalyticsInfraService {
     this.topTenWordsMinDate = datesArray[0];
     this.topTenWordsMaxDate = datesArray[datesArray.length-1];
     this.topTenWordsMaxDate.setDate(this.topTenWordsMaxDate.getDate() + 1);
-
-    console.log(this.topTenWordsMinDate);
-    console.log(this.topTenWordsMaxDate);
-  
   }
 
 
@@ -184,11 +220,19 @@ export class AnalyticsInfraService {
     return tempArray;
   }
 
+  filterTestByStartAndEnd(start:Date,end:Date,dates: TestResult[]){
+    let tempArray = dates.filter((item: TestResult) =>
+    new Date(item.answerDate).getTime()>= start.getTime() && new Date (item.answerDate).getTime() <= end.getTime()
+    );
+    return tempArray;
+  }
+
   // get category analytics for view category graph
   public getCategoriesAnalytics()
   {
     this.getCategoriesMinMaxDateValues();
     this.getWrongRightMinMaxValues();
+    this.getTestMinMaxValues();
     this.getSortedCategoriesListByViewsDesc();
   }
 
@@ -273,14 +317,74 @@ export class AnalyticsInfraService {
     
   }
 
+  getTestDuration(){
+
+    this.timeSpentArray.splice(0, this.timeSpentArray.length);
+    this.timeSpentName.splice(0, this.timeSpentName.length);
+  
+    this.allTestResults.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
+
+    for(let i=0; i<this.allTestResults.length;i++){
+     this.timeSpentArray.push(this.allTestResults[i].duration);
+     let testName = this.allTests.find(test => test.id === this.allTestResults[i].testId)
+     if(testName !== undefined){
+      this.timeSpentName.push(testName?.nameOfTest);
+     }
+    }
+    
+  }
+
+  getTestImprovemnt(){
+
+    this.testGradeArray.splice(0, this.testGradeArray.length);
+    this.testGradeNames.splice(0, this.testGradeNames.length);
+  
+    this.allTestResults.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
+
+    for(let i=0; i<this.allTestResults.length;i++){
+     this.testGradeArray.push(this.allTestResults[i].rightList.length);
+     let testName = this.allTests.find(test => test.id === this.allTestResults[i].testId)
+     if(testName !== undefined){
+      this.testGradeNames.push(testName?.nameOfTest);
+     }
+    }
+    
+  }
+
+  getSortedTestDurationByStartAndEndDate(start:Date,end:Date){
+    this.timeSpentArray.splice(0, this.timeSpentArray.length);
+    this.timeSpentName.splice(0, this.timeSpentName.length);
+    this.allTestResults.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
+
+    let filteredArray = this.filterTestByStartAndEnd(start,end,this.allTestResults);
+    for(let i=0; i<filteredArray.length;i++){
+      this.timeSpentArray.push(filteredArray[i].duration);
+      let testName = this.allTests.find(test => test.id === filteredArray[i].testId)
+      if(testName !== undefined){
+       this.timeSpentName.push(testName?.nameOfTest);
+      }
+    }
+  }
+
+  getSortedTestGradeByStartAndEndDate(start:Date,end:Date){
+    this.testGradeArray.splice(0, this.testGradeArray.length);
+    this.testGradeNames.splice(0, this.testGradeNames.length);
+  
+    this.allTestResults.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
+
+    let filteredArray = this.filterTestByStartAndEnd(start,end,this.allTestResults);
+    for(let i=0; i<filteredArray.length;i++){
+      this.testGradeArray.push(filteredArray[i].rightList.length);
+      let testName = this.allTests.find(test => test.id === filteredArray[i].testId)
+      if(testName !== undefined){
+       this.testGradeNames.push(testName?.nameOfTest);
+      }
+    }
+  }
+
   filterAllGameByType(type:number){
     this.dateArray.splice(0, this.dateArray.length);
     this.gameRightAnswers.splice(0, this.gameRightAnswers.length);
-
-    console.log(this.dateArray);
-    console.log(this.gameRightAnswers);
-    console.log(this.allGames)
-
 
     let tempArray = this.allGames.filter(game => game.gameType === type);
     console.log(tempArray);

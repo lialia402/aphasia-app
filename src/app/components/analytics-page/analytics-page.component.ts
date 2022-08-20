@@ -32,10 +32,22 @@ export class AnalyticsPageComponent implements OnInit {
     end: new FormControl<Date | null>(null),
   });
 
+  rangeChart5 = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
+  rangeChart6 = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   chart1: Chart<"bar", number[], string>;
   chart2: Chart<"doughnut", number[], string>;
   chart3: Chart<"bar", number[], string>
   chart4: Chart<"line", number[], string>
+  chart5: Chart<"line", number[], string>
+  chart6: Chart<"line", number[], string>
   gameTypeName3:string = "";
   gameTypeName4:string = "";
  
@@ -50,6 +62,8 @@ export class AnalyticsPageComponent implements OnInit {
     this.analytics.updateData();
     this.analytics.getSortedWordsListByViewsDesc();
     this.analytics.getGameImprovment();
+    this.analytics.getTestDuration();
+    this.analytics.getTestImprovemnt();
     this.analytics.getGameAnswers(0);
     this.analytics.getCategoriesAnalytics();
     this.gameTypeName3='כלל המשחקים';
@@ -147,11 +161,43 @@ this.chart4 = new Chart("myChart4", {
         datasets: [{
           label: 'תוצאות משחק',
           data: this.analytics.gameRightAnswers,
-          fill: true,
-          borderColor: '#727272',
+          fill: false,
+          borderColor: '#F16B5C',
           tension: 0.1
         }]
  } });
+
+
+ // line graph of results for up to the last 10 games the user has played
+this.chart5 = new Chart("myChart5", {
+  type: 'line',
+  data: {
+      labels: this.analytics.timeSpentName,
+      datasets: [{
+        label: 'משך המבחן ',
+        data: this.analytics.timeSpentArray,
+        fill: false,
+        borderColor: '#83DDE7',
+        tension: 0.1
+      }]
+} });
+
+
+// line graph of results for up to the last 10 games the user has played
+this.chart6 = new Chart("myChart6", {
+  type: 'line',
+  data: {
+      labels: this.analytics.testGradeNames,
+      datasets: [{
+        label: 'תוצאות מבחן',
+        data: this.analytics.testGradeArray,
+        fill: false,
+        borderColor: '#A984E6',
+        tension: 0.05
+      }]
+} });
+
+
   }
 
   public async getCategories()
@@ -182,6 +228,35 @@ this.chart4 = new Chart("myChart4", {
     this.analytics.getSortedWordsListByViewsDesc();
     this.rangeChart1.reset();
     this.chart1.update();
+  }
+
+  filterTestDuration(){
+    if(this.rangeChart5.value.start !== undefined && this.rangeChart5.value.start !== null && 
+      this.rangeChart5.value.end !== undefined && this.rangeChart5.value.end !== null){
+        this.analytics.getSortedTestDurationByStartAndEndDate(this.rangeChart5.value.start,this.rangeChart5.value.end);
+      }
+    this.chart5.update();
+  }
+
+  resetTestDuration(){
+    this.analytics.getTestDuration();
+    this.rangeChart5.reset();
+    this.chart5.update();
+  }
+
+
+  filterTestGrade(){
+    if(this.rangeChart6.value.start !== undefined && this.rangeChart6.value.start !== null && 
+      this.rangeChart6.value.end !== undefined && this.rangeChart6.value.end !== null){
+        this.analytics.getSortedTestGradeByStartAndEndDate(this.rangeChart6.value.start,this.rangeChart6.value.end);
+      }
+    this.chart6.update();
+  }
+
+  resetTestGrade(){
+    this.analytics.getTestImprovemnt();
+    this.rangeChart6.reset();
+    this.chart6.update();
   }
 
 
