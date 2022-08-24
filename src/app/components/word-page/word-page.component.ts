@@ -19,12 +19,14 @@ import { EditWordsDialogComponent } from '../utils/edit-words-dialog/edit-words-
 })
 export class WordPageComponent implements OnInit {
   public words: WordClass[];
+  public categories: CategoryClass[];
   public category: CategoryClass;
   public name:string;
   public imagePath:any;
   public audioPath:any;
   public imageLink:any;
   isTherapist: boolean;
+  isSuperAdmin: boolean;
   isWordDisabled: boolean = false;
   isWordEnabled: boolean = false;
 
@@ -42,11 +44,18 @@ export class WordPageComponent implements OnInit {
 
   ngOnInit() {
     this.getwords();
+    this.getCategories(); 
     this.isTherapist = this.authService.user.userType === 'admin';
+    this.isSuperAdmin = this.authService.user.userType === 'superAdmin';
+  }
+
+  getCategories(){
+    this.categories = this.authService.user.userType === 'superAdmin' ? this.categoryService.superAdminCategories : this.categoryService.categories;
   }
 
   updateWordsList(category: CategoryClass){
     this.categoryService.currentCategory = category;
+    this.wordService.currentCategory = category;
     this.category = category;
     if(this.authService.user.userType === 'patient')
     {
@@ -58,7 +67,13 @@ export class WordPageComponent implements OnInit {
 
   getwords()
   {
-    let promise= this.wordService.getPhrases(this.category);
+    let promise;
+    if(this.authService.user.userType === 'superAdmin'){
+      promise= this.wordService.getSuperAdminPhrases(this.category);
+    }
+    else{
+      promise= this.wordService.getPhrases(this.category);
+    }
     promise.then((data) => {
       this.words = data;
       this.wordService.words = data;

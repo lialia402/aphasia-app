@@ -30,8 +30,14 @@ export class FirebaseInfraService {
   categoriesCollection: AngularFirestoreCollection<CategoryClass> | undefined;
   categories: Observable<CategoryClass[]> = new Observable<CategoryClass[]>()
 
+  superAdminCategoriesCollection: AngularFirestoreCollection<CategoryClass> | undefined;
+  superAdminCategories: Observable<CategoryClass[]> = new Observable<CategoryClass[]>()
+
   wordsCollection: AngularFirestoreCollection<WordClass> | undefined;
   words: Observable<WordClass[]> = new Observable<WordClass[]>()
+
+  superAdminWordsCollection: AngularFirestoreCollection<WordClass> | undefined;
+  superAdminWords: Observable<WordClass[]> = new Observable<WordClass[]>()
 
   patientsCollection: AngularFirestoreCollection<User> | undefined;
   patients: Observable<User[]> = new Observable<User[]>()
@@ -238,6 +244,42 @@ export class FirebaseInfraService {
   }
 
 
+  public importSuperAdminCategories()
+  {
+    //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
+    try{
+      this.superAdminCategoriesCollection = this.afs.collection<CategoryClass>('superAdminCategories', ref => ref.orderBy('order','asc'));
+      this.superAdminCategories = this.superAdminCategoriesCollection.snapshotChanges().pipe(map((result:any[]) => {
+        return result.map(a => {
+          let temp = a.payload.doc.data() as CategoryClass;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
+  public importSuperAdminWords(category: CategoryClass)
+  {
+    //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
+    try{
+      this.superAdminWordsCollection = this.afs.collection<WordClass>('superAdminWords', ref => ref.orderBy('order','asc').where('categoryID','==',category.id));
+      this.superAdminWords = this.superAdminWordsCollection.snapshotChanges().pipe(map((result:any[]) => {
+        return result.map(a => {
+          let temp = a.payload.doc.data() as WordClass;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
   public importCategories()
   {
     //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
@@ -321,6 +363,22 @@ export class FirebaseInfraService {
      })
   }
 
+  addSuperAdminCategory(category: CategoryClass) {   
+    return this.superAdminCategoriesCollection?.add(CategoryClass.toObject(category)).then(function(){
+    }).catch((e) =>{
+      // this.error.simpleToast("הוספה נכשלה");
+         console.log("הוספה נכשלה");
+     })
+  }
+
+  addSuperAdminWord(word: WordClass) {   
+    return this.superAdminWordsCollection?.add(WordClass.toObject(word)).then(function(){
+    }).catch((e) =>{
+      // this.error.simpleToast("הוספה נכשלה");
+         console.log("הוספה נכשלה");
+     })
+  }
+
   addTestInfo(testInfo:TestInfo)
   {
     return this.testInfoCollection?.add(TestInfo.toObject(testInfo)).then(function(){
@@ -357,6 +415,14 @@ export class FirebaseInfraService {
     }).catch((e) => {
        // this.error.simpleToast("מחיקה נכשלה");
     });
+  }
+
+  get getSuperAdminCategoriesObservable() {
+    return this.superAdminCategories;
+  }
+
+  get getSuperAdminWordsObservable() {
+    return this.superAdminWords;
   }
 
   get getwordsObservable() {

@@ -22,17 +22,17 @@
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image"  (click)="openCategoryWords(item);"/>
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
         <mat-card-actions class="buttons">
-          <button *ngIf="isTherapist" class="middle-button" mat-icon-button mat-button (click)="editCategory(item)" >
+          <button *ngIf="isTherapist || isSuperAdmin" class="middle-button" mat-icon-button mat-button (click)="editCategory(item)" >
             <mat-icon>create</mat-icon>
           </button>
-          <button  *ngIf="isTherapist" class="right-button" mat-icon-button mat-button (click) ="openDialog(item);" >
+          <button  *ngIf="isTherapist || isSuperAdmin" class="right-button" mat-icon-button mat-button (click) ="openDialog(item);" >
             <mat-icon>delete</mat-icon>
           </button>
         </mat-card-actions>
       </mat-card>
       </ng-container>
       
-      <button *ngIf="isTherapist" mat-fab color="gray"(click)="addNewCategory();">
+      <button *ngIf="isTherapist || isSuperAdmin" mat-fab color="gray"(click)="addNewCategory();">
         <mat-icon>add</mat-icon>
       </button>
 </div>

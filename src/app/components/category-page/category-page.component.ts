@@ -20,6 +20,7 @@ export class CategoryPageComponent implements OnInit {
   name: any;
   imagePath: any;
   isTherapist: boolean;
+  isSuperAdmin:boolean;
   isCategoryDisabled: boolean = false;
   isCategoryEnabled: boolean = false;
   public categories: CategoryClass[];
@@ -29,7 +30,7 @@ export class CategoryPageComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog, 
     public storageService: StorageInfraProvider,
-    public errorService: ErrorInfra) {}
+    public errorService: ErrorInfra,) {}
 
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
@@ -48,13 +49,17 @@ export class CategoryPageComponent implements OnInit {
     if(this.authService.user.userType=='patient')
     {
       this.categories = this.categoryService.getCategories;
+      this.checkCategoriesVisability();
     }
-    else
+    else if(this.authService.user.userType=='admin')
     {
       await this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
       this.categories = this.categoryService.getCategories;
+      this.checkCategoriesVisability();
     }
-    this.checkCategoriesVisability();
+    else if(this.authService.user.userType=='superAdmin'){
+      this.categories = this.categoryService.getSuperAdminCategories;
+    }
   }
 
   // check if there are visible and invisible categories
@@ -66,8 +71,11 @@ export class CategoryPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCategories();
+    setTimeout(async () => {  
+      await this.getCategories();  
+    }, 500)
     this.isTherapist = this.authService.user.userType === 'admin';
+    this.isSuperAdmin = this.authService.user.userType === 'superAdmin';
   }
 
   // delete the specific category and the words belongs to it
@@ -75,7 +83,7 @@ export class CategoryPageComponent implements OnInit {
     setTimeout(async () => {
       await this.categoryService.removeCategory(category);   
       this.getCategories();  
-    }, 500)
+    }, 750)
   }
 
   // verifies the deletion operation
@@ -98,12 +106,12 @@ export class CategoryPageComponent implements OnInit {
 
   async addNewCategory() {
     let email:string;
-    if(this.authService.user.userType ==='patient')
+    if(this.authService.user.userType ==='admin')
     {
-      email = this.authService.user.email;
+      email = this.authService.patientOfTherapist.email;
     }
     else{
-      email = this.authService.patientOfTherapist.email;
+      email = this.authService.user.email;
     }
     const dialogRef = this.dialog.open(AddCategoryDialogComponent, {
       height: '445px',
@@ -140,12 +148,12 @@ export class CategoryPageComponent implements OnInit {
   // edit category: Change one or more of the following details: category name, category image
   async editCategory(category: CategoryClass){
     let email:string;
-    if(this.authService.user.userType ==='patient')
+    if(this.authService.user.userType ==='admin')
     {
-      email = this.authService.user.email;
+      email = this.authService.patientOfTherapist.email;
     }
     else{
-      email = this.authService.patientOfTherapist.email;
+      email = this.authService.user.email;
     }
     const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
       height: '445px',

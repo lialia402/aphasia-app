@@ -23,6 +23,7 @@ export class UserInfaService {
   private updateUsersArray() {
     this.firebaseInfraService.importCategories();
     this.firebaseInfraService.getUsersObservable.subscribe(a => {
+      console.log(a);
       this.users = a;
     });
   }
@@ -88,6 +89,10 @@ export class UserInfaService {
       }
      
     return this.patients;
+  }
+
+  public getAllPatients(){
+    return this.users.filter((user) => user.userType === 'patient');
   }
 }
 

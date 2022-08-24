@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { from } from 'rxjs';
 import { CategoryClass } from '../models/category-class.model';
 import { WordClass } from '../models/word-class.model';
+import { AuthService } from './auth.service';
 import { FirebaseInfraService } from './firebase-infra.service';
+import { UserInfaService } from './user-infa.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,12 @@ export class WordInfraService {
 
   words: any;
   categoryName: any;
+  public currentCategory: CategoryClass;
 
-  constructor(public firebaseProvider: FirebaseInfraService) {}
+  constructor(
+    public firebaseProvider: FirebaseInfraService,
+    public authentication: AuthService,
+    public userInfra: UserInfaService,) {}
 
   //first,calling import of all category's phrases.
   //then, create a Promise object that active only when arrayOfPhrases filled up once.
@@ -24,6 +28,15 @@ export class WordInfraService {
     this.firebaseProvider.importwords(category);
     return new Promise((resolve, reject) => {
       this.firebaseProvider.getwordsObservable.subscribe(arrayOfWords => {
+        resolve(arrayOfWords);
+      })
+    })
+  }
+
+  public getSuperAdminPhrases(category: CategoryClass): Promise<WordClass[]> {
+    this.firebaseProvider.importSuperAdminWords(category);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getSuperAdminWordsObservable.subscribe(arrayOfWords => {
         resolve(arrayOfWords);
       })
     })
@@ -47,9 +60,39 @@ export class WordInfraService {
    */
   public addPhrase(word: WordClass, callFromAppBuilder = false) : Promise<any> {
     return new Promise((resolve, reject) => {
-      this.firebaseProvider.addWord(word)?.then(() => {
-        resolve(word);
-      });
+      if(this.authentication.user.userType === 'superAdmin')
+      {
+        this.firebaseProvider.addSuperAdminWord(word)?.then(() => {
+          let patients = this.userInfra.getAllPatients();
+          let patientCategories:any[] =[];
+          for(let i=0;i<patients.length;i++){
+            this.firebaseProvider.importCategoriesByEmail(patients[i].email);
+            this.firebaseProvider.getCategoriesObservable.subscribe(arrayOfCategories => {
+              patientCategories = arrayOfCategories;
+              debugger;
+              console.log(arrayOfCategories);
+              word.categoryID = arrayOfCategories.find(category => category.name === this.currentCategory.name)?.id || 'missing';
+              console.log(word.categoryID);
+              word.visibility = false;
+              this.firebaseProvider.addWord(word);
+              resolve(arrayOfCategories);
+            });
+            
+            // word.id = "";
+            // word.categoryID = patientCategories.find(category => category.name === this.currentCategory.name).id;
+            // word.visibility = false;
+            // this.firebaseProvider.addWord(word);
+          }
+
+          resolve(word);
+        });
+      }
+
+      else{
+        this.firebaseProvider.addWord(word)?.then(() => {
+          resolve(word);
+        });
+      }
     })
   }
 
