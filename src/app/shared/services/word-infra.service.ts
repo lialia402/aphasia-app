@@ -11,7 +11,9 @@ import { UserInfaService } from './user-infa.service';
 export class WordInfraService {
 
   words: any;
+  superAdminWords:any;
   categoryName: any;
+  categories: CategoryClass[];
   public currentCategory: CategoryClass;
 
   constructor(
@@ -28,6 +30,17 @@ export class WordInfraService {
     this.firebaseProvider.importwords(category);
     return new Promise((resolve, reject) => {
       this.firebaseProvider.getwordsObservable.subscribe(arrayOfWords => {
+        this.words = arrayOfWords;
+        resolve(arrayOfWords);
+      })
+    })
+  }
+
+  public getPhrasesByName(name: string): Promise<WordClass[]> {
+    this.firebaseProvider.importwordsByName(name);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getwordsObservable.subscribe(arrayOfWords => {
+        this.words = arrayOfWords;
         resolve(arrayOfWords);
       })
     })
@@ -37,6 +50,7 @@ export class WordInfraService {
     this.firebaseProvider.importSuperAdminWords(category);
     return new Promise((resolve, reject) => {
       this.firebaseProvider.getSuperAdminWordsObservable.subscribe(arrayOfWords => {
+        this.superAdminWords = arrayOfWords;
         resolve(arrayOfWords);
       })
     })
@@ -62,28 +76,22 @@ export class WordInfraService {
     return new Promise((resolve, reject) => {
       if(this.authentication.user.userType === 'superAdmin')
       {
-        this.firebaseProvider.addSuperAdminWord(word)?.then(() => {
+        this.firebaseProvider.addSuperAdminWord(word)?.then(async () => {
           let patients = this.userInfra.getAllPatients();
-          let patientCategories:any[] =[];
           for(let i=0;i<patients.length;i++){
-            this.firebaseProvider.importCategoriesByEmail(patients[i].email);
-            this.firebaseProvider.getCategoriesObservable.subscribe(arrayOfCategories => {
-              patientCategories = arrayOfCategories;
-              debugger;
-              console.log(arrayOfCategories);
-              word.categoryID = arrayOfCategories.find(category => category.name === this.currentCategory.name)?.id || 'missing';
-              console.log(word.categoryID);
+            debugger;
+            let promise = await this.importCategoriesArrayByEmail(patients[i].email);
+            let category = promise.find(category => category.name === this.currentCategory.name);
+            if(category !== undefined){
+              let anotherPromise = await this.getPhrases(category);
+              this.words = anotherPromise;
+              word.categoryID = this.categories.find(category => category.name === this.currentCategory.name)?.id || 'missing';
               word.visibility = false;
-              this.firebaseProvider.addWord(word);
-              resolve(arrayOfCategories);
-            });
-            
-            // word.id = "";
-            // word.categoryID = patientCategories.find(category => category.name === this.currentCategory.name).id;
-            // word.visibility = false;
-            // this.firebaseProvider.addWord(word);
+              this.firebaseProvider.addWord(word)?.then(() => {
+              resolve(word);
+            }); 
+            }
           }
-
           resolve(word);
         });
       }
@@ -96,12 +104,33 @@ export class WordInfraService {
     })
   }
 
+   // updating the categories and refreshing the page, the method return a Promise object
+   public importCategoriesArrayByEmail(email:string): Promise<CategoryClass[]> {
+    this.firebaseProvider.importCategoriesByEmail(email);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getCategoriesObservable.subscribe(arrayOfWords => {
+        this.categories = arrayOfWords;
+        resolve(arrayOfWords);
+      })
+    })
+  }
+
+  
+
   /**
  * remove phrase, update DB and arrange by order.
  * 
  */
   public removePhrase(phrase: WordClass) {
     this.firebaseProvider.removePhrase(phrase);
+  }
+
+  public removePhraseSuperAdmin(phrase: WordClass) {
+    this.firebaseProvider.removePhraseSuperAdmin(phrase);
+    let promise = this.getPhrasesByName(phrase.name);
+    promise.then(()=>{
+      this.words.forEach((a:WordClass)=> this.removePhrase(a));
+    })
   }
 
   //SETTERS

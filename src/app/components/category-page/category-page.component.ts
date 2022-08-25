@@ -9,6 +9,7 @@ import { AddCategoryDialogComponent } from '../utils/add-category-dialog/add-cat
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { EditCategoryDialogComponent } from '../utils/edit-category-dialog/edit-category-dialog.component';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-category-page',
@@ -23,6 +24,7 @@ export class CategoryPageComponent implements OnInit {
   isSuperAdmin:boolean;
   isCategoryDisabled: boolean = false;
   isCategoryEnabled: boolean = false;
+  isSuperAdminCategoryDisabled: boolean = false;
   public categories: CategoryClass[];
   constructor(
     public authService: AuthService, 
@@ -30,7 +32,8 @@ export class CategoryPageComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog, 
     public storageService: StorageInfraProvider,
-    public errorService: ErrorInfra,) {}
+    public errorService: ErrorInfra,
+    private _snackBar: MatSnackBar) {}
 
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
@@ -56,6 +59,7 @@ export class CategoryPageComponent implements OnInit {
       await this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
       this.categories = this.categoryService.getCategories;
       this.checkCategoriesVisability();
+      this.checkSuperCategoriesVisability();
     }
     else if(this.authService.user.userType=='superAdmin'){
       this.categories = this.categoryService.getSuperAdminCategories;
@@ -70,6 +74,36 @@ export class CategoryPageComponent implements OnInit {
       this.isCategoryDisabled = this.categories.some(checkDisabledCat);
   }
 
+  checkSuperCategoriesVisability(){
+    const checkSuperAdminCat =  (obj: CategoryClass) => obj.visibility === false 
+    && obj.name !== 'אוכל'
+    && obj.name !== 'מספרים'
+    && obj.name !== 'חגים'
+    && obj.name !== 'אירועים'
+    && obj.name !== 'מקומות'
+    && obj.name !== 'אברי גוף'
+    && obj.name !== 'רגשות'
+    && obj.name !== 'אנשי מקצוע'
+    && obj.name !== 'חגים'
+    && this.categoryService.superAdminCategories.some(a=> a.name === obj.name);
+
+    this.isSuperAdminCategoryDisabled = this.categories.some(checkSuperAdminCat);
+  }
+
+  isSuperAdminCategory(name:string)
+  {
+    return name !== 'אוכל'
+    && name !== 'מספרים'
+    && name !== 'חגים'
+    && name !== 'אירועים'
+    && name !== 'מקומות'
+    && name !== 'אברי גוף'
+    && name !== 'רגשות'
+    && name !== 'אנשי מקצוע'
+    && name !== 'חגים'
+    && this.categoryService.superAdminCategories.some(a=> a.name === name);
+  }
+
   ngOnInit(): void {
     setTimeout(async () => {  
       await this.getCategories();  
@@ -81,9 +115,15 @@ export class CategoryPageComponent implements OnInit {
   // delete the specific category and the words belongs to it
   public deleteCategory(category: CategoryClass) {
     setTimeout(async () => {
-      await this.categoryService.removeCategory(category);   
+      if(this.authService.user.userType==='superAdmin')
+      {
+        await this.categoryService.removeCategorySuperAdmin(category);
+      }
+      else{
+        await this.categoryService.removeCategory(category); 
+      }
       this.getCategories();  
-    }, 750)
+    }, 1000)
   }
 
   // verifies the deletion operation
@@ -93,6 +133,7 @@ export class CategoryPageComponent implements OnInit {
       if(result)
       {
         this.deleteCategory(category);
+        this._snackBar.open('המחיקה הושלמה בהצלחה', 'סגור');
       }
     });
   }
@@ -138,7 +179,8 @@ export class CategoryPageComponent implements OnInit {
         this.categoryService.addCategory(newCategory);
         setTimeout(async () => {
           await  
-          this.getCategories();  
+          this.getCategories();
+          this._snackBar.open('ההוספה הושלמה בהצלחה', 'סגור');  
         }, 500);
         }
       }
@@ -185,6 +227,7 @@ export class CategoryPageComponent implements OnInit {
         setTimeout(async () => {
           await  
           this.getCategories();  
+          this._snackBar.open('העריכה הושלמה בהצלחה', 'סגור');
         }, 500);
       }
     });
@@ -194,5 +237,6 @@ export class CategoryPageComponent implements OnInit {
   updateVisibility(category:CategoryClass){
     this.categoryService.changeVisibility(category);
     this.checkCategoriesVisability();
+    this.checkSuperCategoriesVisability();
   }
 }

@@ -181,7 +181,6 @@ export class FirebaseInfraService {
     try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
       this.gamesCollection = this.afs.collection<Game>('games', ref => ref.where('userEmail', '==', this.authentication.userData.email));
       this.games = this.gamesCollection.snapshotChanges().pipe(map((result:any[]) => {
-        console.log("import games")
       return result.map(a => {
           let temp = a.payload.doc.data() as Game;
           temp.id = a.payload.doc.id;
@@ -198,7 +197,6 @@ export class FirebaseInfraService {
     try{//ref => ref.where('userEmail', '==', this.authentication.userData.email )
       this.testInfoCollection = this.afs.collection<TestInfo>('tests', ref => ref.where('userEmail', '==', this.authentication.userData.email));
       this.testInfo = this.testInfoCollection.snapshotChanges().pipe(map((result:any[]) => {
-        console.log("import Test")
       return result.map(a => {
           let temp = a.payload.doc.data() as TestInfo;
           temp.id = a.payload.doc.id;
@@ -298,6 +296,24 @@ export class FirebaseInfraService {
     }
   }
 
+  public importCategoriesByName(name:string)
+  {
+    //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
+    try{
+      this.categoriesCollection = this.afs.collection<CategoryClass>('categories', ref => ref.orderBy('order','asc').where('name', '==', name));
+      this.categories = this.categoriesCollection.snapshotChanges().pipe(map((result:any[]) => {
+        return result.map(a => {
+          let temp = a.payload.doc.data() as CategoryClass;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+    catch(e){
+     // this.error.simpleToast("Connection error");
+    }
+  }
+
   public importCategoriesByEmail(email:string)
   {
     //Creating the categories collection of the CURRENT USER!!!!!!!! ha ha
@@ -322,6 +338,24 @@ export class FirebaseInfraService {
       //Creating the words collection of specific category of current user
       this.wordsCollection = this.afs.collection<WordClass>('words', ref => ref.orderBy('order','asc').where('categoryID','==',category.id));
       //this.wordsCollection = this.afs.collection<Phrase>('words', ref => ref.orderBy('name', 'asc'));
+      this.words = this.wordsCollection.snapshotChanges().pipe(map((result:any[]) => {
+        return result.map(a => {
+          let temp = a.payload.doc.data() as WordClass;
+          temp.id = a.payload.doc.id;
+          return temp;
+        });
+      }));
+    }
+      catch(e){
+       // this.error.simpleToast("Connection error");
+      }
+  }
+
+  public importwordsByName(name: string)
+  {
+    try{
+      //Creating the words collection of specific category of current user
+      this.wordsCollection = this.afs.collection<WordClass>('words', ref => ref.orderBy('order','asc').where('name','==',name));
       this.words = this.wordsCollection.snapshotChanges().pipe(map((result:any[]) => {
         return result.map(a => {
           let temp = a.payload.doc.data() as WordClass;
@@ -409,6 +443,13 @@ export class FirebaseInfraService {
   });
   }
 
+  removeSuperAdminCategory(category: CategoryClass){
+    this.superAdminCategoriesCollection?.doc(category.id ).delete().then(function() {
+  }).catch((e) => {
+     // this.error.simpleToast("מחיקה נכשלה");
+  });
+  }
+
   removeTestInfo(test:TestInfo)
   {
     this.testInfoCollection?.doc(test.id ).delete().then(function() {
@@ -479,6 +520,13 @@ export class FirebaseInfraService {
 
   removePhrase(phrase: WordClass){
     this.wordsCollection?.doc(phrase.id).delete().then(function() {
+  }).catch((e) => {
+      //this.error.simpleToast("מחיקה נכשלה");
+  });
+  }
+
+  removePhraseSuperAdmin(phrase: WordClass){
+    this.superAdminWordsCollection?.doc(phrase.id).delete().then(function() {
   }).catch((e) => {
       //this.error.simpleToast("מחיקה נכשלה");
   });

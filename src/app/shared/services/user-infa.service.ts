@@ -23,7 +23,6 @@ export class UserInfaService {
   private updateUsersArray() {
     this.firebaseInfraService.importCategories();
     this.firebaseInfraService.getUsersObservable.subscribe(a => {
-      console.log(a);
       this.users = a;
     });
   }

@@ -31,6 +31,16 @@ export class CategoryInfraService {
       this.importSuperCategoriesArray();
   }
 
+  public getCategoriesByName(name: string): Promise<CategoryClass[]> {
+    this.firebaseProvider.importCategoriesByName(name);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getCategoriesObservable.subscribe(arrayOfWords => {
+        this.categories = arrayOfWords;
+        resolve(arrayOfWords);
+      })
+    })
+  }
+
   // updating the categories and refreshing the page, the method return a Promise object
   public updateCategoriesArray(): Promise<CategoryClass[]> {
     this.allUserPhrases = []
@@ -203,6 +213,21 @@ export class CategoryInfraService {
         })
       })
     })
+  }
+
+  public removeCategorySuperAdmin(category: CategoryClass) : Promise<any>{
+    return new Promise((resolve, reject) => {
+    this.firebaseProvider.removeSuperAdminCategory(category);
+    let promise = this.getCategoriesByName(category.name);
+    promise.then(()=>{
+      console.log(this.categories);
+      this.categories.forEach((a:CategoryClass)=> this.removeCategory(a));
+      let p = this.importSuperCategoriesArray();
+      p.then(() => {
+        resolve(true);
+      })
+    })
+  })
   }
 
   // update category in firebase
