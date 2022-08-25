@@ -28,15 +28,15 @@
      </mat-card>
      <div class="line-item">
         <button class="create-button font" mat-raised-button color="warn" (click)="deleteTestInfo(this.currentTest)"> מחיקה</button>
-        <button class="create-button font" mat-raised-button color="primary" (click)="disActivateTestInfo(this.currentTest)"> כבה</button>
+        <button class="create-button font" mat-raised-button color="primary" (click)="disActivateTestInfo(this.currentTest)"> הפוך ללא זמין</button>
     </div>
         </div>
     </mat-expansion-panel>
     <p *ngIf="this.testService.getDisactiveTest().length!==0" class="title-disactivated font" dir="rtl"> רשימת המבחנים שהמטופל ביצע:</p>
-    <p *ngIf="this.testService.getDisactiveTest().length!==0" class="title-comment font" dir="rtl"> שים לב, על מנת להפעיל משחק מחדש, יש למחוק או לכבות את המבחנים הנוכחיים</p>
+    <p *ngIf="this.testService.getDisactiveTest().length!==0" class="title-comment font" dir="rtl"> שים לב, על מנת להפעיל משחק מחדש, יש למחוק או להפוך ללא זמין את המבחן הנוכחי </p>
     <mat-expansion-panel *ngFor="let test of this.disableTests">
         <mat-expansion-panel-header [ngClass]="{'played':wasPlayed(test), 'notPlayed': (!wasPlayed(test))}">
-            <mat-panel-title dir="rtl" style="max-width: 200px;" class="font">
+            <mat-panel-title dir="rtl" style="max-width: 200px;min-width: 125px;" class="font">
             {{test.nameOfTest}} 
             </mat-panel-title>
             <mat-panel-description  dir="rtl" class="font">
@@ -57,7 +57,7 @@
      </mat-card>
      <div class="line-item">
         <button class="create-button font" mat-raised-button color="warn" (click)="deleteTestInfo(test)"> מחיקה</button>
-        <button class="create-button font" mat-raised-button color="primary" (click)="activateTestInfo(test)"> הדלק</button>
+        <button class="create-button font" mat-raised-button color="primary" (click)="activateTestInfo(test)"> הפוך לזמין</button>
     </div>
         </div>
     </mat-expansion-panel>

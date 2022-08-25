@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
@@ -19,12 +20,14 @@ import { EditWordsDialogComponent } from '../utils/edit-words-dialog/edit-words-
 })
 export class WordPageComponent implements OnInit {
   public words: WordClass[];
+  public categories: CategoryClass[];
   public category: CategoryClass;
   public name:string;
   public imagePath:any;
   public audioPath:any;
   public imageLink:any;
   isTherapist: boolean;
+  isSuperAdmin: boolean;
   isWordDisabled: boolean = false;
   isWordEnabled: boolean = false;
 
@@ -35,18 +38,26 @@ export class WordPageComponent implements OnInit {
     public router: Router ,
     public dialog: MatDialog, 
     public storageService: StorageInfraProvider, 
-    public errorService: ErrorInfra) 
+    public errorService: ErrorInfra,
+    private _snackBar: MatSnackBar) 
     {
       this.category=categoryService.getCurrentCategory;
     }
 
   ngOnInit() {
     this.getwords();
+    this.getCategories(); 
     this.isTherapist = this.authService.user.userType === 'admin';
+    this.isSuperAdmin = this.authService.user.userType === 'superAdmin';
+  }
+
+  getCategories(){
+    this.categories = this.authService.user.userType === 'superAdmin' ? this.categoryService.superAdminCategories : this.categoryService.categories;
   }
 
   updateWordsList(category: CategoryClass){
     this.categoryService.currentCategory = category;
+    this.wordService.currentCategory = category;
     this.category = category;
     if(this.authService.user.userType === 'patient')
     {
@@ -58,10 +69,16 @@ export class WordPageComponent implements OnInit {
 
   getwords()
   {
-    let promise= this.wordService.getPhrases(this.category);
+    let promise;
+    if(this.authService.user.userType === 'superAdmin'){
+      promise= this.wordService.getSuperAdminPhrases(this.category);
+    }
+    else{
+      promise= this.wordService.getPhrases(this.category);
+    }
     promise.then((data) => {
       this.words = data;
-      this.wordService.words = data;
+      //this.wordService.words = data;
       this.checkWordsVisability();
     })
   }
@@ -81,7 +98,14 @@ export class WordPageComponent implements OnInit {
 
    public deleteWord(word: WordClass) {
     setTimeout(async () => {
-      await this.wordService.removePhrase(word);
+
+      if(this.authService.user.userType === 'superAdmin')
+      {
+        this.wordService.removePhraseSuperAdmin(word);
+      }
+      else{
+        this.wordService.removePhrase(word);
+      }
       this.getwords()      
     }, 500)
     this.wordService.arrangePhrasesByOrder();
@@ -94,6 +118,7 @@ export class WordPageComponent implements OnInit {
       if(result)
       {
         this.deleteWord(word);
+        this._snackBar.open('המחיקה הושלמה בהצלחה', 'סגור');
       }
     });
   }
@@ -134,6 +159,7 @@ export class WordPageComponent implements OnInit {
           await this.wordService.removePhrase(word);
           await this.wordService.addPhrase(newWord);
           await this.getwords();
+          this._snackBar.open('העריכה הושלמה בהצלחה', 'סגור');
         }, 500);
 
           if(result.name!==undefined && result.audioPath===undefined)
@@ -191,6 +217,7 @@ export class WordPageComponent implements OnInit {
         const newWord = new WordClass("", result.name, imageLink, this.categoryService.currentCategory.id, 0, audioLink, false, -1, true);
         this.wordService.addPhrase(newWord);
         this.getwords();
+        this._snackBar.open('ההוספה הושלמה בהצלחה', 'סגור');
         }
       }
     });
