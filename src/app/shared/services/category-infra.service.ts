@@ -166,9 +166,16 @@ export class CategoryInfraService {
           this.firebaseProvider.addCategory(category);
         }
       }
-      else{
+      else if(this.authentication.user.userType==='Admin'){
         promise = this.firebaseProvider.addCategory(category);
         this.updateCategoriesArrayByEmail(this.authentication.patientOfTherapist.email).then(res => {
+        }).catch((err) =>{
+          this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
+        })
+      }
+      else{
+        promise = this.firebaseProvider.addCategory(category);
+        this.updateCategoriesArray().then(res => {
         }).catch((err) =>{
           this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
         })
