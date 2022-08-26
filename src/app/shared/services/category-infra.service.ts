@@ -5,6 +5,7 @@ import { CategoryClass } from '../models/category-class.model';
 import { AuthService } from './auth.service';
 import { ErrorInfra } from './error-infra.service';
 import { FirebaseInfraService } from './firebase-infra.service';
+import { UserInfaService } from './user-infa.service';
 import { WordInfraService } from './word-infra.service';
 
 @Injectable({
@@ -14,6 +15,7 @@ import { WordInfraService } from './word-infra.service';
 export class CategoryInfraService {
   public currentCategory: CategoryClass;
   public categories: any[]=[];
+  public superAdminCategories: any[]=[];
   private allUserPhrases : any[]= [];
   private subCategories : any[]= []; //tdl
 
@@ -22,9 +24,21 @@ export class CategoryInfraService {
     public firebaseProvider: FirebaseInfraService,
     public error: ErrorInfra,
     public authentication: AuthService,
-    public wordInfraService: WordInfraService) {
+    public wordInfraService: WordInfraService,
+    public userInfra: UserInfaService) {
     if (authentication.afAuth.currentUser!==null)
       this.updateCategoriesArray();
+      this.importSuperCategoriesArray();
+  }
+
+  public getCategoriesByName(name: string): Promise<CategoryClass[]> {
+    this.firebaseProvider.importCategoriesByName(name);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getCategoriesObservable.subscribe(arrayOfWords => {
+        this.categories = arrayOfWords;
+        resolve(arrayOfWords);
+      })
+    })
   }
 
   // updating the categories and refreshing the page, the method return a Promise object
@@ -47,6 +61,17 @@ export class CategoryInfraService {
         })
         this.categories = a.filter(cat => cat.parentCategoryID == "");
         resolve(this.subCategories = a.filter(cat => cat.parentCategoryID != ""))
+      })
+    })
+  }
+
+  // updating the categories and refreshing the page, the method return a Promise object
+  public importSuperCategoriesArray(): Promise<CategoryClass[]> {
+    this.firebaseProvider.importSuperAdminCategories();
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getSuperAdminCategoriesObservable.subscribe(arrayOfWords => {
+        this.superAdminCategories = arrayOfWords;
+        resolve(arrayOfWords);
       })
     })
   }
@@ -91,6 +116,12 @@ export class CategoryInfraService {
     return this.categories;
   }
 
+  public get getSuperAdminCategories() {
+    return this.superAdminCategories;
+  }
+
+
+
   public get getAllUserPhrases() {
     return this.allUserPhrases;
   }
@@ -117,17 +148,34 @@ export class CategoryInfraService {
   // add category to firebase
   public addCategory(category: CategoryClass, callFromAppBuilder = false): Promise<void>|undefined 
   {
-    let promise = this.firebaseProvider.addCategory(category);
+    let promise;
     if(callFromAppBuilder == false) {
-      if(this.authentication.user.userType==='patient')
+      if(this.authentication.user.userType==='superAdmin')
       {
+        promise = this.firebaseProvider.addSuperAdminCategory(category);
         this.updateCategoriesArray().then(res => {
+        }).catch((err) =>{
+          this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
+        })
+
+        let patients = this.userInfra.getAllPatients();
+        for(let i=0;i<patients.length;i++){
+          category.id = "";
+          category.visibility = false;
+          category.userEmail = patients[i].email;
+          this.firebaseProvider.addCategory(category);
+        }
+      }
+      else if(this.authentication.user.userType==='Admin'){
+        promise = this.firebaseProvider.addCategory(category);
+        this.updateCategoriesArrayByEmail(this.authentication.patientOfTherapist.email).then(res => {
         }).catch((err) =>{
           this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
         })
       }
       else{
-        this.updateCategoriesArrayByEmail(this.authentication.patientOfTherapist.email).then(res => {
+        promise = this.firebaseProvider.addCategory(category);
+        this.updateCategoriesArray().then(res => {
         }).catch((err) =>{
           this.error.openSimleSnackBar('ההוספה נכשלה', 'סגור');
         })
@@ -160,23 +208,33 @@ export class CategoryInfraService {
             this.firebaseProvider.removeCategory(element);
           })
         }
-        //favoriteProvider.remove_fav_cat(category);
-        //favoriteProvider.remove_from_commom_cat(category);
 
         phrases.forEach(element => {
           this.firebaseProvider.removePhrase(element);
-          //favoriteProvider.remove_fav_phrases(element)
-          //favoriteProvider.remove_from_commom_phrases(element)
         });
 
         this.firebaseProvider.removeCategory(category);
         let promise = this.updateCategoriesArray();
         promise.then(() => {
-          // this.arrangeCategoriesByOrder();//TODO: Check if needed here, it update all the items in the DB
           resolve(true);
         })
       })
     })
+  }
+
+  public removeCategorySuperAdmin(category: CategoryClass) : Promise<any>{
+    return new Promise((resolve, reject) => {
+    this.firebaseProvider.removeSuperAdminCategory(category);
+    let promise = this.getCategoriesByName(category.name);
+    promise.then(()=>{
+      console.log(this.categories);
+      this.categories.forEach((a:CategoryClass)=> this.removeCategory(a));
+      let p = this.importSuperCategoriesArray();
+      p.then(() => {
+        resolve(true);
+      })
+    })
+  })
   }
 
   // update category in firebase
@@ -210,6 +268,7 @@ export class CategoryInfraService {
   // seeters
   public setCurrentCategory(category: CategoryClass) {
     this.currentCategory = category;
+    this.wordInfraService.currentCategory = category;
   }
 
   public setName(category: CategoryClass, newName: string) {

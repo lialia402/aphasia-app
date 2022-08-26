@@ -47,5 +47,9 @@ export class HomePageComponent implements OnInit {
     {
       this.router.navigate(['dashboard']);
     }
+    else if(this.authService.user.userType === "superAdmin")
+    {
+      this.router.navigate(['category-page']);
+    }
   }
 }

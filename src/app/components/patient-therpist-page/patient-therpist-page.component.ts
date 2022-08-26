@@ -24,6 +24,7 @@ export class PatientTherpistPageComponent implements OnInit {
       public testService:EquizInfraService,) { 
         
         this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
+        this.categoryService.importSuperCategoriesArray();
         this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
         this.gameService.getGamesByEmail(this.authService.patientOfTherapist.email);
         this.gameService.getGameSettingsByEmail(this.authService.patientOfTherapist.email);

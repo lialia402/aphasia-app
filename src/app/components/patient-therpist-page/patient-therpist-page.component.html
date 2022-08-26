@@ -12,6 +12,7 @@
     <div class="loader">
       <mat-spinner [diameter]="200" *ngIf="isLoading"></mat-spinner>
       </div>
+      <p *ngIf="!isLoading" class="title-comment font" dir="rtl"> שים לב,קטגוריות חדשות ומילים נוספות למערכת באופן דינאמי כל הזמן ולכן מומלץ להכנס לקטגוריות ולהפעילם עבור המטופל במידה ותמצאו זאת מתאים</p>
       <div class="card-deck" fxLayout.xs="row" *ngIf="!isLoading">
         <mat-card style="width:10rem;" (click) = "navigateToPatientAnalytics();"
                  class="mat-card">

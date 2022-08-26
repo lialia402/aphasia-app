@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { from } from 'rxjs';
 import { CategoryClass } from '../models/category-class.model';
 import { WordClass } from '../models/word-class.model';
+import { AuthService } from './auth.service';
 import { FirebaseInfraService } from './firebase-infra.service';
+import { UserInfaService } from './user-infa.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +11,15 @@ import { FirebaseInfraService } from './firebase-infra.service';
 export class WordInfraService {
 
   words: any;
+  superAdminWords:any;
   categoryName: any;
+  categories: CategoryClass[];
+  public currentCategory: CategoryClass;
 
-  constructor(public firebaseProvider: FirebaseInfraService) {}
+  constructor(
+    public firebaseProvider: FirebaseInfraService,
+    public authentication: AuthService,
+    public userInfra: UserInfaService,) {}
 
   //first,calling import of all category's phrases.
   //then, create a Promise object that active only when arrayOfPhrases filled up once.
@@ -24,6 +30,27 @@ export class WordInfraService {
     this.firebaseProvider.importwords(category);
     return new Promise((resolve, reject) => {
       this.firebaseProvider.getwordsObservable.subscribe(arrayOfWords => {
+        this.words = arrayOfWords;
+        resolve(arrayOfWords);
+      })
+    })
+  }
+
+  public getPhrasesByName(name: string): Promise<WordClass[]> {
+    this.firebaseProvider.importwordsByName(name);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getwordsObservable.subscribe(arrayOfWords => {
+        this.words = arrayOfWords;
+        resolve(arrayOfWords);
+      })
+    })
+  }
+
+  public getSuperAdminPhrases(category: CategoryClass): Promise<WordClass[]> {
+    this.firebaseProvider.importSuperAdminWords(category);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getSuperAdminWordsObservable.subscribe(arrayOfWords => {
+        this.superAdminWords = arrayOfWords;
         resolve(arrayOfWords);
       })
     })
@@ -47,11 +74,48 @@ export class WordInfraService {
    */
   public addPhrase(word: WordClass, callFromAppBuilder = false) : Promise<any> {
     return new Promise((resolve, reject) => {
-      this.firebaseProvider.addWord(word)?.then(() => {
-        resolve(word);
-      });
+      if(this.authentication.user.userType === 'superAdmin')
+      {
+        this.firebaseProvider.addSuperAdminWord(word)?.then(async () => {
+          let patients = this.userInfra.getAllPatients();
+          for(let i=0;i<patients.length;i++){
+            debugger;
+            let promise = await this.importCategoriesArrayByEmail(patients[i].email);
+            let category = promise.find(category => category.name === this.currentCategory.name);
+            if(category !== undefined){
+              let anotherPromise = await this.getPhrases(category);
+              this.words = anotherPromise;
+              word.categoryID = this.categories.find(category => category.name === this.currentCategory.name)?.id || 'missing';
+              word.visibility = false;
+              this.firebaseProvider.addWord(word)?.then(() => {
+              resolve(word);
+            }); 
+            }
+          }
+          resolve(word);
+        });
+      }
+
+      else{
+        this.firebaseProvider.addWord(word)?.then(() => {
+          resolve(word);
+        });
+      }
     })
   }
+
+   // updating the categories and refreshing the page, the method return a Promise object
+   public importCategoriesArrayByEmail(email:string): Promise<CategoryClass[]> {
+    this.firebaseProvider.importCategoriesByEmail(email);
+    return new Promise((resolve, reject) => {
+      this.firebaseProvider.getCategoriesObservable.subscribe(arrayOfWords => {
+        this.categories = arrayOfWords;
+        resolve(arrayOfWords);
+      })
+    })
+  }
+
+  
 
   /**
  * remove phrase, update DB and arrange by order.
@@ -59,6 +123,14 @@ export class WordInfraService {
  */
   public removePhrase(phrase: WordClass) {
     this.firebaseProvider.removePhrase(phrase);
+  }
+
+  public removePhraseSuperAdmin(phrase: WordClass) {
+    this.firebaseProvider.removePhraseSuperAdmin(phrase);
+    let promise = this.getPhrasesByName(phrase.name);
+    promise.then(()=>{
+      this.words.forEach((a:WordClass)=> this.removePhrase(a));
+    })
   }
 
   //SETTERS

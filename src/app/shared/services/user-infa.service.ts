@@ -89,5 +89,9 @@ export class UserInfaService {
      
     return this.patients;
   }
+
+  public getAllPatients(){
+    return this.users.filter((user) => user.userType === 'patient');
+  }
 }
 

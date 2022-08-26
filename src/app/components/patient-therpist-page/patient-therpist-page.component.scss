@@ -83,3 +83,17 @@
     align-items: center;
   }
     
+
+.font{
+    font-family: system-ui;
+}
+
+.title-comment
+{
+    display: flex;
+    justify-content: center;
+    color: #6471bd;
+    font-weight: bold;
+    font-size: smaller;
+    margin-top: 15px;
+}

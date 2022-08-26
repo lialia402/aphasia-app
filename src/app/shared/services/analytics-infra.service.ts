@@ -387,7 +387,6 @@ export class AnalyticsInfraService {
     this.gameRightAnswers.splice(0, this.gameRightAnswers.length);
 
     let tempArray = this.allGames.filter(game => game.gameType === type);
-    console.log(tempArray);
     for(let i=0; i<tempArray.length;i++){
       this.dateArray.push(new Date(tempArray[i].dateOfGame).toLocaleDateString());
       this.gameRightAnswers.push(tempArray[i].right);

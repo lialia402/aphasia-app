@@ -110,8 +110,6 @@ export class TestSettingsComponent implements OnInit {
     }
 
     let testResult = this.testService.testResult.find(a => a.testId === test.id);
-    console.log("wrong", testResult);
-    console.log(testResult?.wrongList)
     return testResult?.wrongList.some(a=> a === word);
   }
 
@@ -122,8 +120,6 @@ export class TestSettingsComponent implements OnInit {
     }
 
     let testResult = this.testService.testResult.find(a => a.testId === test.id);
-    console.log("right", testResult);
-    console.log(testResult?.rightList);
     return testResult?.rightList.some(a=> a === word);
   }
 

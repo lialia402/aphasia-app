@@ -89,7 +89,6 @@ export class CreateTestComponent implements OnInit {
             'value':  data.value
          })
     })
-    console.log(this.checkedCustom)
     if(this.checked.length+ this.checkedCustom.length > 10)
     {
       this.messageInfra.openSimleSnackBar('שים לב: בחרת יותר מ10 מילים!', 'סגור');
@@ -117,7 +116,6 @@ export class CreateTestComponent implements OnInit {
     {
         this.selectedWords.push(tempArray[i].value);
     }
-    console.log(this.nameOfTest)
     if(this.nameOfTest===undefined || this.nameOfTest==="")
     {
       this.messageInfra.openSimleSnackBar('לא ניתן להוסיף את המבחן, יש למלא שם ', 'סגור');
