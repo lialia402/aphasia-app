@@ -25,10 +25,11 @@ export class DashboardComponent implements OnInit {
    if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
     {
       setTimeout(async () => {
-        this.appBuilderProvider?.fillDB();
+        this.appBuilderProvider?.newFillDB();
         this.authService.SetFirstTime();   
       }, 1500)
     }
+
   }
 
   public showCategories(){
