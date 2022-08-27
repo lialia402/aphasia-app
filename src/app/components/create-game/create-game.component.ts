@@ -9,6 +9,7 @@ import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
 import { Game } from 'src/app/shared/models/game.model';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { CategoryClass } from 'src/app/shared/models/category-class.model';
 
 @Component({
   selector: 'app-create-game',
@@ -23,6 +24,7 @@ export class CreateGameComponent implements OnInit {
   showButton:boolean = false;
   allWords:WordClass[] = [];
   isEditMode=false;
+  validCategories: CategoryClass[] = [];
 
   constructor(
     public authService: AuthService,
@@ -35,6 +37,7 @@ export class CreateGameComponent implements OnInit {
   ngOnInit(): void {
     this.allWords = [];
     this.allWords = this.categoryService.getAllUserPhrases;
+    this.getValidCategories();
     this.isEditMode = this.gameService.gameToEdit.gameNum !== -1;
     if(this.isEditMode){
       for(let i=0;i<this.gameService.gameToEdit.listOfWords.length;i++)
@@ -43,6 +46,17 @@ export class CreateGameComponent implements OnInit {
           'checked' : true,
           'value':  this.gameService.gameToEdit.listOfWords[i],
        })
+      }
+    }
+  }
+
+  getValidCategories(){
+    for(let i=0; i<this.categoryService.categories.length;i++)
+    {
+      let wordsArray = this.filterPerCategory(this.categoryService.categories[i].id);
+      if(wordsArray.length > 3)
+      {
+        this.validCategories.push(this.categoryService.categories[i]);
       }
     }
   }
