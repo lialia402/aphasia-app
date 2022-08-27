@@ -67,6 +67,10 @@ export class EquizInfraService {
     })
   }
 
+  public validWords(){
+    return this.gameInfra.countValidWords();
+  }
+
   public getTestResultByEmail(email:string): Promise<TestResult[]> {
     this.firebaseInfraService.imporTestResultByEmail(email);
     return new Promise((resolve, reject) => {

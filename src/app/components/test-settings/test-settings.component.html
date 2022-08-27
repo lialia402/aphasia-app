@@ -34,7 +34,7 @@
     </mat-expansion-panel>
     <p *ngIf="this.testService.getDisactiveTest().length!==0" class="title-disactivated font" dir="rtl"> רשימת המבחנים שהמטופל ביצע:</p>
     <p *ngIf="this.testService.getDisactiveTest().length!==0" class="title-comment font" dir="rtl"> שים לב, על מנת להפעיל משחק מחדש, יש למחוק או להפוך ללא זמין את המבחן הנוכחי </p>
-    <mat-expansion-panel *ngFor="let test of this.disableTests">
+    <mat-expansion-panel *ngFor="let test of this.disableTests;">
         <mat-expansion-panel-header [ngClass]="{'played':wasPlayed(test), 'notPlayed': (!wasPlayed(test))}">
             <mat-panel-title dir="rtl" style="max-width: 200px;min-width: 125px;" class="font">
             {{test.nameOfTest}} 
@@ -57,9 +57,13 @@
      </mat-card>
      <div class="line-item">
         <button class="create-button font" mat-raised-button color="warn" (click)="deleteTestInfo(test)"> מחיקה</button>
-        <button class="create-button font" mat-raised-button color="primary" (click)="activateTestInfo(test)"> הפוך לזמין</button>
+        <button *ngIf="canBeEnabled(test.wordList)" class="create-button font" mat-raised-button color="primary" (click)="activateTestInfo(test)"> הפוך לזמין</button>
+        <button *ngIf="!canBeEnabled(test.wordList)"  disabled class="create-button font" mat-raised-button color="primary"> לא ניתן להפוך לזמין</button>
     </div>
+   
         </div>
+        <p  class="disable-message font"> {{this.message1}} </p>
+        <p  class="disable-message font"> {{this.message2}} </p>
     </mat-expansion-panel>
 </div>
 <div class="line-item" style="margin-bottom: 10px;">

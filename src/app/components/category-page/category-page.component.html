@@ -9,6 +9,12 @@
 </div>
 
 <!-- for normal mode -->
+<div *ngIf="isSuperAdmin" class="exit-button">
+  <button mat-icon-button color="gray"(click)="exitApp();">
+    <mat-icon>exit_to_app</mat-icon>
+  </button>
+  <p dir="rtl" style="margin-top: 10px; font-family: system-ui;">להתנתקות:</p>
+</div>
 <div class="stretch">
     <p class="buttons font" *ngIf="isTherapist && this.isCategoryEnabled">על מנת להסתיר את הקטגוריה מהמטופל אנא כבה את הכפתור</p>
     <div class="card-deck" fxLayout.xs="row">

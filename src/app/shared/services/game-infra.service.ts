@@ -49,9 +49,10 @@ export class GameInfraService {
       let wordsArray = this.filterPerCategory(this.categoryInfraService.categories[i].id);
       if(wordsArray.length > 3)
       {
-        count =+ wordsArray.length;
+        count += wordsArray.length;
       }
     }
+    console.log(count);
     return count < 10;
   }
 
