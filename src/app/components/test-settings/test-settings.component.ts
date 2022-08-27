@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TestInfo } from 'src/app/shared/models/test-info.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
@@ -24,7 +25,8 @@ export class TestSettingsComponent implements OnInit {
     public dialog: MatDialog,
     public testService:EquizInfraService,
     public messageInfra: ErrorInfra,
-    private _snackBar: MatSnackBar,) 
+    private _snackBar: MatSnackBar,
+    public categoryService:CategoryInfraService) 
     { }
 
   ngOnInit(): void {
@@ -50,7 +52,11 @@ export class TestSettingsComponent implements OnInit {
 
   navigateToCreateTest()
   {
-    if(this.currentTest===undefined)
+    if(this.categoryService.getAllUserPhrases.length < 10)
+    {
+      this.messageInfra.openSimleSnackBar('כעת מספר המילים במערכת קטן מעשר ולכן לא ניתן ליצור משחק', 'סגור');
+    }
+    else if(this.currentTest===undefined)
     {
       this.router.navigate(['create-test']);
     }

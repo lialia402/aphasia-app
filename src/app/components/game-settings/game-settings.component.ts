@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
 import { GameSettings } from 'src/app/shared/models/game-settings.model';
+import { WordClass } from 'src/app/shared/models/word-class.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
@@ -56,10 +57,38 @@ export class GameSettingsComponent implements OnInit {
 
   }
 
+  countValidWords(){
+    let count = 0;
+    for(let i=0; i<this.categoryService.categories.length;i++)
+    {
+      let wordsArray = this.filterPerCategory(this.categoryService.categories[i].id);
+      if(wordsArray.length > 3)
+      {
+        count =+ wordsArray.length;
+      }
+    }
+    return count < 10;
+  }
+
+  // filter words per category
+  filterPerCategory(categoryID: string){
+    let wordsArray = this.categoryService.getAllUserPhrases.filter((word) => {return word.categoryID === categoryID}).sort(function(a, b) {
+      return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
+    });
+    return wordsArray;
+  }
+
   navigateToCreateGame(){
     if(this.gamesInformation !== undefined && this.gamesInformation.length === 3)
     {
       this.messageInfra.openSimleSnackBar('כעת יש במערכת 3 משחקים מותאמים אישית למטופל עלייך למחוק אחד כדי לייצר אחד חדש', 'סגור');
+    }
+    else if(this.categoryService.getAllUserPhrases.length < 10)
+    {
+      this.messageInfra.openSimleSnackBar('כעת מספר המילים במערכת קטן מעשר ולכן לא ניתן ליצור משחק', 'סגור');
+    }
+    else if(this.countValidWords()){
+      this.messageInfra.openSimleSnackBar('כעת מספר המילים המשוייכות לקטגוריות בהן יש יותר מ4 מילים קטן מ10', 'סגור');
     }
     else{
       this.router.navigate(['create-game-page']);

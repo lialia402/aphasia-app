@@ -23,7 +23,7 @@ export class GameComponent implements OnInit {
     this.gameService.currentCustomGame = -1;
     this.gameService.customGame = false;
     setTimeout(async () => {
-      await this.gameService.giveRandomList()
+      await this.gameService.checkAndGiveRandomList();
       await this.gameService.getGameResults();
       await this.gameService.getGames();
       let settings = await this.gameService.getGameSettings();
@@ -35,6 +35,13 @@ export class GameComponent implements OnInit {
           this.CustomGames = settings[0].listOfGames;
           this.isCustonExists = true;
         }
+      }
+      else{
+        this.isRandomGameEnabled = true;
+      }
+
+      if(this.gameService.randomWordList.length === 0){
+        this.isRandomGameEnabled = false;
       }
       this.isLoading = false;
 
