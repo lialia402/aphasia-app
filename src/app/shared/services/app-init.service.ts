@@ -56,11 +56,8 @@ export class AppInitService {
   newFillDB(){
     setTimeout(async () => {
       await this.categoryInfra.importSuperCategoriesArray();
-      console.log("first");
       this.categoryInfra.getSuperAdminCategories.forEach(async (category) => {
-      console.log(category);
       let words =  await this.wordInfra.getSuperAdminPhrases(category);
-      console.log(words);
       category.id = "";
       category.userEmail = this.userEmail;
       this.add_new_cat_to_db(category,words, [], [], false);

@@ -15,7 +15,7 @@
     </div>
     <p class="chosen-words font" dir="rtl"> בחר 10 מילים מתוך מאגר מילים הבא עבור משחק מותאם אישית:</p>
 <div dir="rtl" class="main">
-    <mat-expansion-panel *ngFor="let category of this.categoryService.categories">
+    <mat-expansion-panel *ngFor="let category of this.validCategories">
         <mat-expansion-panel-header>
             <mat-panel-title style="max-width: 200px;" class="font">
             {{category.name}}

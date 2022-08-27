@@ -10,6 +10,7 @@ import { TestInfo } from 'src/app/shared/models/test-info.model';
 import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
+import { CategoryClass } from 'src/app/shared/models/category-class.model';
 
 @Component({
   selector: 'app-create-test',
@@ -26,6 +27,7 @@ export class CreateTestComponent implements OnInit {
   showButton:boolean = false;
   allWords:WordClass[] = [];
   nameOfTest:string;
+  validCategories:CategoryClass[] = [];
   
   constructor(
     public testService:EquizInfraService,
@@ -39,6 +41,7 @@ export class CreateTestComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getValidCategories();
   }
 
   sortedWordsList() : Array<WordClass>{
@@ -46,6 +49,17 @@ export class CreateTestComponent implements OnInit {
       return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
     });
     return this.allWords;
+  }
+
+  getValidCategories(){
+    for(let i=0; i<this.categoryService.categories.length;i++)
+    {
+      let wordsArray = this.filterPerCategory(this.categoryService.categories[i].id);
+      if(wordsArray.length > 3)
+      {
+        this.validCategories.push(this.categoryService.categories[i]);
+      }
+    }
   }
 
   // allows you to mark exactly 10 words

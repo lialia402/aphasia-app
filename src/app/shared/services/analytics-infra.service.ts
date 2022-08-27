@@ -86,7 +86,7 @@ export class AnalyticsInfraService {
     this.topTenWordsNames.splice(0, this.topTenWordsNames.length);
     this.topTenWordsViews.splice(0, this.topTenWordsViews.length);
     let listTenWords= this.allWords.sort((a,b) => (a.views < b.views) ? 1 : ((b.views < a.views) ? -1 : 0)).slice(0,10);
-    for(let i=0; i<10; i++)
+    for(let i=0; i<listTenWords.length; i++)
     {
       this.topTenWordsNames.push(listTenWords[i].name);
       this.topTenWordsViews.push(listTenWords[i].views);
@@ -104,7 +104,9 @@ export class AnalyticsInfraService {
     datesArray.sort((b, a) => new Date(b).getTime() - new Date(a).getTime());
     this.wrongRightMinDate = datesArray[0];
     this.wrongRightMaxDate = datesArray[datesArray.length-1];
-    this.wrongRightMaxDate.setDate(this.wrongRightMaxDate.getDate() + 1);
+    if(this.wrongRightMaxDate !== undefined){
+      this.wrongRightMaxDate.setDate(this.wrongRightMaxDate.getDate() + 1);
+    }
   }
 
   public getTestMinMaxValues(){
@@ -119,7 +121,9 @@ export class AnalyticsInfraService {
 
     this.testMinDate = datesArray[0];
     this.testMaxDate = datesArray[datesArray.length-1];
-    this.testMaxDate.setDate(this.testMaxDate.getDate() + 1);
+    if(this.testMaxDate !== undefined){
+      this.testMaxDate.setDate(this.testMaxDate.getDate() + 1);
+    }
   }
 
 
@@ -136,7 +140,10 @@ export class AnalyticsInfraService {
 
     this.fiveCategoryMinDate = datesArray[0];
     this.fiveCategoryMaxDate = datesArray[datesArray.length-1];
-    this.fiveCategoryMaxDate.setDate(this.fiveCategoryMaxDate.getDate() + 1);
+
+    if(this.fiveCategoryMaxDate !== undefined){
+      this.fiveCategoryMaxDate.setDate(this.fiveCategoryMaxDate.getDate() + 1);
+    }
 
     datesArray = [];
 
@@ -151,7 +158,10 @@ export class AnalyticsInfraService {
 
     this.topTenWordsMinDate = datesArray[0];
     this.topTenWordsMaxDate = datesArray[datesArray.length-1];
-    this.topTenWordsMaxDate.setDate(this.topTenWordsMaxDate.getDate() + 1);
+
+    if(this.topTenWordsMaxDate !== undefined){
+      this.topTenWordsMaxDate.setDate(this.topTenWordsMaxDate.getDate() + 1);
+    }
   }
 
 
@@ -160,7 +170,7 @@ export class AnalyticsInfraService {
     this.topFiveCategoriesNames.splice(0, this.topFiveCategoriesNames.length);
     this.topFiveCategoriesViews.splice(0, this.topFiveCategoriesViews.length);
     let listFiveCategories= this.allCategories.sort((a,b) => (a.views < b.views) ? 1 : ((b.views < a.views) ? -1 : 0)).slice(0,5);
-    for(let i=0; i<5; i++)
+    for(let i=0; i<listFiveCategories.length; i++)
     {
       this.topFiveCategoriesNames.push(listFiveCategories[i].name);
       this.topFiveCategoriesViews.push(listFiveCategories[i].views);

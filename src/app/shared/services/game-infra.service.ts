@@ -42,6 +42,37 @@ export class GameInfraService {
     return words[randomNumber];
   }
 
+  countValidWords(){
+    let count = 0;
+    for(let i=0; i<this.categoryInfraService.categories.length;i++)
+    {
+      let wordsArray = this.filterPerCategory(this.categoryInfraService.categories[i].id);
+      if(wordsArray.length > 3)
+      {
+        count += wordsArray.length;
+      }
+    }
+    console.log(count);
+    return count < 10;
+  }
+
+  // filter words per category
+  filterPerCategory(categoryID: string){
+    let wordsArray = this.categoryInfraService.getAllUserPhrases.filter((word) => {return word.categoryID === categoryID}).sort(function(a, b) {
+      return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
+    });
+    return wordsArray;
+  }
+
+  public async checkAndGiveRandomList(){
+    if((this.categoryInfraService.getAllUserPhrases.length < 10) || (this.countValidWords()) ){
+      return this.randomWordList = [];
+    }
+    else{
+      return this.giveRandomList();
+    }
+  }
+
 
   public async giveRandomList(){
     let category;
@@ -52,14 +83,19 @@ export class GameInfraService {
     this.randomSelectionWords=[];
     while (this.randomWordList.length < 10) {
       category = this.giveRandomCategory();
-      while(category.length < 4){
-        category = this.giveRandomCategory();
-      }
+     
       let promise= this.wordInfraService.getPhrases(category);
-
       await promise.then((data) => {
         words = data;
       })
+
+      while(words.length < 4){
+        category = this.giveRandomCategory();
+        let promise= this.wordInfraService.getPhrases(category);
+        await promise.then((data) => {
+          words = data;
+        })
+      }
 
       word = this.giveRandomWord(words);
 

@@ -10,6 +10,8 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { EditCategoryDialogComponent } from '../utils/edit-category-dialog/edit-category-dialog.component';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
+import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 @Component({
   selector: 'app-category-page',
@@ -33,7 +35,9 @@ export class CategoryPageComponent implements OnInit {
     public dialog: MatDialog, 
     public storageService: StorageInfraProvider,
     public errorService: ErrorInfra,
-    private _snackBar: MatSnackBar) {}
+    private _snackBar: MatSnackBar,
+    public testService: EquizInfraService,
+    public gameService: GameInfraService) {}
 
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
@@ -44,6 +48,20 @@ export class CategoryPageComponent implements OnInit {
       this.categoryService.updateViewsPerDate(category);
     }
     this.router.navigate(['word-page']);
+  }
+
+  public exitApp(){
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, { data: {name: "להתנתק"}});
+    dialogRef.afterClosed().subscribe(result => {
+      if(result)
+      {
+        this.authService.SignOut();
+        this.router.navigate(['sign-in']).then(() => {
+          window.location.reload();
+        });
+      }
+    });
   }
   
   // load the relavant categories
@@ -128,14 +146,33 @@ export class CategoryPageComponent implements OnInit {
 
   // verifies the deletion operation
   openDialog(category: CategoryClass) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
+    let needToDisableActiveTest = this.checkActiveTest(category);
+    let message = needToDisableActiveTest? "למחוק, שים לב מחיקה זו תהפוך את המבחן הפעיל כעת ללא פעיל" : "למחוק";
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: message}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
       {
         this.deleteCategory(category);
+        if(needToDisableActiveTest)
+        {
+          this.testService.updateDisActivateTest(this.testService.getActiveTest());
+        }
         this._snackBar.open('המחיקה הושלמה בהצלחה', 'סגור');
       }
     });
+  }
+
+  //check if the active test containes the category we want to delete
+  checkActiveTest(category: CategoryClass)
+  {
+    if(this.testService.getActiveTest() === undefined){
+      return false;
+    }
+
+    else{
+      let wordsArray = this.categoryService.getAllUserPhrases.filter(word => word.categoryID === category.id).map(word => word.name);
+      return this.testService.getActiveTest().wordList.some(r=> wordsArray.includes(r));
+    }
   }
 
   // upload the new image to firebase
