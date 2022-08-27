@@ -64,7 +64,7 @@ export class GameSettingsComponent implements OnInit {
       let wordsArray = this.filterPerCategory(this.categoryService.categories[i].id);
       if(wordsArray.length > 3)
       {
-        count =+ wordsArray.length;
+        count += wordsArray.length;
       }
     }
     return count < 10;
@@ -87,7 +87,7 @@ export class GameSettingsComponent implements OnInit {
     {
       this.messageInfra.openSimleSnackBar('כעת מספר המילים במערכת קטן מעשר ולכן לא ניתן ליצור משחק', 'סגור');
     }
-    else if(this.countValidWords()){
+    else if(this.countValidWords() === true){
       this.messageInfra.openSimleSnackBar('כעת מספר המילים המשוייכות לקטגוריות בהן יש יותר מ4 מילים קטן מ10', 'סגור');
     }
     else{

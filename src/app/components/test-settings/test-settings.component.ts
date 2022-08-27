@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ignoreElements } from 'rxjs-compat/operator/ignoreElements';
 import { TestInfo } from 'src/app/shared/models/test-info.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
@@ -18,6 +19,8 @@ export class TestSettingsComponent implements OnInit {
 
   currentTest:TestInfo;
   disableTests:TestInfo[];
+  message1 = "";
+  message2 = "";
 
   constructor(
     public authService: AuthService,
@@ -55,6 +58,9 @@ export class TestSettingsComponent implements OnInit {
     if(this.categoryService.getAllUserPhrases.length < 10)
     {
       this.messageInfra.openSimleSnackBar('כעת מספר המילים במערכת קטן מעשר ולכן לא ניתן ליצור משחק', 'סגור');
+    } 
+    else if(this.testService.validWords() === true){
+      this.messageInfra.openSimleSnackBar('כעת מספר המילים המשוייכות לקטגוריות בהן יש יותר מ4 מילים קטן מ10', 'סגור');
     }
     else if(this.currentTest===undefined)
     {
@@ -64,6 +70,59 @@ export class TestSettingsComponent implements OnInit {
     {
       this.messageInfra.openSimleSnackBar('לא ניתן להוסיף את המבחן, כבר קיים מבחן מופעל במערכת ', 'סגור');
     }
+  }
+
+  canBeEnabled(test: string[]){
+    let flag = true;
+    let allWords = this.categoryService.getAllUserPhrases;
+    for(let i=0;i<test.length && flag;i++){
+      if(allWords.some((word)=> { return word.name === test[i]}) === false)
+      {
+        flag = false;
+      }
+      else{
+        let wordTemp = allWords.find((word)=> {return word.name === test[i]});
+        let tempArray = allWords.filter(word => word.categoryID === wordTemp.categoryID);
+        if(tempArray.length < 4){
+          flag = false;
+        }
+      }
+    }
+
+    this.getMessage(test);
+    return flag;
+  }
+
+  getMessage(test: string[]){
+    this.message1 = "";
+    this.message2 = "";
+    let words = "";
+    let categories = "";
+    let allWords = this.categoryService.getAllUserPhrases;
+    for(let i=0;i<test.length ;i++){
+      if(allWords.some((word)=> { return word.name === test[i]}) === false)
+      {
+        words += `${test[i]},`;
+      }
+      else{
+        let wordTemp = allWords.find((word)=> {return word.name === test[i]});
+        let tempArray = allWords.filter(word => word.categoryID === wordTemp.categoryID);
+        if(tempArray.length < 4){
+          categories += `${test[i]},`;
+        }
+      }
+    }
+
+    if(words.length>0){
+      words = words.substring(0, words.length - 1);
+      this.message1 += `המילים הבאות אינן קיימות יותר במערכת: ${words}`;
+    }
+
+    if(categories.length>0){
+      categories = categories.substring(0, categories.length - 1);
+      this.message2 += `בקטגוריות אליהן המילים הבאות משוייכות אין מספיק מילים: ${categories}`;
+    }
+
   }
 
   deleteTestInfo(test:TestInfo)

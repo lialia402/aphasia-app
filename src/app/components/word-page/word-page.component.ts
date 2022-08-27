@@ -6,6 +6,7 @@ import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
+import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.service';
 import { WordInfraService } from 'src/app/shared/services/word-infra.service';
@@ -39,7 +40,8 @@ export class WordPageComponent implements OnInit {
     public dialog: MatDialog, 
     public storageService: StorageInfraProvider, 
     public errorService: ErrorInfra,
-    private _snackBar: MatSnackBar) 
+    private _snackBar: MatSnackBar,
+    public testService: EquizInfraService) 
     {
       this.category=categoryService.getCurrentCategory;
     }
@@ -113,15 +115,45 @@ export class WordPageComponent implements OnInit {
   }
 
   openDialog(word: WordClass) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
+    let needToDisableActiveTest = this.checkActiveTest(word);
+    let message = needToDisableActiveTest? "למחוק, שים לב מחיקה זו תהפוך את המבחן הפעיל כעת ללא פעיל" : "למחוק";
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: message}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
       {
         this.deleteWord(word);
+        if(needToDisableActiveTest)
+        {
+          this.testService.updateDisActivateTest(this.testService.getActiveTest());
+        }
         this._snackBar.open('המחיקה הושלמה בהצלחה', 'סגור');
       }
     });
   }
+
+   //check if the active test containes the category we want to delete
+   checkActiveTest(word: WordClass)
+   {
+     if(this.testService.getActiveTest() === undefined){
+       return false;
+     }
+
+     else if(this.testService.getActiveTest().wordList.includes(word.name))
+     {
+      return true;
+     }
+ 
+     else{
+       let wordsArray = this.categoryService.getAllUserPhrases.filter(word => word.categoryID === this.categoryService.currentCategory.id).map(word => word.name);
+      if(this.testService.getActiveTest().wordList.some(r=> wordsArray.includes(r)))
+      {
+        return wordsArray.length-1 < 4;
+      }
+      else{
+        return false;
+      }
+     }
+   }
 
   // option to change one or more details: word name, image or sound
   async editWord(word: WordClass)

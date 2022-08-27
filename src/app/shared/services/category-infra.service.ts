@@ -227,7 +227,6 @@ export class CategoryInfraService {
     this.firebaseProvider.removeSuperAdminCategory(category);
     let promise = this.getCategoriesByName(category.name);
     promise.then(()=>{
-      console.log(this.categories);
       this.categories.forEach((a:CategoryClass)=> this.removeCategory(a));
       let p = this.importSuperCategoriesArray();
       p.then(() => {

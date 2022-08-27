@@ -18,6 +18,6 @@ export class SignInComponent implements OnInit {
   {
     setTimeout(async () => {
       await this.authService.SignIn(userName,userPassword)  
-    }, 1500)
+    }, 2000)
   }
 }
