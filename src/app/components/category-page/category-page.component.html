@@ -46,7 +46,7 @@
 </div>
 </div>
 <div class="stretch" *ngIf="isTherapist && this.isCategoryDisabled">
-    <p class="buttons font" *ngIf="isTherapist && this.isCategoryDisabled">על מנת להציג את הקטגוריה למטופל אנא הדלק את הכפתור</p>
+    <p class="buttons font" *ngIf="isTherapist && (isTherpistHasDisableCategory())">על מנת להציג את הקטגוריה למטופל אנא הדלק את הכפתור</p>
     <div class="card-deck" fxLayout.xs="row" *ngIf="isTherapist">
       <ng-container *ngFor="let item of this.categories">
         <mat-card style="width:10rem;" class="mat-card" *ngIf="(!item.visibility) && (!isSuperAdminCategory(item.name))">

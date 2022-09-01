@@ -49,7 +49,6 @@ export class CategoryPageComponent implements OnInit {
     }
     this.router.navigate(['word-page']);
   }
-
   public exitApp(){
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, { data: {name: "להתנתק"}});
     dialogRef.afterClosed().subscribe(result => {
@@ -63,6 +62,12 @@ export class CategoryPageComponent implements OnInit {
     });
   }
   
+  // Check if patient has categories disabled by therpist
+  public isTherpistHasDisableCategory(){
+    const checkDisabledCat = (obj: CategoryClass) => obj.visibility === false &&(!this.isSuperAdminCategory(obj.name));
+    return this.categories.some(checkDisabledCat);
+  }
+
   // load the relavant categories
   public async getCategories()
   {
