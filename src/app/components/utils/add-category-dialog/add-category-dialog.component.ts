@@ -13,7 +13,6 @@ export interface DialogData {
 })
 
 export class AddCategoryDialogComponent implements OnInit {
-
   selectedFiles?: FileList;
   audioFile?:FileList;
   selectedFileNames: string[] = [];
@@ -25,7 +24,8 @@ export class AddCategoryDialogComponent implements OnInit {
   fileToUpload: any;
   imageUrl: any;
 
-  constructor(public dialogRef: MatDialogRef<AddCategoryDialogComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<AddCategoryDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   ngOnInit(): void {

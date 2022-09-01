@@ -30,6 +30,7 @@ export class EditCategoryDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // open the file explorer for the user to allow him to select an image
   selectFiles(event: any): void {
     this.selectedFiles = event.target.files;
     if (this.selectedFiles && this.selectedFiles[0]) {

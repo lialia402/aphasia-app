@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { ignoreElements } from 'rxjs-compat/operator/ignoreElements';
 import { TestInfo } from 'src/app/shared/models/test-info.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
@@ -38,12 +37,14 @@ export class TestSettingsComponent implements OnInit {
     }, 500)
   }
 
+  // get list of all the tests
   getTests()
   {
     this.currentTest=this.testService.getActiveTest();
     this.disableTests=this.testService.getDisactiveTest().sort((a,b) => (this.wasPlayed(a) < this.wasPlayed(b)) ? 1 : ((this.wasPlayed(a) > this.wasPlayed(b)) ? -1 : 0));
   }
 
+  // get an update list of all the test
   updateTest()
   {
     let promise=this.testService.getTestsByEmail(this.authService.patientOfTherapist.email);
@@ -72,6 +73,7 @@ export class TestSettingsComponent implements OnInit {
     }
   }
 
+  // return if the test cannot be restarted
   canBeEnabled(test: string[]){
     let flag = true;
     let allWords = this.categoryService.getAllUserPhrases;
@@ -93,6 +95,7 @@ export class TestSettingsComponent implements OnInit {
     return flag;
   }
 
+  // get a message why the test cannot be restarted
   getMessage(test: string[]){
     this.message1 = "";
     this.message2 = "";
@@ -125,6 +128,7 @@ export class TestSettingsComponent implements OnInit {
 
   }
 
+  // delete the test
   deleteTestInfo(test:TestInfo)
   {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
@@ -139,6 +143,7 @@ export class TestSettingsComponent implements OnInit {
     });
   }
 
+  // disactive the test
   disActivateTestInfo(test:TestInfo)
   {
     setTimeout(async () => {
@@ -148,6 +153,7 @@ export class TestSettingsComponent implements OnInit {
     this._snackBar.open('המבחן כובה בהצלחה', 'סגור');
   }
 
+  // activate the test
   activateTestInfo(test:TestInfo)
   {
     if(this.currentTest===undefined)
@@ -164,10 +170,12 @@ export class TestSettingsComponent implements OnInit {
     }
   }
 
+  // return if the test was played
   wasPlayed(test: TestInfo){
     return this.testService.testResult.filter(a => a.testId === test.id).length > 0;
   }
 
+  // return if the patient answer the word incorrectly
   isWrong(test: TestInfo, word:string){
     if(this.wasPlayed(test) === false)
     {
@@ -178,6 +186,7 @@ export class TestSettingsComponent implements OnInit {
     return testResult?.wrongList.some(a=> a === word);
   }
 
+  // return if the patient answer the word correctly
   isRight(test: TestInfo, word:string){
     if(this.wasPlayed(test) === false)
     {
@@ -188,6 +197,7 @@ export class TestSettingsComponent implements OnInit {
     return testResult?.rightList.some(a=> a === word);
   }
 
+  // get the duration it took the patient to complete the specific test 
   getTestDuration(testId: string){
     let minutes = "";
     this.testService.testResult.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
@@ -200,6 +210,7 @@ export class TestSettingsComponent implements OnInit {
     return minutes;
   }
 
+  // get the grade of the specific test
   getTestGrade(testId: string){
     let grade = 0;
     this.testService.testResult.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
@@ -211,6 +222,7 @@ export class TestSettingsComponent implements OnInit {
     return grade;
   }
 
+  // return the given date object in the appropriate format
   toDate(date: Date){ 
     let dateNew = new Date(date).toLocaleDateString();
     return dateNew;

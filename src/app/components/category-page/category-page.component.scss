@@ -37,7 +37,6 @@
 .page-title{
   padding-top: 3px;
   padding-bottom: 2px;
-  margin-bottom: 3px;
   background-size: 100%;
   background-color: black;
   display: flex;
@@ -50,7 +49,7 @@
   margin-bottom: 10px;
   font-family: system-ui;
   color: white;
-  }
+}
 
 .mat-card-image{
 height: 170px; 
@@ -77,6 +76,13 @@ height: 170px;
   min-height : 100%;
 }
 
+.stretch-super-user{
+  height : auto !important; 
+  height : 100%;            
+  min-height : 100%;
+  background-color: #57575759;
+}
+
 .buttons{
   display: flex;
   justify-content: center;
@@ -94,8 +100,7 @@ height: 170px;
 :host ::ng-deep  .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
   background-color: #a0c9a2;
 }
-
-    
+ 
 .exit-button{
   display: flex;
   justify-content: end;

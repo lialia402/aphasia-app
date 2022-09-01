@@ -7,7 +7,7 @@
   </div>
 </div>
 <!-- for normal mode -->
-<div class="stretch">
+<div [ngClass]="{'stretch-super-user': isSuperAdmin, 'stretch':!isSuperAdmin}">
   <mat-toolbar style="justify-content: center;" >
     <mat-nav-list class="list-horizontal" *ngFor="let item of this.categories">
       <mat-list-item style="font-family: system-ui; font-weight: normal;"(click)="updateWordsList(item);"> 
@@ -32,7 +32,7 @@
           <button mat-icon-button mat-button (click)="playVoice(item);">
             <mat-icon>mic</mat-icon>
           </button>
-          <button *ngIf="isTherapist || isSuperAdmin" class="middle-button" mat-icon-button mat-button (click)="editWord(item);">
+          <button *ngIf="isTherapist" class="middle-button" mat-icon-button mat-button (click)="editWord(item);">
             <mat-icon>create</mat-icon>
           </button>
           <button *ngIf="isTherapist || isSuperAdmin" class="right-button" mat-icon-button mat-button (click)="openDialog(item);">

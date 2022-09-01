@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
 import Chart from 'chart.js/auto';
 import { AnalyticsInfraService } from 'src/app/shared/services/analytics-infra.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -51,7 +50,6 @@ export class AnalyticsPageComponent implements OnInit {
   gameTypeName3:string = "";
   gameTypeName4:string = "";
  
-
   constructor(
       public authService: AuthService, 
       public categoryService:CategoryInfraService, 
@@ -182,7 +180,6 @@ this.chart5 = new Chart("myChart5", {
       }]
 } });
 
-
 // line graph of results for up to the last 10 games the user has played
 this.chart6 = new Chart("myChart6", {
   type: 'line',
@@ -195,9 +192,7 @@ this.chart6 = new Chart("myChart6", {
         borderColor: '#A984E6',
         tension: 0.05
       }]
-} });
-
-
+    } });
   }
 
   public async getCategories()
@@ -206,15 +201,16 @@ this.chart6 = new Chart("myChart6", {
     await this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
   }
 
+  // get the appropriate data for the desired date range- chart 2
   filterByDataCategory(){
     if(this.rangeChart2.value.start !== undefined && this.rangeChart2.value.start !== null && this.rangeChart2.value.end !== undefined && this.rangeChart2.value.end !== null){
       this.analytics.getSortedCategoriesListByStartAndEndDate(this.analytics.topFiveCategoriesNames,
         this.analytics.topFiveCategoriesViews,this.rangeChart2.value.start,this.rangeChart2.value.end);
     }
-
     this.chart2.update();
   }
 
+  // get the appropriate data for the desired date range- chart 1
   filterByDataWords(){
   if(this.rangeChart1.value.start !== undefined && this.rangeChart1.value.start !== null && 
     this.rangeChart1.value.end !== undefined && this.rangeChart1.value.end !== null){
@@ -224,12 +220,14 @@ this.chart6 = new Chart("myChart6", {
     this.chart1.update();
   }
 
+  // return to the default filter for the entire time range- chart 1
   resetWords(){
     this.analytics.getSortedWordsListByViewsDesc();
     this.rangeChart1.reset();
     this.chart1.update();
   }
 
+  // get the appropriate data for the desired date range- chart 5
   filterTestDuration(){
     if(this.rangeChart5.value.start !== undefined && this.rangeChart5.value.start !== null && 
       this.rangeChart5.value.end !== undefined && this.rangeChart5.value.end !== null){
@@ -238,13 +236,14 @@ this.chart6 = new Chart("myChart6", {
     this.chart5.update();
   }
 
+  // return to the default filter for the entire time range- chart 5
   resetTestDuration(){
     this.analytics.getTestDuration();
     this.rangeChart5.reset();
     this.chart5.update();
   }
 
-
+  // get the appropriate data for the desired date range- chart 6
   filterTestGrade(){
     if(this.rangeChart6.value.start !== undefined && this.rangeChart6.value.start !== null && 
       this.rangeChart6.value.end !== undefined && this.rangeChart6.value.end !== null){
@@ -253,25 +252,28 @@ this.chart6 = new Chart("myChart6", {
     this.chart6.update();
   }
 
+  // return to the default filter for the entire time range- chart 6
   resetTestGrade(){
     this.analytics.getTestImprovemnt();
     this.rangeChart6.reset();
     this.chart6.update();
   }
 
-
+  // return to the default filter for the entire time range- chart 2
   resetCategory(){
     this.analytics.getSortedCategoriesListByViewsDesc();
     this.rangeChart2.reset();
     this.chart2.update();
   }
 
+  // return to the default filter for the entire time range- chart 3
   resetWrongRight(){
     this.analytics.getGameAnswers(this.rightWrongType);
     this.rangeChart3.reset();
     this.chart3.update();
   }
 
+  // get the appropriate data for the desired date range- chart 3
   filterByDataWrongRight(){
     if(this.rangeChart3.value.start !== undefined && this.rangeChart3.value.start !== null &&
        this.rangeChart3.value.end !== undefined && this.rangeChart3.value.end !== null)
@@ -286,18 +288,19 @@ this.chart6 = new Chart("myChart6", {
     this.chart3.update();
   }
 
+  // get the appropriate data for custom & random games- chart 4
   filterAll(){
     this.analytics.getGameImprovment();
     this.chart4.update();
-
   }
 
+  // get the appropriate data for custom games- chart 4
   filterCustom(){
     this.analytics.filterAllGameByType(1);
     this.chart4.update();
-    
   }
 
+  // get the appropriate data for random games- chart 4
   filterRandom(){
     this.analytics.filterAllGameByType(0);
     this.chart4.update();

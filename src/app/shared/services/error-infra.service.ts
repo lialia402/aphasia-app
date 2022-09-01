@@ -7,7 +7,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 
 export class ErrorInfra {
 
-  constructor(private snackBar:MatSnackBar) { }
+  constructor(
+    private snackBar:MatSnackBar) { }
 
   // Opens a error message with given message and a close button
   openSimleSnackBar(message: string, action: string) {
