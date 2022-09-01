@@ -9,7 +9,6 @@ import {Location} from '@angular/common';
 import { TestInfo } from 'src/app/shared/models/test-info.model';
 import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 
 @Component({
@@ -44,6 +43,7 @@ export class CreateTestComponent implements OnInit {
     this.getValidCategories();
   }
 
+  // get alphabetical sorted word list
   sortedWordsList() : Array<WordClass>{
     this.allWords.sort(function(a, b) {
       return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
@@ -51,6 +51,7 @@ export class CreateTestComponent implements OnInit {
     return this.allWords;
   }
 
+  // get all categories that have at least 4 words
   getValidCategories(){
     for(let i=0; i<this.categoryService.categories.length;i++)
     {
@@ -86,6 +87,7 @@ export class CreateTestComponent implements OnInit {
     }
   }
 
+  // check how much words already choose
   getCheckboxCustom(checkBoxCustom:any)
   {
     this.checkedCustom = [];
@@ -146,11 +148,13 @@ export class CreateTestComponent implements OnInit {
     }
   }
 
+  // return if there is duplicate in the list of test choosen words
   hasDuplicates(array:string[]) 
   {
     return (new Set(array)).size !== array.length;
   }
 
+  // check if there is duplicate in the list of test choosen words
   checkDuplicate(word:string)
   {
     if(this.checked.some( obj=> obj.value === word)||this.checkedCustom.some( obj=> obj.value === word))
@@ -160,6 +164,7 @@ export class CreateTestComponent implements OnInit {
     }
   }
 
+  // add test object to the data
   insertTestInfo(listOfWords:string[], nameOfTest:string)
   {
     let newTestInfo = new TestInfo("", this.authService.patientOfTherapist.email, listOfWords, nameOfTest);
@@ -189,6 +194,5 @@ export class CreateTestComponent implements OnInit {
 
   cancel(){
     this._location.back();
-    //this.gameService.gameToEdit = new GameInfo(-1,[], new Date());
   }
 }

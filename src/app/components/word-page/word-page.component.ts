@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -131,7 +131,7 @@ export class WordPageComponent implements OnInit {
     });
   }
 
-   //check if the active test containes the category we want to delete
+   // check if the active test containes the category we want to delete
    checkActiveTest(word: WordClass)
    {
      if(this.testService.getActiveTest() === undefined){

@@ -27,7 +27,8 @@ export class EditWordsDialogComponent implements OnInit {
   fileToUpload: any;
   imageUrl: any;
 
-  constructor(private domSanitizer: DomSanitizer,
+  constructor(
+    private domSanitizer: DomSanitizer,
     public dialogRef: MatDialogRef<EditWordsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 

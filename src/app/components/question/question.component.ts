@@ -11,7 +11,6 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
   styleUrls: ['./question.component.scss']
 })
 export class QuestionComponent implements OnInit {
-
   wrong:boolean;
   right:boolean;
   activeIndex: number;
@@ -46,6 +45,7 @@ export class QuestionComponent implements OnInit {
     this.cardAnswers= this.gameService.getOptionsPerRound(this.currentRound*4);
   }
 
+  // get the question word per round
   public getQuestionWord() {
     this.cardQuestion= this.gameService.getCardQuestionPerRound(this.currentRound);
   }

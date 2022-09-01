@@ -128,7 +128,6 @@ export class TherapistPanelComponent implements OnInit {
   }
 
   public exitApp(){
-
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, { data: {name: "להתנתק"}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)

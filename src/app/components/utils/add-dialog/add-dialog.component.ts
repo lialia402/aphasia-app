@@ -15,7 +15,6 @@ export interface DialogData {
 })
 
 export class AddDialogComponent implements OnInit {
-
   selectedFiles?: FileList;
   audioFile?:FileList;
   selectedFileNames: string[] = [];

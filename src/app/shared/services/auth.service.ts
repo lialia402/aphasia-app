@@ -106,23 +106,7 @@ export class AuthService {
     return user !== null && user.emailVerified !== false ? true : false;
   }
 
-  // auth logic to run auth providers
-  AuthLogin(provider: any) {
-    return this.afAuth
-      .signInWithPopup(provider)
-      .then((result) => {
-        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
-        });
-        this.SetUserData(result.user);
-      })
-      .catch((error) => {
-        window.alert(error);
-      });
-  }
-
   // setting up user data when sign in/sign up with social auth provider in Firestore database 
-  // using AngularFirestore + AngularFirestoreDocument service 
   SetUserData(user: any, firstName?:string, lastName?:string, userID?:string,firstTime?:boolean) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`

@@ -4,6 +4,7 @@ import { AppInitService } from 'src/app/shared/services/app-init.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { WordInfraService } from 'src/app/shared/services/word-infra.service';
 import { AuthService } from '../../shared/services/auth.service';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -29,7 +30,6 @@ export class DashboardComponent implements OnInit {
         this.authService.SetFirstTime();   
       }, 1500)
     }
-
   }
 
   public showCategories(){

@@ -15,6 +15,7 @@
     
   .card-deck{
     display: flex;
+    justify-content: center;
     height: 100%;
     margin-top: 20px;
     flex-wrap: wrap;
@@ -50,7 +51,7 @@
     margin-bottom: 10px;
     font-family: system-ui;
     color: white;
-    }
+  }
   
   .mat-card-image{
   height: 170px; /* adjust as needed */
@@ -72,9 +73,16 @@
   }
   
   .stretch{
-    height : auto !important; /* Ignored by Internet Explorer, applied everywhere else. */
-    height : 100%;            /* Internet Explorer treats as min-height. */
+    height : auto !important; 
+    height : 100%;            
     min-height : 100%;
+  }
+
+  .stretch-super-user{
+    height : auto !important; 
+    height : 100%;            
+    min-height : 100%;
+    background-color: #57575759;
   }
 
   .buttons{

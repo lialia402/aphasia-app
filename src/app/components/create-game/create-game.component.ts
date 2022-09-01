@@ -7,7 +7,6 @@ import { GameSettings } from 'src/app/shared/models/game-settings.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
-import { Game } from 'src/app/shared/models/game.model';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 
@@ -50,6 +49,7 @@ export class CreateGameComponent implements OnInit {
     }
   }
 
+  // get all categories that have at least 4 words
   getValidCategories(){
     for(let i=0; i<this.categoryService.categories.length;i++)
     {
@@ -108,20 +108,15 @@ export class CreateGameComponent implements OnInit {
         this.gameService.gameToEdit = new GameInfo(-1,[],new Date());
         this._snackBar.open('העריכה הושלמה בהצלחה', 'סגור');
       }
-  
       else{
         this.insertGameInfo(this.selectedWords);
         this._snackBar.open('ההוספה הושלמה בהצלחה', 'סגור');
       }
-      
-      
       this._location.back();
     }
-
     else{
       this.messageInfra.openSimleSnackBar('שים לב: משחק זה קיים עבור המטופל במערכת אנא שנה רשימה מילים', 'סגור');
     }
-    
   }
 
   // compare to all games
@@ -156,14 +151,12 @@ export class CreateGameComponent implements OnInit {
       let newGameSetting = new GameSettings("",this.authService.patientOfTherapist.email,true,newInfroArray);
       this.gameService.addGameSettings(newGameSetting);
     }
-
     else
     {
       let numOfGame =  this.gameService.gameSettings[0].listOfGames.length;
       let newGameInfo = new GameInfo(numOfGame,words, new Date());
       this.gameService.addGameInfo(newGameInfo);
     }
-
   }
 
   // filter words per category
@@ -171,6 +164,7 @@ export class CreateGameComponent implements OnInit {
     let wordsArray = this.categoryService.getAllUserPhrases.filter((word) => {return word.categoryID === categoryID}).sort(function(a, b) {
       return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
     });
+
     return wordsArray;
   }
 
