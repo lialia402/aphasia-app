@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { ignoreElements } from 'rxjs-compat/operator/ignoreElements';
 import { CategoryClass } from '../models/category-class.model';
 import { AuthService } from './auth.service';
 import { ErrorInfra } from './error-infra.service';

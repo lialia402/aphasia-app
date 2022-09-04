@@ -49,9 +49,7 @@ export class CategoryPageComponent implements OnInit {
     }
     this.router.navigate(['word-page']);
   }
-
   public exitApp(){
-
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, { data: {name: "להתנתק"}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
@@ -64,6 +62,12 @@ export class CategoryPageComponent implements OnInit {
     });
   }
   
+  // Check if patient has categories disabled by therpist
+  public isTherpistHasDisableCategory(){
+    const checkDisabledCat = (obj: CategoryClass) => obj.visibility === false &&(!this.isSuperAdminCategory(obj.name));
+    return this.categories.some(checkDisabledCat);
+  }
+
   // load the relavant categories
   public async getCategories()
   {
@@ -108,6 +112,7 @@ export class CategoryPageComponent implements OnInit {
     this.isSuperAdminCategoryDisabled = this.categories.some(checkSuperAdminCat);
   }
 
+  // check if there are categories of the admin
   isSuperAdminCategory(name:string)
   {
     return name !== 'אוכל'
@@ -162,7 +167,7 @@ export class CategoryPageComponent implements OnInit {
     });
   }
 
-  //check if the active test containes the category we want to delete
+  // check if the active test containes the category we want to delete
   checkActiveTest(category: CategoryClass)
   {
     if(this.testService.getActiveTest() === undefined){
@@ -209,7 +214,7 @@ export class CategoryPageComponent implements OnInit {
           this.errorService.openSimleSnackBar('לא נבחרה תמונה', 'סגור');
         }
         else{
-        //go to storage to add word
+        // go to storage to add word
         const imageLink = await this.createImageInStorage(result);
         const newCategory = new CategoryClass(result.name, "", imageLink, email,
         "", 0, false, -1, true);

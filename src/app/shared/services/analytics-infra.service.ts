@@ -15,7 +15,6 @@ import { WordInfraService } from './word-infra.service';
 })
 
 export class AnalyticsInfraService {
-
   // All data
   allWords:WordClass[];
   allCategories:CategoryClass[];
@@ -36,7 +35,7 @@ export class AnalyticsInfraService {
   topTenWordsMinDate:Date;
   topTenWordsMaxDate:Date;
   
-  // graph wrong start
+  // graph wrong right
   categoriesNamesInGame:string[] = [];
   rightAnswers:number[] = [];
   wrongAnswers:number[] = [];
@@ -73,6 +72,7 @@ export class AnalyticsInfraService {
     this.allTests=this.testInfraService.tests;
    }
 
+   // get all the necessary updated lists
    public updateData(){
     this.allWords=this.categoryInfraService.getAllUserPhrases;
     this.allCategories=this.categoryInfraService.getCategories;
@@ -82,6 +82,7 @@ export class AnalyticsInfraService {
     this.allTests=this.testInfraService.tests;
    }
 
+  // get sorted words by number of views order by desc
   public getSortedWordsListByViewsDesc() {
     this.topTenWordsNames.splice(0, this.topTenWordsNames.length);
     this.topTenWordsViews.splice(0, this.topTenWordsViews.length);
@@ -93,6 +94,7 @@ export class AnalyticsInfraService {
     }
   }
 
+  // get min max dates values for wrong right graph 
   public getWrongRightMinMaxValues(){
     let datesArray:Date[] = [];
     for(let i=0;i<this.allGameResults.length;i++){
@@ -109,6 +111,7 @@ export class AnalyticsInfraService {
     }
   }
 
+  // get min max dates values for test graph 
   public getTestMinMaxValues(){
     let datesArray:Date[] = [];
     datesArray.splice(1,datesArray.length);
@@ -126,7 +129,7 @@ export class AnalyticsInfraService {
     }
   }
 
-
+  // get min max dates values for views categories graph
   public getCategoriesMinMaxDateValues(){
     let datesArray:Date[] = [];
     for(let i=0;i<this.allCategories.length;i++){
@@ -164,7 +167,6 @@ export class AnalyticsInfraService {
     }
   }
 
-
   // create a list of the 5 most viewed categories by the user for all time
   public getSortedCategoriesListByViewsDesc() {
     this.topFiveCategoriesNames.splice(0, this.topFiveCategoriesNames.length);
@@ -177,6 +179,7 @@ export class AnalyticsInfraService {
     }
   }
 
+  // get list of categories for all relavant categories in the given time frame
   public getSortedCategoriesListByStartAndEndDate(axis_x:string[],axis_y:number[],start:Date ,end:Date) {
     end.setDate(end.getDate() + 1);
     axis_x.splice(0, axis_x.length);
@@ -200,6 +203,7 @@ export class AnalyticsInfraService {
      }
   }
 
+  // get list of words for all relavant words in the given time frame
   public getSortedWordsListByStartAndEndDate(axis_x:string[],axis_y:number[],start:Date ,end:Date) {
     end.setDate(end.getDate() + 1);
     axis_x.splice(0, axis_x.length);
@@ -230,6 +234,7 @@ export class AnalyticsInfraService {
     return tempArray;
   }
 
+  // get list of results for all relavant tests in the given time frame
   filterTestByStartAndEnd(start:Date,end:Date,dates: TestResult[]){
     let tempArray = dates.filter((item: TestResult) =>
     new Date(item.answerDate).getTime()>= start.getTime() && new Date (item.answerDate).getTime() <= end.getTime()
@@ -246,6 +251,7 @@ export class AnalyticsInfraService {
     this.getSortedCategoriesListByViewsDesc();
   }
 
+  // get list of worng right answer for all relavant games in the given time frame
   filterWrongRightByEndStart(start:Date,end:Date,type:number){
     end.setDate(end.getDate() + 1);
     this.categoriesNamesInGame.splice(0, this.categoriesNamesInGame.length);
@@ -276,10 +282,10 @@ export class AnalyticsInfraService {
         this.rightAnswers.push(this.filterByStartAndEnd(start,end,this.allGameResults[i].rightRandom.map(date => new Date(date))).length);
         this.wrongAnswers.push(this.filterByStartAndEnd(start,end,this.allGameResults[i].wrongRandom.map(date => new Date(date))).length);
       }
-     
     }
   }
 
+   // get list of grades for all relavant games: random / custom 
    getGameAnswers(type:number){
     this.categoriesNamesInGame.splice(0, this.categoriesNamesInGame.length);
     this.rightAnswers.splice(0, this.rightAnswers.length);
@@ -308,30 +314,25 @@ export class AnalyticsInfraService {
         this.rightAnswers.push(this.allGameResults[i].rightRandom.length);
         this.wrongAnswers.push(this.allGameResults[i].wrongRandom.length);
       }
-      
     }
   }
 
+  // get list of grades for all games
   getGameImprovment(){
-
     this.dateArray.splice(0, this.dateArray.length);
     this.gameRightAnswers.splice(0, this.gameRightAnswers.length);
-  
     this.allGames.sort((b, a) => new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime());
 
     for(let i=0; i<this.allGames.length;i++){
      this.dateArray.push(new Date(this.allGames[i].dateOfGame).toLocaleDateString());
      this.gameRightAnswers.push(this.allGames[i].right);
-     
     }
-    
   }
 
+  // get list of duration for all tests
   getTestDuration(){
-
     this.timeSpentArray.splice(0, this.timeSpentArray.length);
     this.timeSpentName.splice(0, this.timeSpentName.length);
-  
     this.allTestResults.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
 
     for(let i=0; i<this.allTestResults.length;i++){
@@ -341,14 +342,12 @@ export class AnalyticsInfraService {
       this.timeSpentName.push(testName?.nameOfTest);
      }
     }
-    
   }
 
+  // get list of grades for all tests
   getTestImprovemnt(){
-
     this.testGradeArray.splice(0, this.testGradeArray.length);
     this.testGradeNames.splice(0, this.testGradeNames.length);
-  
     this.allTestResults.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
 
     for(let i=0; i<this.allTestResults.length;i++){
@@ -358,9 +357,9 @@ export class AnalyticsInfraService {
       this.testGradeNames.push(testName?.nameOfTest);
      }
     }
-    
   }
 
+  // get list of duration for all relavant test in the given time frame
   getSortedTestDurationByStartAndEndDate(start:Date,end:Date){
     this.timeSpentArray.splice(0, this.timeSpentArray.length);
     this.timeSpentName.splice(0, this.timeSpentName.length);
@@ -376,6 +375,7 @@ export class AnalyticsInfraService {
     }
   }
 
+  // get list of grades for all relavant test in the given time frame
   getSortedTestGradeByStartAndEndDate(start:Date,end:Date){
     this.testGradeArray.splice(0, this.testGradeArray.length);
     this.testGradeNames.splice(0, this.testGradeNames.length);
@@ -392,6 +392,7 @@ export class AnalyticsInfraService {
     }
   }
 
+  // get list of all relavant games: random / custom
   filterAllGameByType(type:number){
     this.dateArray.splice(0, this.dateArray.length);
     this.gameRightAnswers.splice(0, this.gameRightAnswers.length);
@@ -401,7 +402,6 @@ export class AnalyticsInfraService {
       this.dateArray.push(new Date(tempArray[i].dateOfGame).toLocaleDateString());
       this.gameRightAnswers.push(tempArray[i].right);
      }
-
   }
 }
 

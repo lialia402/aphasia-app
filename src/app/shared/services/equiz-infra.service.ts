@@ -11,7 +11,6 @@ import { GameInfraService } from './game-infra.service';
   providedIn: 'root'
 })
 export class EquizInfraService {
-
   public testQuestionsList:WordClass[]= [];
   public testQuestionsSelectionWords:WordClass[]= [];
   public tests: TestInfo[]=[];
@@ -27,16 +26,19 @@ export class EquizInfraService {
     this.getTestResult();
   }
 
+  // get the only active test if there is one
   public getActiveTest()
   {
     return this.tests.filter(a=> a.isPlayed===false)[0];
   }
 
+  // get list of all disactive tests 
   public getDisactiveTest()
   {
     return this.tests.filter(a=> a.isPlayed===true);
   }
 
+  // get all relavant tests
   public getTests(): Promise<TestInfo[]> {
     this.firebaseInfraService.importTestInfo();
     return new Promise((resolve, reject) => {
@@ -47,6 +49,7 @@ export class EquizInfraService {
     })
   }
 
+  // get all relavant tests by unique email
   public getTestsByEmail(email:string): Promise<TestInfo[]> {
     this.firebaseInfraService.importTestsByEmail(email);
     return new Promise((resolve, reject) => {
@@ -57,6 +60,7 @@ export class EquizInfraService {
     })
   }
 
+  // get all relavant test results 
   public getTestResult(): Promise<TestResult[]> {
     this.firebaseInfraService.importTestResult();
     return new Promise((resolve, reject) => {
@@ -71,6 +75,7 @@ export class EquizInfraService {
     return this.gameInfra.countValidWords();
   }
 
+  // get all relavant test results by unique email
   public getTestResultByEmail(email:string): Promise<TestResult[]> {
     this.firebaseInfraService.imporTestResultByEmail(email);
     return new Promise((resolve, reject) => {
@@ -81,6 +86,7 @@ export class EquizInfraService {
     })
   }
 
+  // add test info to DB
   public addTestInfo(testInfo:TestInfo)
   {
     return new Promise((resolve, reject) => {
@@ -90,6 +96,7 @@ export class EquizInfraService {
     })
   }
 
+  // add test resulr to DB
   public addTestResult(testResult:TestResult)
   {
     return new Promise((resolve, reject) => {
@@ -99,6 +106,7 @@ export class EquizInfraService {
     })
   }
 
+  // delete test
   public deleteTestInfo(testInfo:TestInfo)
   {
     this.firebaseInfraService.removeTestInfo(testInfo);
@@ -116,17 +124,20 @@ export class EquizInfraService {
     this.firebaseInfraService.updateTestInfo(testInfo);
   }
 
+  // return the word object of options for answer per round
   public getOptionsPerRound (currentRound: number)
   {
       let tempListOfRandomAnswer=this.testQuestionsSelectionWords.slice(currentRound, currentRound+4);
       return this.gameInfra.shuffle(tempListOfRandomAnswer);
   }
 
+  // return the word object of question per round
   public getCardQuestionPerRound(currentRound: number) 
   {
       return this.testQuestionsList[currentRound];
   }
 
+  // return words object list of questions 
   public giveTestList(){
     let testArray=this.getActiveTest();
     let category:CategoryClass;

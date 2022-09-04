@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
 import { GameSettings } from 'src/app/shared/models/game-settings.model';
-import { WordClass } from 'src/app/shared/models/word-class.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
@@ -43,8 +42,8 @@ export class GameSettingsComponent implements OnInit {
    
   }
 
+  // delete the specific game
   deleteGameInfo(game:GameInfo){
-
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: "למחוק"}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
@@ -57,6 +56,7 @@ export class GameSettingsComponent implements OnInit {
 
   }
 
+  // count all the words displayed to the user
   countValidWords(){
     let count = 0;
     for(let i=0; i<this.categoryService.categories.length;i++)
@@ -106,11 +106,13 @@ export class GameSettingsComponent implements OnInit {
     }
   }
 
+  // navigate to edit game page
   editGameInfo(game: GameInfo){
     this.gameService.gameToEdit = game;
     this.router.navigate(['create-game-page']);
   }
 
+  // return the average score in the game
   calculateAverage(game:GameInfo){
     if(game.numOfPlayed === 0){
       return 0;
@@ -120,21 +122,21 @@ export class GameSettingsComponent implements OnInit {
     }
   }
 
+  // check if the random game bottun enable
   checkEnableRandomGame(){
     if(this.gameSetting === undefined)
     {
       return true;
     }
-    else{
+    else
+    {
       return this.gameSetting.enableRandomGame;
     }
-    
   }
 
+  // return the given date object in the appropriate format
   toDate(date: Date){ 
     let dateNew = new Date(date).toLocaleDateString();
     return dateNew;
   }
-
-
 }

@@ -27,7 +27,7 @@
     height: 195px; 
   }
 
-  .example-container {
+  .example-container{
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -76,8 +76,7 @@
     background-color: #bab6b617;
   }
 
-  .mat-expansion-panel:not([class*=mat-elevation-z])
-  {
+  .mat-expansion-panel:not([class*=mat-elevation-z]){
     box-shadow:none;
   }
 
@@ -91,8 +90,7 @@
 
   .mat-icon-outside {
     color:white;
-}
-
+  }
   
   .example-is-mobile .example-sidenav-container {
     flex: 1 0 auto;
@@ -120,7 +118,7 @@
     margin-top: 15px;
   }
 
-.test{
+  .test{
     display: flex;
     justify-content: center;
     align-items: center;

@@ -25,23 +25,25 @@ export class GameInfraService {
   public currentCustomGame = -1;
   public gameToEdit:GameInfo = new GameInfo(-1,[], new Date);
 
-  constructor
-  ( public categoryInfraService: CategoryInfraService, 
+  constructor( 
+    public categoryInfraService: CategoryInfraService, 
     public wordInfraService: WordInfraService,
     public firebaseInfraService: FirebaseInfraService) {
-
    }
 
+  // give random category from all user's categories 
   public giveRandomCategory(){
     let randomNumber = Math.floor(Math.random()*this.categoryInfraService.categories.length);
     return this.categoryInfraService.categories[randomNumber];
   }
 
+  // give random word from all user's words 
   public giveRandomWord(words : WordClass[]){
     let randomNumber = Math.floor(Math.random()*words.length);
     return words[randomNumber];
   }
 
+  // Returns the amount of legal words: found in a category that has more than 3 words 
   countValidWords(){
     let count = 0;
     for(let i=0; i<this.categoryInfraService.categories.length;i++)
@@ -64,6 +66,7 @@ export class GameInfraService {
     return wordsArray;
   }
 
+  // return list of words only if the user has more than 10 valid words in the system
   public async checkAndGiveRandomList(){
     if((this.categoryInfraService.getAllUserPhrases.length < 10) || (this.countValidWords()) ){
       return this.randomWordList = [];
@@ -73,7 +76,7 @@ export class GameInfraService {
     }
   }
 
-
+  // return random words list 
   public async giveRandomList(){
     let category;
     let words: WordClass[] = [];
@@ -110,6 +113,7 @@ export class GameInfraService {
     return this.randomWordList;
   }
 
+  // return words list for custom game
   public giveCustomList(customWords: string[]){
     let category:CategoryClass;
     let words: WordClass[] = [];
@@ -135,12 +139,14 @@ export class GameInfraService {
     return this.customWordList;
   }
 
+  // find the given word by the name, and return word object
   findWordByName(wordName: string){
     const findWord = (obj: WordClass) => obj.name === wordName;
     let currentWord = this.categoryInfraService.getAllUserPhrases.find(findWord);
     return currentWord;
-}
+  }
 
+  // add 3 words to the list 
   public pushAnotherThreeWords(word:WordClass, words:WordClass[],array:WordClass[]){
     let word1 = this.giveRandomWord(words);
     let word2 = this.giveRandomWord(words);
@@ -179,6 +185,7 @@ export class GameInfraService {
     return flag;
   }
 
+  // return 4 option word for answer per round
   public getOptionsPerRound (currentRound: number)
   {
 
@@ -194,8 +201,7 @@ export class GameInfraService {
     }
   }
 
-  
-
+  // return the question word per round
   public getCardQuestionPerRound(currentRound: number) 
   {
     if(this.customGame === true)
@@ -206,9 +212,9 @@ export class GameInfraService {
     {
       return this.randomWordList[currentRound];
     }
-    
   }
 
+  // shuffle the given words array
   public shuffle(array:WordClass[]) {
     let currentIndex = array.length,  randomIndex;
     while (currentIndex != 0) {
@@ -221,7 +227,7 @@ export class GameInfraService {
     return array;
   }
 
-
+  // return the result of the given game
   public getGameResults(): Promise<GameResult[]> {
     this.firebaseInfraService.importGameResults();
     return new Promise((resolve, reject) => {
@@ -231,7 +237,8 @@ export class GameInfraService {
       })
     })
   }
-
+  
+  // get all the games of the user
   public getGames(): Promise<Game[]> {
     this.firebaseInfraService.importGames();
     return new Promise((resolve, reject) => {
@@ -242,6 +249,7 @@ export class GameInfraService {
     })
   }
 
+  // get all the games by uniqe email
   public getGamesByEmail(email:string): Promise<Game[]> {
     this.firebaseInfraService.importGamesByEmail(email);
     return new Promise((resolve, reject) => {
@@ -252,6 +260,7 @@ export class GameInfraService {
     })
   }
 
+  // get all the game results by uniqe email
   public getGameResultsByEmail(email:string): Promise<GameResult[]> {
     this.firebaseInfraService.importGameResultsByEmail(email);
     return new Promise((resolve, reject) => {
@@ -262,7 +271,8 @@ export class GameInfraService {
     })
   }
 
-   public getGameSettings(): Promise<GameSettings[]> {
+  // get all the game settings results by uniqe email
+  public getGameSettings(): Promise<GameSettings[]> {
     this.firebaseInfraService.importGameSettings();
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
@@ -272,6 +282,7 @@ export class GameInfraService {
     })
   }
 
+  // get all the game settings by uniqe email
   public getGameSettingsByEmail(email:string): Promise<GameSettings[]> {
     this.firebaseInfraService.importGameSettingsByEmail(email);
     return new Promise((resolve, reject) => {
@@ -282,9 +293,9 @@ export class GameInfraService {
     })
   }
 
+  // increase by one the right answer in the category of the word
   public increaseRightAnswer(categoryId:string)
   {
-
     const checkCategory = (obj: GameResult) => obj.categoryID === categoryId;
     if(this.resultGameArray.some(checkCategory)){
      let currentResult = this.resultGameArray.find(checkCategory);
@@ -292,17 +303,16 @@ export class GameInfraService {
        this.customGame ? currentResult.rightCustom.push(new Date()) : currentResult.rightRandom.push(new Date());
        this.firebaseInfraService.updateResult(currentResult);
      }
-
     }
-    else
-    {
+
+    else{
       const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,"");
       this.customGame ? result.rightCustom.push(new Date()) : result.rightRandom.push(new Date());
       this.addResult(result);
     }
-  
   }
 
+  // increase by one the worng answer in the category of the word
   public increaseWrongAnswer(categoryId:string)
   {
     const checkCategory = (obj: GameResult) => obj.categoryID === categoryId;
@@ -312,15 +322,13 @@ export class GameInfraService {
         this.customGame ? currentResult.wrongCustom.push(new Date()) : currentResult.wrongRandom.push(new Date());
         this.firebaseInfraService.updateResult(currentResult);
       }
-
     }
-    else
-    {
+    
+    else{
       const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,"");
       this.customGame ? result.wrongCustom.push(new Date()) : result.wrongRandom.push(new Date());
       this.addResult(result);
     }
-  
   }
 
   public addResult(result: GameResult, callFromAppBuilder = false) : Promise<any> {
@@ -348,7 +356,6 @@ export class GameInfraService {
       });
     })
   }
-
 
   // change lofic to accomidate custom and random
   public addGame(game: Game) : Promise<any> {

@@ -9,6 +9,7 @@
 </div>
 
 <!-- for normal mode -->
+<div class="stretch" [ngClass]="{'stretch-super-user': isSuperAdmin, 'stretch':!isSuperAdmin}">
 <div *ngIf="isSuperAdmin" class="exit-button">
   <button mat-icon-button color="gray"(click)="exitApp();">
     <mat-icon>exit_to_app</mat-icon>
@@ -16,6 +17,7 @@
   <p dir="rtl" style="margin-top: 10px; font-family: system-ui;">להתנתקות:</p>
 </div>
 <div class="stretch">
+  <p class="buttons font" *ngIf="isSuperAdmin">הוספה ומחיקה של קטגוריה תתבצע עבור כל משתמשי המערכת</p>
     <p class="buttons font" *ngIf="isTherapist && this.isCategoryEnabled">על מנת להסתיר את הקטגוריה מהמטופל אנא כבה את הכפתור</p>
     <div class="card-deck" fxLayout.xs="row">
       <ng-container class="stretch" *ngFor="let item of this.categories">
@@ -28,7 +30,7 @@
         <img md-card-image=""  src={{item?.imageURL}} class="mat-card-image"  (click)="openCategoryWords(item);"/>
         <mat-card-subtitle  class="mat-card-title text-center">{{ item.name }}</mat-card-subtitle>
         <mat-card-actions class="buttons">
-          <button *ngIf="isTherapist || isSuperAdmin" class="middle-button" mat-icon-button mat-button (click)="editCategory(item)" >
+          <button *ngIf="isTherapist" class="middle-button" mat-icon-button mat-button (click)="editCategory(item)" >
             <mat-icon>create</mat-icon>
           </button>
           <button  *ngIf="isTherapist || isSuperAdmin" class="right-button" mat-icon-button mat-button (click) ="openDialog(item);" >
@@ -42,8 +44,9 @@
         <mat-icon>add</mat-icon>
       </button>
 </div>
+</div>
 <div class="stretch" *ngIf="isTherapist && this.isCategoryDisabled">
-    <p class="buttons font" *ngIf="isTherapist && this.isCategoryDisabled">על מנת להציג את הקטגוריה למטופל אנא הדלק את הכפתור</p>
+    <p class="buttons font" *ngIf="isTherapist && (isTherpistHasDisableCategory())">על מנת להציג את הקטגוריה למטופל אנא הדלק את הכפתור</p>
     <div class="card-deck" fxLayout.xs="row" *ngIf="isTherapist">
       <ng-container *ngFor="let item of this.categories">
         <mat-card style="width:10rem;" class="mat-card" *ngIf="(!item.visibility) && (!isSuperAdminCategory(item.name))">

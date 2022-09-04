@@ -18,7 +18,4 @@ export class GameResult extends Unit{
         this.rightRandom = [];
         this.wrongRandom = [];
     }
-
-
-    
 }

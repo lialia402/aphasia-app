@@ -51,7 +51,6 @@ export class GameComponent implements OnInit {
   // navigate to diffult game
   navigateToGame()
   {
-    
     this.gameService.customGame = false;
     this.router.navigate(['question-page']);
   }

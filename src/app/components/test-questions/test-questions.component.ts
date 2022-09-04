@@ -56,6 +56,7 @@ export class TestQuestionsComponent implements OnInit {
     this.cardAnswers= this.testInfra.getOptionsPerRound(this.currentRound*4);
   }
 
+  // get the question word per round
   public getQuestionWord() {
     this.cardQuestion= this.testInfra.getCardQuestionPerRound(this.currentRound);
   }
@@ -106,14 +107,7 @@ export class TestQuestionsComponent implements OnInit {
     }
   }
 
-  navigateHomePage(){
-    // this.testInfra.currentCustomGame = -1;
-    // this.testInfra.customGame = false;
-    // this.router.navigate(['dashboard']);
-  }
-
   showQuestionAndAnswer(){
     this.imageLoaded = true;
   }
-
 }
