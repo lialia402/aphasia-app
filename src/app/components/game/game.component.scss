@@ -127,3 +127,11 @@ height: 170px; /* adjust as needed */
   font-weight: normal;
 }
 
+.empty-state{
+    display: flex;
+    justify-content: center;
+    font-size: xxx-large;
+    font-weight: bold;
+    margin-top: 105px;
+    font-family: system-ui;
+}

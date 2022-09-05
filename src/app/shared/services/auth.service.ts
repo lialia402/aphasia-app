@@ -53,7 +53,18 @@ export class AuthService {
         this.SetUserData(result.user);
       })
       .catch((error) => {
-        window.alert(error.message);
+        if(error.message.includes('password is invalid'))
+        {
+          window.alert('סיסמא אינה תקינה');
+        }
+        //email address is badly formatted
+        else if(error.message.includes('email address is badly formatted'))
+        {
+          window.alert('כתובת האימייל אינה תקינה');
+        }
+        else{
+          window.alert(error.message);
+        }
       });
   }
   
@@ -75,7 +86,19 @@ export class AuthService {
         }
         this.SetUserData(result.user, firstName, lastName, userID,false);
       }).catch((error) => {
-        window.alert(error.message);
+        if(error.message.includes('email address is already in use'))
+        {
+          window.alert('כתובת האימייל כבר קיימת במערכת');
+        }
+        //email address is badly formatted
+        else if(error.message.includes('email address is badly formatted'))
+        {
+          window.alert('כתובת האימייל אינה תקינה');
+        }
+        else{
+          window.alert(error.message);
+        }
+       
       });
   }
 

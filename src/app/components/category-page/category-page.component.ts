@@ -12,6 +12,7 @@ import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
+import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 
 @Component({
   selector: 'app-category-page',
@@ -37,7 +38,8 @@ export class CategoryPageComponent implements OnInit {
     public errorService: ErrorInfra,
     private _snackBar: MatSnackBar,
     public testService: EquizInfraService,
-    public gameService: GameInfraService) {}
+    public gameService: GameInfraService,
+    public userService: UserInfaService) {}
 
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {

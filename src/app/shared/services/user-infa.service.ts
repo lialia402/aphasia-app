@@ -93,5 +93,13 @@ export class UserInfaService {
   public getAllPatients(){
     return this.users.filter((user) => user.userType === 'patient');
   }
+
+  public getAllTherapist(){
+    return this.users.filter((user) => user.userType === 'admin');
+  }
+
+  public isIDExist(id: string){
+    return this.users.some((user) => user.userID === id);
+  }
 }
 

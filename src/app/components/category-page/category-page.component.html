@@ -16,6 +16,10 @@
   </button>
   <p dir="rtl" style="margin-top: 10px; font-family: system-ui;">להתנתקות:</p>
 </div>
+<div  *ngIf="isSuperAdmin" class="user-info">
+  <p> מספר המטופלים הכולל במערכת: {{userService.getAllPatients().length}}</p>
+  <p> מספר המטפלים הכולל במערכת: {{userService. getAllTherapist().length}}</p>
+</div>
 <div class="stretch">
   <p class="buttons font" *ngIf="isSuperAdmin">הוספה ומחיקה של קטגוריה תתבצע עבור כל משתמשי המערכת</p>
     <p class="buttons font" *ngIf="isTherapist && this.isCategoryEnabled">על מנת להסתיר את הקטגוריה מהמטופל אנא כבה את הכפתור</p>

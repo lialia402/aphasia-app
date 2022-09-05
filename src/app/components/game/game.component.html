@@ -27,6 +27,12 @@
         <mat-card-subtitle  (click) ="navigateToGame()" class="mat-card-title text-center font">התחל משחק כללי</mat-card-subtitle>
       </mat-card> 
       </div>
+
+      <div *ngIf="!isLoading && !isCustonExists && !isRandomGameEnabled">
+        <h1 class="empty-state">כעת, לא קיימים משחקים פעילים עבורך במערכת</h1>
+        </div>
+
+
 </div>
 <app-footer>
 </app-footer>

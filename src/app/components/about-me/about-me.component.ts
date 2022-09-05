@@ -21,7 +21,8 @@ export class AboutMeComponent implements OnInit {
     public authService: AuthService,
     public router: Router,
     public userInfaService: UserInfaService,
-    public errorService:ErrorInfra) {}
+    public errorService:ErrorInfra,
+    public userService: UserInfaService) {}
 
    ngOnInit(): void{
     if(this.authService.user === undefined)
@@ -51,6 +52,15 @@ export class AboutMeComponent implements OnInit {
     {
     this.errorService.openSimleSnackBar('לא הוזנו שינויים', 'סגור');
     this.cancelOption();
+    }
+    else if(this.id !== "" && this.id.match(/^[0-9]+$/) === null){
+      this.errorService.openSimleSnackBar('תעודת זהות לא חוקית ', 'סגור');
+    }
+    else if(this.id !== "" && this.id.length < 9){
+        this.errorService.openSimleSnackBar('תעודת זהות קצרה מידי ', 'סגור');
+    }
+    else if(this.id !== "" && this.userService.isIDExist(this.id)){
+        this.errorService.openSimleSnackBar('תעודת זהות כבר קיימת במערכת', 'סגור');
     }
     else{
     this.firstName=this.firstName===""?this.user.firstName:this.firstName;
