@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
+import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 import { StorageInfraProvider } from 'src/app/shared/services/storage-infra.service';
 import { WordInfraService } from 'src/app/shared/services/word-infra.service';
 import { AddDialogComponent } from '../utils/add-dialog/add-dialog.component';
@@ -41,7 +42,8 @@ export class WordPageComponent implements OnInit {
     public storageService: StorageInfraProvider, 
     public errorService: ErrorInfra,
     private _snackBar: MatSnackBar,
-    public testService: EquizInfraService) 
+    public testService: EquizInfraService,
+    public gameService: GameInfraService) 
     {
       this.category=categoryService.getCurrentCategory;
     }
@@ -75,7 +77,8 @@ export class WordPageComponent implements OnInit {
     if(this.authService.user.userType === 'superAdmin'){
       promise= this.wordService.getSuperAdminPhrases(this.category);
     }
-    else{
+    else
+    {
       promise= this.wordService.getPhrases(this.category);
     }
     promise.then((data) => {
@@ -105,30 +108,74 @@ export class WordPageComponent implements OnInit {
       {
         this.wordService.removePhraseSuperAdmin(word);
       }
-      else{
+      else
+      {
         this.wordService.removePhrase(word);
       }
-      this.getwords()      
+      this.getwords();      
     }, 500)
     this.wordService.arrangePhrasesByOrder();
     
   }
 
+  getDeleteMessage(needToDisableActiveTest:boolean, needToDeleteActiveGame: boolean)
+  {
+    if(needToDisableActiveTest && needToDeleteActiveGame)
+    {
+      return "למחוק, מחיקה זו תהפוך את המבחן הפעיל כעת ללא פעיל ותמחק משחקים הכוללים מילה זו";
+    }
+    else if(needToDisableActiveTest){
+      return "למחוק, שים לב מחיקה זו תהפוך את המבחן הפעיל כעת ללא פעיל";
+    }
+    else if(needToDeleteActiveGame)
+    {
+      return "למחוק, שים לב מחיקה זו תמחק את כל המשחקים הכוללים את המילה הזו";
+    }
+    else{
+      return "למחוק";
+    }
+  }
+
   openDialog(word: WordClass) {
-    let needToDisableActiveTest = this.checkActiveTest(word);
-    let message = needToDisableActiveTest? "למחוק, שים לב מחיקה זו תהפוך את המבחן הפעיל כעת ללא פעיל" : "למחוק";
+    let needToDisableActiveTest = this.isSuperAdmin ? false : this.checkActiveTest(word);
+    let needToDeleteActiveGame = this.isSuperAdmin ? false : this.checkGames(word);
+
+    let message = this.getDeleteMessage(needToDisableActiveTest, needToDeleteActiveGame);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: message}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
       {
-        this.deleteWord(word);
         if(needToDisableActiveTest)
         {
           this.testService.updateDisActivateTest(this.testService.getActiveTest());
         }
+        if(needToDeleteActiveGame)
+        {
+          this.gameService.deleteGamesRealtedToWord(word);
+        }
+        this.deleteWord(word);
         this._snackBar.open('המחיקה הושלמה בהצלחה', 'סגור');
       }
     });
+  }
+
+  checkGames(word: WordClass)
+  {
+
+    let allGames = this.gameService.getAllGames();
+    let wordsArray = this.categoryService.getAllUserPhrases.filter(a => a.categoryID === word.categoryID).map(a => a.name);
+    let flag = false;
+
+    if(wordsArray.length <= 4)
+    {
+      return true;
+    }
+
+    for(let i=0;i<allGames.length && flag === false;i++){
+      flag = allGames[i].listOfWords.some((a) => a === word.name);
+    }
+
+    return flag;
   }
 
    // check if the active test containes the category we want to delete

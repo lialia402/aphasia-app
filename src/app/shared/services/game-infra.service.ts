@@ -54,7 +54,6 @@ export class GameInfraService {
         count += wordsArray.length;
       }
     }
-    console.log(count);
     return count < 10;
   }
 
@@ -406,6 +405,43 @@ export class GameInfraService {
   public changeRandomGame(GameSetting: GameSettings) {
     GameSetting.enableRandomGame = !GameSetting.enableRandomGame;
     this.firebaseInfraService.updateGameSettings(GameSetting);
+  }
+
+  public getAllGames(){
+    return this.gameSettings[0].listOfGames;
+  }
+
+  public deleteGamesRealtedToCategory(category:CategoryClass){
+    let allGames = this.getAllGames();
+    let wordsArray = this.categoryInfraService.getAllUserPhrases.filter(word => word.categoryID === category.id).map(word => word.name);
+    
+    for(let i=0;i<allGames.length;i++){
+      let toDelete = allGames[i].listOfWords.some(r=> wordsArray.includes(r));
+      if(toDelete){
+        this.deleteGameInfo(allGames[i]);
+      }
+    }
+  }
+
+  public deleteGamesRealtedToWord(word:WordClass){
+    let allGames = this.getAllGames();
+    let wordsArray = this.categoryInfraService.getAllUserPhrases.filter(a => a.categoryID === word.categoryID).map(a => a.name);
+
+    if(wordsArray.length <= 4)
+    {
+      let category = this.categoryInfraService.categories.find(a=>a.id = word.categoryID);
+      this.deleteGamesRealtedToCategory(category);
+    }
+    else
+    {
+        for(let i=0;i<allGames.length;i++)
+      {
+        let toDelete = allGames[i].listOfWords.some((a) => a === word.name);
+        if(toDelete){
+          this.deleteGameInfo(allGames[i]);
+        }
+      }
+    }
   }
 }
 
