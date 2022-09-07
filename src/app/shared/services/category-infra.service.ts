@@ -119,8 +119,6 @@ export class CategoryInfraService {
     return this.superAdminCategories;
   }
 
-
-
   public get getAllUserPhrases() {
     return this.allUserPhrases;
   }

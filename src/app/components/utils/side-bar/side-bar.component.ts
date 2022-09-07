@@ -1,6 +1,7 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 
@@ -51,8 +52,19 @@ export class SideBarComponent implements  OnInit {
     public authService: AuthService,
     public userInfaService: UserInfaService,  
     public router: Router,
-    public testInfra:EquizInfraService) {
+    public testInfra:EquizInfraService,
+    public categoryInfra:CategoryInfraService)
+  {
+    this.isLoading = true;
+    setTimeout(async () => {    
+      await this.categoryInfra.updateCategoriesArray();
+      await this.categoryInfra.updateCategoriesArray();
+      await this.categoryInfra.updateCategoriesArray();
+      this.testInfra.validateTest();
+      this.isLoading = true;
+    }, 1500)
   }
+
   ngOnInit(): void{
     if(this.authService.user === undefined)
     {
