@@ -54,7 +54,6 @@ export class GameInfraService {
         count += wordsArray.length;
       }
     }
-    console.log(count);
     return count < 10;
   }
 
@@ -277,6 +276,7 @@ export class GameInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
         this.gameSettings = settings;
+        this.validateGame();
         resolve(this.gameSettings);
       })
     })
@@ -288,6 +288,7 @@ export class GameInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getGameSettingsObservable.subscribe(settings => {
         this.gameSettings = settings;
+        this.validateGame();
         resolve(this.gameSettings);
       })
     })
@@ -406,6 +407,75 @@ export class GameInfraService {
   public changeRandomGame(GameSetting: GameSettings) {
     GameSetting.enableRandomGame = !GameSetting.enableRandomGame;
     this.firebaseInfraService.updateGameSettings(GameSetting);
+  }
+
+  public getAllGames(){
+    return this.gameSettings[0].listOfGames;
+  }
+
+  public deleteGamesRealtedToCategory(category:CategoryClass){
+    let allGames = this.getAllGames();
+    let wordsArray = this.categoryInfraService.getAllUserPhrases.filter(word => word.categoryID === category.id).map(word => word.name);
+    
+    for(let i=0;i<allGames.length;i++){
+      let toDelete = allGames[i].listOfWords.some(r=> wordsArray.includes(r));
+      if(toDelete){
+        this.deleteGameInfo(allGames[i]);
+      }
+    }
+  }
+
+  public deleteGamesRealtedToWord(word:WordClass){
+    let allGames = this.getAllGames();
+    let wordsArray = this.categoryInfraService.getAllUserPhrases.filter(a => a.categoryID === word.categoryID).map(a => a.name);
+
+    if(wordsArray.length <= 4)
+    {
+      let category = this.categoryInfraService.categories.find(a=>a.id = word.categoryID);
+      this.deleteGamesRealtedToCategory(category);
+    }
+    else
+    {
+        for(let i=0;i<allGames.length;i++)
+      {
+        let toDelete = allGames[i].listOfWords.some((a) => a === word.name);
+        if(toDelete){
+          this.deleteGameInfo(allGames[i]);
+        }
+      }
+    }
+  }
+
+  // Validate that all the games are relevent before shpwing them
+  public validateGame(){
+    let games = this.gameSettings[0].listOfGames;
+    let allWords =  this.categoryInfraService.getAllUserPhrases;
+    
+    if(games !== undefined && allWords.length > 0 ){
+      for(let i=0;i<games.length;i++)
+      {
+        let exit = false;
+        for(let j=0;j<games[i].listOfWords.length && exit === false ;j++)
+        {
+          let isExist = allWords.some(a => a.name === games[i].listOfWords[j]);
+          if(isExist)
+          {
+            let word = allWords.find(a => a.name === games[i].listOfWords[j]);
+            let categoryWords = allWords.filter(a=> a.categoryID === word.categoryID);
+
+            if(categoryWords.length < 4)
+            {
+              this.deleteGameInfo(games[i]);
+              exit = true;
+            }
+          }
+          else{
+            this.deleteGameInfo(games[i]);
+            exit = true;
+          }
+        }
+      }
+    }
   }
 }
 

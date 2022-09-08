@@ -12,6 +12,7 @@ import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
+import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 
 @Component({
   selector: 'app-category-page',
@@ -37,7 +38,8 @@ export class CategoryPageComponent implements OnInit {
     public errorService: ErrorInfra,
     private _snackBar: MatSnackBar,
     public testService: EquizInfraService,
-    public gameService: GameInfraService) {}
+    public gameService: GameInfraService,
+    public userService: UserInfaService) {}
 
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
@@ -149,22 +151,60 @@ export class CategoryPageComponent implements OnInit {
     }, 1000)
   }
 
+  getDeleteMessage(needToDisableActiveTest:boolean, needToDeleteActiveGame: boolean)
+  {
+    if(needToDisableActiveTest && needToDeleteActiveGame)
+    {
+      return "למחוק, מחיקה זו תהפוך את המבחן הפעיל כעת ללא פעיל ותמחק משחקים הכוללים קטגוריה זו";
+    }
+    else if(needToDisableActiveTest){
+      return "למחוק, שים לב מחיקה זו תהפוך את המבחן הפעיל כעת ללא פעיל";
+    }
+    else if(needToDeleteActiveGame)
+    {
+      return "למחוק, שים לב מחיקה זו תמחק את כל המשחקים הכוללים את הקטגוריה הזו";
+    }
+    else{
+      return "למחוק";
+    }
+  }
+
   // verifies the deletion operation
   openDialog(category: CategoryClass) {
-    let needToDisableActiveTest = this.checkActiveTest(category);
-    let message = needToDisableActiveTest? "למחוק, שים לב מחיקה זו תהפוך את המבחן הפעיל כעת ללא פעיל" : "למחוק";
+    let needToDisableActiveTest = this.isSuperAdmin ? false : this.checkActiveTest(category);
+    let needToDeleteActiveGame = this.isSuperAdmin ? false : this.checkGames(category);
+    let message = this.getDeleteMessage(needToDisableActiveTest,needToDeleteActiveGame);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{ data: {name: message}});
     dialogRef.afterClosed().subscribe(result => {
       if(result)
       {
-        this.deleteCategory(category);
         if(needToDisableActiveTest)
         {
           this.testService.updateDisActivateTest(this.testService.getActiveTest());
         }
+        if(needToDeleteActiveGame)
+        {
+          this.gameService.deleteGamesRealtedToCategory(category);
+        }
+        this.deleteCategory(category);
         this._snackBar.open('המחיקה הושלמה בהצלחה', 'סגור');
       }
     });
+  }
+
+  checkGames(category: CategoryClass)
+  {
+
+    let allGames = this.gameService.getAllGames();
+    
+    let wordsArray = this.categoryService.getAllUserPhrases.filter(word => word.categoryID === category.id).map(word => word.name);
+    let flag = false;
+
+    for(let i=0;i<allGames.length && flag === false;i++){
+      flag = allGames[i].listOfWords.some(r=> wordsArray.includes(r));
+    }
+
+    return flag;
   }
 
   // check if the active test containes the category we want to delete

@@ -28,6 +28,7 @@ export class GameSettingsComponent implements OnInit {
     public messageInfra: ErrorInfra) { }
 
   ngOnInit(): void {
+    this.gameService.validateGame();
     this.gameSetting = this.gameService.gameSettings[0];
 
     if(this.gameSetting !== undefined){

@@ -6,6 +6,7 @@ import { WordClass } from '../models/word-class.model';
 import { CategoryInfraService } from './category-infra.service';
 import { FirebaseInfraService } from './firebase-infra.service';
 import { GameInfraService } from './game-infra.service';
+import { WordInfraService } from './word-infra.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class EquizInfraService {
     public firebaseInfraService: FirebaseInfraService,
     public gameInfra: GameInfraService,
     public categoryInfraService: CategoryInfraService,
+    public wordInfraService: WordInfraService,
   ) 
   { 
     this.getTests();
@@ -44,6 +46,7 @@ export class EquizInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getTestInfosObservable.subscribe(arrayOfResults => {
         this.tests = arrayOfResults;
+        this.validateTest();
         resolve(arrayOfResults);
       })
     })
@@ -55,6 +58,7 @@ export class EquizInfraService {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.getTestInfosObservable.subscribe(arrayOfResults => {
         this.tests = arrayOfResults;
+        this.validateTest();
         resolve(arrayOfResults);
       })
     })
@@ -162,5 +166,34 @@ export class EquizInfraService {
       i++;
     }
     return this.testQuestionsList;
+  }
+
+  // validate that all the tests are relevent before shpwing them
+  public validateTest(){
+    let activeTest = this.getActiveTest();
+    let allWords =  this.categoryInfraService.getAllUserPhrases;
+  
+    let exit = false;
+    if(activeTest !== undefined && allWords.length > 0 ){
+      for(let i=0;i<activeTest.wordList.length && exit === false;i++)
+      {
+        let isExist = allWords.some(a => a.name === activeTest.wordList[i]);
+        if(isExist)
+        {
+          let word = allWords.find(a => a.name === activeTest.wordList[i]);
+          let categoryWords = allWords.filter(a=> a.categoryID === word.categoryID);
+
+          if(categoryWords.length < 4)
+          {
+            this.updateDisActivateTest(activeTest);
+            exit = true;
+          }
+        }
+        else{
+          this.updateDisActivateTest(activeTest);
+          exit = true;
+        }
+      }
+    }
   }
 }

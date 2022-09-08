@@ -107,5 +107,14 @@ height: 170px;
   justify-content: end;
 }
 
+.user-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 500;
+    font-family: system-ui;
+    margin-bottom: 20px;
+}
+
 
   
