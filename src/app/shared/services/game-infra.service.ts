@@ -448,7 +448,7 @@ export class GameInfraService {
 
   // Validate that all the games are relevent before shpwing them
   public validateGame(){
-    let games = this.gameSettings[0].listOfGames;
+    let games = this.gameSettings[0]?.listOfGames;
     let allWords =  this.categoryInfraService.getAllUserPhrases;
     
     if(games !== undefined && allWords.length > 0 ){

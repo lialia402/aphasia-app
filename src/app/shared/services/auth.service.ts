@@ -62,6 +62,10 @@ export class AuthService {
         {
           window.alert('כתובת האימייל אינה תקינה');
         }
+        else if(error.message.includes('There is no user record'))
+        {
+          window.alert('כתובת האימייל אינה קיימת במערכת');
+        }
         else{
           window.alert(error.message);
         }
