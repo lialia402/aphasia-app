@@ -10,10 +10,16 @@ import { UserInfaService } from './user-infa.service';
 })
 export class WordInfraService {
 
+  // local words array
   words: any;
+
+  // local super admin local array
   superAdminWords:any;
-  categoryName: any;
+
+  // local categories array
   categories: CategoryClass[];
+
+  categoryName: any;
   public currentCategory: CategoryClass;
 
   constructor(
@@ -43,6 +49,7 @@ export class WordInfraService {
     })
   }
 
+   // get all super admin words by category and subscribes to the collection
   public getSuperAdminPhrases(category: CategoryClass): Promise<WordClass[]> {
     this.firebaseProvider.importSuperAdminWords(category);
     return new Promise((resolve, reject) => {
@@ -53,23 +60,15 @@ export class WordInfraService {
     })
   }
 
-  /**
-   * Rearrange the current phrases array by order propery.
-   * usually used after adding or removing of phrase. 
-   * MAKE SURE you update the local prhase array here in the provider
-   *  or you are going to have a bad time
-   */
+  // order by the words by given order in db
   public arrangePhrasesByOrder() {
     for (var i = 0; i < this.words.length; i++) {
       this.setOrder(this.words[i], i);
     }
   }
 
-  /**
-   * add phrase, update DB and arrange by order.
-   * if addPhrase called from App-Builder don't arrange by order.
-   */
-  public addPhrase(word: WordClass, callFromAppBuilder = false) : Promise<any> {
+  // add word to the category 
+  public addPhrase(word: WordClass) : Promise<any> {
     return new Promise((resolve, reject) => {
       if(this.authentication.user.userType === 'superAdmin')
       {
@@ -111,15 +110,13 @@ export class WordInfraService {
       })
     })
   }
-
-  
-
  
-  // remove phrase, update DB and arrange by order.
+  // remove word and update the db
   public removePhrase(phrase: WordClass) {
     this.firebaseProvider.removePhrase(phrase);
   }
 
+  // remove super admin word and update the db
   public removePhraseSuperAdmin(phrase: WordClass) {
     this.firebaseProvider.removePhraseSuperAdmin(phrase);
     let promise = this.getPhrasesByName(phrase.name);
@@ -128,27 +125,6 @@ export class WordInfraService {
     })
   }
 
-  //SETTERS
-  public setName(word: WordClass, newName: string) {
-    word.name = newName;
-    this.firebaseProvider.updateWord(word)
-  }
-  public setImageUrl(phrase: WordClass, newURL: string) {
-    phrase.imageURL = newURL;
-    this.firebaseProvider.updateWord(phrase)
-  }
-  public setAudioUrl(phrase: WordClass, newURL: string) {
-    phrase.audio = newURL;
-    this.firebaseProvider.updateWord(phrase)
-  }
-  public setCategoryID(phrase: WordClass, newCategoryParent: string) {
-    phrase.categoryID = newCategoryParent;
-    this.firebaseProvider.updateWord(phrase)
-  }
-  public setIsFav(phrase: WordClass, isFav: boolean) {
-    phrase.isFav = isFav;
-    this.firebaseProvider.updateWord(phrase);
-  }
   //each time a category has chosen, her views increase by 1.
   public increaseViews(phrase: WordClass) {
     phrase.views++;
@@ -167,13 +143,42 @@ export class WordInfraService {
     this.firebaseProvider.updateWord(phrase)
   }
 
+  //SETTERS
+
+  public setName(word: WordClass, newName: string) {
+    word.name = newName;
+    this.firebaseProvider.updateWord(word)
+  }
+
+  public setImageUrl(phrase: WordClass, newURL: string) {
+    phrase.imageURL = newURL;
+    this.firebaseProvider.updateWord(phrase)
+  }
+
+  public setAudioUrl(phrase: WordClass, newURL: string) {
+    phrase.audio = newURL;
+    this.firebaseProvider.updateWord(phrase)
+  }
+
+  public setCategoryID(phrase: WordClass, newCategoryParent: string) {
+    phrase.categoryID = newCategoryParent;
+    this.firebaseProvider.updateWord(phrase)
+  }
+
+  public setIsFav(phrase: WordClass, isFav: boolean) {
+    phrase.isFav = isFav;
+    this.firebaseProvider.updateWord(phrase);
+  }
+ 
   public setOrder(phrase: WordClass, order: number) {
     phrase.order = order;
     this.firebaseProvider.updateWord(phrase);
   }
+
   public updateWord(phrase: WordClass) {
     this.firebaseProvider.updateWord(phrase)
   }
+
   public changeVisibility(phrase: WordClass) {
     phrase.visibility = !phrase.visibility;
     this.firebaseProvider.updateWord(phrase);

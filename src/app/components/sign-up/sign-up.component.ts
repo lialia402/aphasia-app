@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppInitService } from 'src/app/shared/services/app-init.service';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
+import { UserInfaService } from 'src/app/shared/services/user-infa.service';
 import { AuthService } from "../../shared/services/auth.service";
 
 @Component({
@@ -15,7 +16,8 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    public errorService: ErrorInfra) {}
+    public errorService: ErrorInfra,
+    public userInfa: UserInfaService) {}
   ngOnInit() { }
 
   public signUp(userFirstName:string, userLastName:string, userID:string, userEmail:string, userPwd:string, userType:string){
@@ -24,6 +26,10 @@ export class SignUpComponent implements OnInit {
    }
    else if(userID.length !== 9){
     this.errorService.openSimleSnackBar('מספר תעודת זהות לא חוקי', 'סגור');
+   }
+   else if(this.userInfa.isIDExist(userID))
+   {
+    this.errorService.openSimleSnackBar('תעודת זהות כבר קיימת במערכת', 'סגור');
    }
    else{
      this.authService.SignUp(userFirstName,userLastName,userID,userEmail,userPwd,userType);

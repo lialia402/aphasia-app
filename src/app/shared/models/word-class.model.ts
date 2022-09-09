@@ -7,8 +7,8 @@ export class WordClass extends Unit{
     public views: number; //the number of the times that the user clicked on the phrase
     public imageURL: string; //the url of the image of the phrase
     public audio: string;//a url link to the audio file in the storage
-    public isFav: boolean// tdl
-    public order: number//tdl
+    public isFav: boolean//favorite category - not implemented yet
+    public order: number//order by - not implemented yet
     public visibility: boolean;//TRUE if the phrase is visible to the user
     public viewPerDate:Date[]; //date array of views
 
