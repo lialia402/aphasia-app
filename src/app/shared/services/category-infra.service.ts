@@ -110,23 +110,7 @@ export class CategoryInfraService {
     }
   }
 
-  // geeters
-  public get getCategories() {
-    return this.categories;
-  }
-
-  public get getSuperAdminCategories() {
-    return this.superAdminCategories;
-  }
-
-  public get getAllUserPhrases() {
-    return this.allUserPhrases;
-  }
-
-  public get getCurrentCategory() {
-    return this.currentCategory;
-  }
-  
+  // get all categories by name
   public getCategoryByName(n: string): Promise<CategoryClass> {
     return new Promise((resolve, reject) => {
       try {
@@ -142,7 +126,7 @@ export class CategoryInfraService {
     })
   }
 
-  // add category to firebase
+  // add category and update in db
   public addCategory(category: CategoryClass, callFromAppBuilder = false): Promise<void>|undefined 
   {
     let promise;
@@ -181,7 +165,7 @@ export class CategoryInfraService {
     return promise;
   }
 
-  // tdl remove category from firebase
+  // remove category from firebase
   public removeCategory(category: CategoryClass): Promise<any> {
     return new Promise((resolve, reject) => {
       let promise = this.wordInfraService.getPhrases(category);
@@ -191,15 +175,11 @@ export class CategoryInfraService {
           //if the wanted remove category isn't a sub-category.
           let subCategories = this.subCategories.filter(cat => cat.parentCategoryID == category.id);
           subCategories.forEach(element => {
-           // favoriteProvider.remove_fav_cat(element);
-           // favoriteProvider.remove_from_commom_cat(element);
             let promise2 = this.wordInfraService.getPhrases(element);//remove the sub-categories's phrases
             promise2.then((data) => {
               let phrases2 = data;
               phrases2.forEach(element => {
                 this.firebaseProvider.removePhrase(element);
-               // favoriteProvider.remove_fav_phrases(element)
-               // favoriteProvider.remove_from_commom_phrases(element)
               })
             });
             this.firebaseProvider.removeCategory(element);
@@ -219,6 +199,7 @@ export class CategoryInfraService {
     })
   }
 
+  // remove super admin category
   public removeCategorySuperAdmin(category: CategoryClass) : Promise<any>{
     return new Promise((resolve, reject) => {
     this.firebaseProvider.removeSuperAdminCategory(category);
@@ -261,7 +242,34 @@ export class CategoryInfraService {
     })
   }
 
-  // seeters
+  // each time a category is chosen, its views increase by 1.
+  public increaseViews(category: CategoryClass) {
+    category.views++;
+    this.firebaseProvider.updateCategory(category)
+  }
+
+  // add to array of viewPerDate the current date of click
+  public updateViewsPerDate(category: CategoryClass) {
+    if(category.viewPerDate===undefined)
+    {
+      category.viewPerDate=[];
+    }
+    let date=new Date();
+    category.viewPerDate.push(date);
+    this.firebaseProvider.updateCategory(category)
+  }
+
+  public updateCategory(category: CategoryClass) {
+    this.firebaseProvider.updateCategory(category);
+  }
+
+  public changeVisibility(category: CategoryClass) {
+    category.visibility = !category.visibility;
+    this.firebaseProvider.updateCategory(category);
+  }
+
+  // setters
+
   public setCurrentCategory(category: CategoryClass) {
     this.currentCategory = category;
     this.wordInfraService.currentCategory = category;
@@ -287,34 +295,26 @@ export class CategoryInfraService {
     this.firebaseProvider.updateCategory(category)
   }
 
-  // each time a category is chosen, its views increase by 1.
-  public increaseViews(category: CategoryClass) {
-    category.views++;
-    this.firebaseProvider.updateCategory(category)
-  }
-
-  // add to array of viewPerDate the current date of click
-  public updateViewsPerDate(category: CategoryClass) {
-    if(category.viewPerDate===undefined)
-    {
-      category.viewPerDate=[];
-    }
-    let date=new Date();
-    category.viewPerDate.push(date);
-    this.firebaseProvider.updateCategory(category)
-  }
-
-  public updateCategory(category: CategoryClass) {
-    this.firebaseProvider.updateCategory(category);
-  }
-
   public setOrder(category: CategoryClass, order: number) {
     category.order = order;
     this.firebaseProvider.updateCategory(category);
   }
 
-  public changeVisibility(category: CategoryClass) {
-    category.visibility = !category.visibility;
-    this.firebaseProvider.updateCategory(category);
+  // getters
+  
+  public get getCategories() {
+    return this.categories;
+  }
+
+  public get getSuperAdminCategories() {
+    return this.superAdminCategories;
+  }
+
+  public get getAllUserPhrases() {
+    return this.allUserPhrases;
+  }
+
+  public get getCurrentCategory() {
+    return this.currentCategory;
   }
 }
