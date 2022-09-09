@@ -55,14 +55,18 @@ export class SideBarComponent implements  OnInit {
     public testInfra:EquizInfraService,
     public categoryInfra:CategoryInfraService)
   {
-    this.isLoading = true;
-    setTimeout(async () => {    
-      await this.categoryInfra.updateCategoriesArray();
-      await this.categoryInfra.updateCategoriesArray();
-      await this.categoryInfra.updateCategoriesArray();
-      this.testInfra.validateTest();
+
+    if(this.authService.user.firstTime && this.authService.user.userType !== "admin")
+    {
       this.isLoading = true;
-    }, 1500)
+      setTimeout(async () => {    
+        await this.categoryInfra.updateCategoriesArray();
+        await this.categoryInfra.updateCategoriesArray();
+        await this.categoryInfra.updateCategoriesArray();
+        this.testInfra.validateTest();
+        this.isLoading = false;
+      }, 1500)
+    }
   }
 
   ngOnInit(): void{

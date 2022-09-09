@@ -67,7 +67,7 @@ export class FirebaseInfraService {
 
 
   constructor(public afs: AngularFirestore, public authentication: AuthService,) {
-    //first import the users collection , mainly to get the current users's attrs.
+    // first import the users collection , mainly to get the current users's attrs.
     this.importUsers()
   }
 
@@ -352,7 +352,7 @@ export class FirebaseInfraService {
   public importwords(category: CategoryClass)
   {
     try{
-      //Creating the words collection of specific category of current user
+      // Creating the words collection of specific category of current user
       this.wordsCollection = this.afs.collection<WordClass>('words', ref => ref.orderBy('order','asc').where('categoryID','==',category.id));
       this.words = this.wordsCollection.snapshotChanges().pipe(map((result:any[]) => {
         return result.map(a => {
@@ -488,7 +488,7 @@ export class FirebaseInfraService {
 
   // remove category fro, firebase
   removeCategory(category: CategoryClass){
-    this.categoriesCollection?.doc(category.id ).delete().then(function() {
+    this.categoriesCollection?.doc(category.id).delete().then(function() {
   }).catch((e) => {
     console.log("מחיקה נכשלה");
   });
@@ -519,7 +519,7 @@ export class FirebaseInfraService {
   });
   }
 
-  
+  // remove word from firebase
   removePhrase(phrase: WordClass){
     this.wordsCollection?.doc(phrase.id).delete().then(function() {
   }).catch((e) => {
@@ -527,6 +527,7 @@ export class FirebaseInfraService {
   });
   }
 
+  // remove super admin word from firebase
   removePhraseSuperAdmin(phrase: WordClass){
     this.superAdminWordsCollection?.doc(phrase.id).delete().then(function() {
   }).catch((e) => {
@@ -534,27 +535,33 @@ export class FirebaseInfraService {
   });
   }
 
+  // update word in firebase
   updateWord(word: WordClass){
     this.afs.doc('words/' + word.id).update(WordClass.toObject(word));
   }
 
+  // update test info in firebase
   updateTestInfo(test:TestInfo)
   {
     this.afs.doc('tests/' + test.id).update(TestInfo.toObject(test));
   }
 
+  // update category in firebase
   updateCategory(category: CategoryClass){
     this.afs.doc('categories/' + category.id).update(CategoryClass.toObject(category));
   }
 
+  // update game result in firebase
   updateResult(result: GameResult){
     this.afs.doc('gameResults/' + result.id).update(GameResult.toObject(result));
   }
 
+  // update game settings in firebase
   updateGameSettings(result: GameSettings){
     this.afs.doc('gameSettings/' + result.id).update(result);
   }
 
+  // update game info in firebase
   updateGameInfo(gameSettings: GameSettings) {
     const userRef: AngularFirestoreDocument<GameSettings> = this.afs.doc( `gameSettings/${gameSettings.id}` );
     return userRef.set(GameSettings.toObject(gameSettings));

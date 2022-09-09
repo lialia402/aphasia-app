@@ -21,11 +21,7 @@ export class WordInfraService {
     public authentication: AuthService,
     public userInfra: UserInfaService,) {}
 
-  //first,calling import of all category's phrases.
-  //then, create a Promise object that active only when arrayOfPhrases filled up once.
-  //Promise return to an async function that handle with him.
-  //subscribe listen to the db while the app is alive.
-  //note that there is no relation between Promise object to  method. 
+  // get all words of a category and subscribes to the collection
   public getPhrases(category: CategoryClass): Promise<WordClass[]> {
     this.firebaseProvider.importwords(category);
     return new Promise((resolve, reject) => {
@@ -36,6 +32,7 @@ export class WordInfraService {
     })
   }
 
+  // get all words by name and subscribes to the collection
   public getPhrasesByName(name: string): Promise<WordClass[]> {
     this.firebaseProvider.importwordsByName(name);
     return new Promise((resolve, reject) => {
@@ -117,10 +114,8 @@ export class WordInfraService {
 
   
 
-  /**
- * remove phrase, update DB and arrange by order.
- * 
- */
+ 
+  // remove phrase, update DB and arrange by order.
   public removePhrase(phrase: WordClass) {
     this.firebaseProvider.removePhrase(phrase);
   }

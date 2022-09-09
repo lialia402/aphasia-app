@@ -1,10 +1,10 @@
 <div class="displayTable">
     <div class="displayTableCell">
       <div class="authBlock">
-        <h3>Thank You for Registering</h3>
+        <h3>תודה על ההרשמה</h3>
         <div class="formGroup" *ngIf="authService.userData as user">
-          <p class="text-center">We have sent a confirmation email to <strong>{{user.email}}</strong>.</p>
-          <p class="text-center">Please check your email and click on the link to verfiy your email address.</p>
+          <p class="text-center">שלחנו מייל אישור לכתובת המייל הבאה <strong>{{user.email}}</strong></p>
+          <p class="text-center">אנא בדוק את תיבת הדואר שלך</p>
         </div>
         
         <!-- Calling SendVerificationMail() method using authService Api -->
