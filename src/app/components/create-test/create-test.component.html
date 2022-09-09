@@ -32,7 +32,7 @@
      </mat-card>
         </div>
     </mat-expansion-panel>
-    <mat-expansion-panel *ngFor="let game of this.gameService.gameSettings[0].listOfGames">
+    <mat-expansion-panel *ngFor="let game of this.gameService.gameSettings[0]?.listOfGames">
         <mat-expansion-panel-header>
             <mat-panel-title style="max-width: 200px;" class="font">
             משחק מספר {{game.gameNum+1}}
