@@ -35,7 +35,7 @@ const routes: Routes = [
   { path: 'word-page', component: WordPageComponent},
   {path: 'about-me', component: AboutMeComponent },
   {path: 'therapist-panel', component: TherapistPanelComponent },
-  {path: 'home-page', component: HomePageComponent },
+  {path: 'home-page', component: HomePageComponent, canActivate: [AuthGuard] },
   {path: 'patient-therpist-page', component: PatientTherpistPageComponent },
   {path: 'game-page', component: GameComponent },
   {path: 'question-page', component: QuestionComponent },

@@ -56,7 +56,7 @@ export class SideBarComponent implements  OnInit {
     public categoryInfra:CategoryInfraService)
   {
 
-    if(this.authService.user.firstTime && this.authService.user.userType !== "admin")
+    if(this.authService.user?.firstTime && this.authService.user.userType !== "admin")
     {
       this.isLoading = true;
       setTimeout(async () => {    
@@ -85,7 +85,7 @@ export class SideBarComponent implements  OnInit {
       this.user = this.authService.user;
     }
 
-    if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
+    if(!this.authService.user?.firstTime && this.authService.user?.userType !== "admin")
     {
         this.isLoading = true;
         setTimeout(() => this.isLoading = false, 25000);

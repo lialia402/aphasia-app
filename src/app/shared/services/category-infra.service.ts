@@ -131,7 +131,7 @@ export class CategoryInfraService {
   {
     let promise;
     if(callFromAppBuilder == false) {
-      if(this.authentication.user.userType==='superAdmin')
+      if(this.authentication.user?.userType==='superAdmin')
       {
         promise = this.firebaseProvider.addSuperAdminCategory(category);
         this.updateCategoriesArray().then(res => {
@@ -147,7 +147,7 @@ export class CategoryInfraService {
           this.firebaseProvider.addCategory(category);
         }
       }
-      else if(this.authentication.user.userType==='Admin'){
+      else if(this.authentication.user?.userType==='Admin'){
         promise = this.firebaseProvider.addCategory(category);
         this.updateCategoriesArrayByEmail(this.authentication.patientOfTherapist.email).then(res => {
         }).catch((err) =>{
@@ -301,7 +301,7 @@ export class CategoryInfraService {
   }
 
   // getters
-  
+
   public get getCategories() {
     return this.categories;
   }

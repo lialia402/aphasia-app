@@ -16,7 +16,7 @@ import { Observable } from 'rxjs-compat';
 
 export class AuthService {
   userData: any; // Save logged in user data
-  user:User;
+  user:User | undefined;
   patientOfTherapist:User;
   usersCollection: AngularFirestoreCollection<User> | undefined;
   users: Observable<User[]> = new Observable<User[]>()
@@ -193,7 +193,11 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${this.userData.uid}`
     );
-    this.user.firstTime = true;
+    
+    if(this.user !== undefined)
+    {
+      this.user.firstTime = true;
+    }
     let userData: User;
       userData= {
         uid: this.userData.uid,
@@ -211,6 +215,12 @@ export class AuthService {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
       this.router.navigate(['sign-in']);
+    });
+  }
+
+  deleteUser(){
+    return this.afAuth.signOut().then(() => {
+      localStorage.removeItem('user');
     });
   }
 }
