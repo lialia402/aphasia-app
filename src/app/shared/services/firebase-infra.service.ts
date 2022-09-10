@@ -464,7 +464,7 @@ export class FirebaseInfraService {
 
   // add patient to firebase
   addPatient(email: string) {
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user?.uid}` );
     const addPatient= firebase.firestore.FieldValue.arrayUnion(email) as unknown as string[];
     userRef.update({ listOfPatients: addPatient });
 
@@ -473,7 +473,7 @@ export class FirebaseInfraService {
   // remove patient from firebase
   removePatient(email:string)
   {
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user.uid}` );
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc( `users/${this.authentication.user?.uid}` );
     const addPatient= firebase.firestore.FieldValue.arrayRemove(email) as unknown as string[];
     userRef.update({ listOfPatients: addPatient });
   }

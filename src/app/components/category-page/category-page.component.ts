@@ -44,7 +44,7 @@ export class CategoryPageComponent implements OnInit {
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {
     this.categoryService.setCurrentCategory(category);
-    if(this.authService.user.userType === 'patient')
+    if(this.authService.user?.userType === 'patient')
     {
       this.categoryService.increaseViews(category);
       this.categoryService.updateViewsPerDate(category);
@@ -73,19 +73,19 @@ export class CategoryPageComponent implements OnInit {
   // load the relavant categories
   public async getCategories()
   {
-    if(this.authService.user.userType=='patient')
+    if(this.authService.user?.userType=='patient')
     {
       this.categories = this.categoryService.getCategories;
       this.checkCategoriesVisability();
     }
-    else if(this.authService.user.userType=='admin')
+    else if(this.authService.user?.userType=='admin')
     {
       await this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
       this.categories = this.categoryService.getCategories;
       this.checkCategoriesVisability();
       this.checkSuperCategoriesVisability();
     }
-    else if(this.authService.user.userType=='superAdmin'){
+    else if(this.authService.user?.userType=='superAdmin'){
       this.categories = this.categoryService.getSuperAdminCategories;
     }
   }
@@ -133,14 +133,14 @@ export class CategoryPageComponent implements OnInit {
     setTimeout(async () => {  
       await this.getCategories();  
     }, 500)
-    this.isTherapist = this.authService.user.userType === 'admin';
-    this.isSuperAdmin = this.authService.user.userType === 'superAdmin';
+    this.isTherapist = this.authService.user?.userType === 'admin';
+    this.isSuperAdmin = this.authService.user?.userType === 'superAdmin';
   }
 
   // delete the specific category and the words belongs to it
   public deleteCategory(category: CategoryClass) {
     setTimeout(async () => {
-      if(this.authService.user.userType==='superAdmin')
+      if(this.authService.user?.userType==='superAdmin')
       {
         await this.categoryService.removeCategorySuperAdmin(category);
       }
@@ -200,7 +200,7 @@ export class CategoryPageComponent implements OnInit {
     let wordsArray = this.categoryService.getAllUserPhrases.filter(word => word.categoryID === category.id).map(word => word.name);
     let flag = false;
 
-    for(let i=0;i<allGames.length && flag === false;i++){
+    for(let i=0;i<allGames?.length && flag === false;i++){
       flag = allGames[i].listOfWords.some(r=> wordsArray.includes(r));
     }
 
@@ -229,12 +229,15 @@ export class CategoryPageComponent implements OnInit {
 
   async addNewCategory() {
     let email:string;
-    if(this.authService.user.userType ==='admin')
+    if(this.authService.user?.userType ==='admin')
     {
       email = this.authService.patientOfTherapist.email;
     }
     else{
-      email = this.authService.user.email;
+      if(this.authService.user !== undefined)
+      {
+        email = this.authService.user.email;
+      }
     }
     const dialogRef = this.dialog.open(AddCategoryDialogComponent, {
       height: '445px',
@@ -272,12 +275,15 @@ export class CategoryPageComponent implements OnInit {
   // edit category: Change one or more of the following details: category name, category image
   async editCategory(category: CategoryClass){
     let email:string;
-    if(this.authService.user.userType ==='admin')
+    if(this.authService.user?.userType ==='admin')
     {
       email = this.authService.patientOfTherapist.email;
     }
     else{
-      email = this.authService.user.email;
+      if(this.authService.user !== undefined)
+      {
+        email = this.authService.user.email;
+      }
     }
     const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
       height: '445px',

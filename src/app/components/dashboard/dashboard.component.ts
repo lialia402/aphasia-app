@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     }
     
   ngOnInit(): void {
-   if(!this.authService.user.firstTime && this.authService.user.userType !== "admin")
+   if(!this.authService.user?.firstTime && this.authService.user?.userType !== "admin")
     {
       setTimeout(async () => {
         this.appBuilderProvider?.newFillDB();

@@ -51,19 +51,19 @@ export class WordPageComponent implements OnInit {
   ngOnInit() {
     this.getwords();
     this.getCategories(); 
-    this.isTherapist = this.authService.user.userType === 'admin';
-    this.isSuperAdmin = this.authService.user.userType === 'superAdmin';
+    this.isTherapist = this.authService.user?.userType === 'admin';
+    this.isSuperAdmin = this.authService.user?.userType === 'superAdmin';
   }
 
   getCategories(){
-    this.categories = this.authService.user.userType === 'superAdmin' ? this.categoryService.superAdminCategories : this.categoryService.categories;
+    this.categories = this.authService.user?.userType === 'superAdmin' ? this.categoryService.superAdminCategories : this.categoryService.categories;
   }
 
   updateWordsList(category: CategoryClass){
     this.categoryService.currentCategory = category;
     this.wordService.currentCategory = category;
     this.category = category;
-    if(this.authService.user.userType === 'patient')
+    if(this.authService.user?.userType === 'patient')
     {
       this.categoryService.increaseViews(category);
       this.categoryService.updateViewsPerDate(category);
@@ -74,7 +74,7 @@ export class WordPageComponent implements OnInit {
   getwords()
   {
     let promise;
-    if(this.authService.user.userType === 'superAdmin'){
+    if(this.authService.user?.userType === 'superAdmin'){
       promise= this.wordService.getSuperAdminPhrases(this.category);
     }
     else
@@ -94,7 +94,7 @@ export class WordPageComponent implements OnInit {
     voice.load();
     voice.play();
 
-    if(this.authService.user.userType === 'patient')
+    if(this.authService.user?.userType === 'patient')
     {
     this.wordService.increaseViews(word);
     this.wordService.updateViewsPerDate(word);
@@ -104,7 +104,7 @@ export class WordPageComponent implements OnInit {
    public deleteWord(word: WordClass) {
     setTimeout(async () => {
 
-      if(this.authService.user.userType === 'superAdmin')
+      if(this.authService.user?.userType === 'superAdmin')
       {
         this.wordService.removePhraseSuperAdmin(word);
       }

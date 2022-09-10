@@ -51,7 +51,7 @@ export class UserInfaService {
       user = data;
     }).then(()=>{
         email=user?.email;
-        this.authentication.user.listOfPatients?.push(email);
+        this.authentication.user?.listOfPatients?.push(email);
         this.firebaseInfraService.addPatient(email);
     })
   }
@@ -72,7 +72,7 @@ export class UserInfaService {
   public importPatients(){
     try
     {
-      let emailPatients=this.authentication.user.listOfPatients || ''; 
+      let emailPatients=this.authentication.user?.listOfPatients || ''; 
       let patientsArrayLength=emailPatients?.length ?emailPatients.length :0;
       if(emailPatients!==undefined)
       {  
