@@ -307,9 +307,12 @@ export class GameInfraService {
     }
 
     else{
-      const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,"");
-      this.customGame ? result.rightCustom.push(new Date()) : result.rightRandom.push(new Date());
-      this.addResult(result);
+      if(this.firebaseInfraService.authentication.user !== undefined)
+      {
+        const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,"");
+        this.customGame ? result.rightCustom.push(new Date()) : result.rightRandom.push(new Date());
+        this.addResult(result);
+      }
     }
   }
 
@@ -326,9 +329,12 @@ export class GameInfraService {
     }
     
     else{
-      const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,"");
-      this.customGame ? result.wrongCustom.push(new Date()) : result.wrongRandom.push(new Date());
-      this.addResult(result);
+      if(this.firebaseInfraService.authentication.user !== undefined)
+      {
+        const result = new GameResult(this.firebaseInfraService.authentication.user.email,categoryId,"");
+        this.customGame ? result.wrongCustom.push(new Date()) : result.wrongRandom.push(new Date());
+        this.addResult(result);
+      }
     }
   }
 
@@ -410,7 +416,7 @@ export class GameInfraService {
   }
 
   public getAllGames(){
-    return this.gameSettings[0].listOfGames;
+    return this.gameSettings[0]?.listOfGames;
   }
 
   public deleteGamesRealtedToCategory(category:CategoryClass){

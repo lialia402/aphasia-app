@@ -97,7 +97,11 @@ export class TestQuestionsComponent implements OnInit {
     {
       this.endDate = new Date();
       let currentActiveTest = this.testInfra.getActiveTest();
-      let myEmail = this.authService.user.email;
+      let myEmail = "";
+      if(this.authService.user !== undefined)
+      {
+        myEmail = this.authService.user.email;
+      }
       let duration = (this.endDate.getTime() - this.startDate.getTime())/60000;
       let testResult = new TestResult("",myEmail,currentActiveTest.id,duration,this.wrongList,this.rightList);
       this.testInfra.addTestResult(testResult);

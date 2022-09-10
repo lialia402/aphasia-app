@@ -39,15 +39,15 @@ export class HomePageComponent implements OnInit {
 
   // navigate to the right page according to the type of user: patient vs therapist
   public NavigateUser(){
-    if(this.authService.user.userType === "admin")
+    if(this.authService.user?.userType === "admin")
     {
       this.router.navigate(['therapist-panel']);
     }
-    else if(this.authService.user.userType === "patient")
+    else if(this.authService.user?.userType === "patient")
     {
       this.router.navigate(['dashboard']);
     }
-    else if(this.authService.user.userType === "superAdmin")
+    else if(this.authService.user?.userType === "superAdmin")
     {
       this.router.navigate(['category-page']);
     }

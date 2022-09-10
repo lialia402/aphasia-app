@@ -70,7 +70,7 @@ export class WordInfraService {
   // add word to the category 
   public addPhrase(word: WordClass) : Promise<any> {
     return new Promise((resolve, reject) => {
-      if(this.authentication.user.userType === 'superAdmin')
+      if(this.authentication.user?.userType === 'superAdmin')
       {
         this.firebaseProvider.addSuperAdminWord(word)?.then(async () => {
           let patients = this.userInfra.getAllPatients();

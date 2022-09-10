@@ -86,7 +86,13 @@ export class QuestionComponent implements OnInit {
     {
       this.gameService.finalScoreCurrentGame=this.correctAnswers;
       const gameType = this.gameService.customGame ? 1 : 0;
-      const currentGame = new Game("",this.correctAnswers, this.authService.user.email,new Date(),gameType);
+
+      let email = "";
+      if(this.authService.user !== undefined)
+      {
+        email = this.authService.user.email;
+      }
+      const currentGame = new Game("",this.correctAnswers,email,new Date(),gameType);
       this.gameService.addGame(currentGame);
       if(this.gameService.customGame)
       {
