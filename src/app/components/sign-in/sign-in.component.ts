@@ -19,8 +19,8 @@ export class SignInComponent implements OnInit {
   signIn(userName:string,userPassword:string)
   {
     setTimeout(async () => {
-      await this.authService.SignIn(userName,userPassword)  
-      await this.authService.SignIn(userName,userPassword)  
+      await this.authService.SignIn(userName,userPassword);
+      await this.authService.firstSignIn(userName,userPassword);
     }, 2000)
   }
 }
