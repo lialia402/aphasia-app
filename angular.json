@@ -101,6 +101,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "aphasia-app:build:production",
+            "firebaseProject": "auth-development-599b0",
+            "firebaseHostingSite": "auth-development-599b0"
+          }
         }
       }
     }

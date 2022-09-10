@@ -1,126 +1,126 @@
-  .mat-card {
-    min-width: 250px; /* adjust as desired */
-    min-height: 250px;
-    margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
-    background-color: #f8f9fa;
-    display: grid;
-    position: relative;
-    padding: 16px;
-    border-radius: 4px;
-    margin-left: 5px;
-    margin-bottom: 8px;
-  }
-  
-  .card-deck{
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    margin-top: 20px;
-    flex-wrap: wrap;
-    gap: 60px 60px;
-    cursor: pointer;
-    margin-left: 60px;
-    margin-bottom:20px;
-  }
+.mat-card {
+  min-width: 250px; /* adjust as desired */
+  min-height: 250px;
+  margin-bottom: 20px; /* same as fxLayoutGap for even distribution */
+  background-color: #f8f9fa;
+  display: grid;
+  position: relative;
+  padding: 16px;
+  border-radius: 4px;
+  margin-left: 5px;
+  margin-bottom: 8px;
+}
 
-  .mat-card-image{
-    height: 195px; 
-  }
+.card-deck{
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 60px 60px;
+  cursor: pointer;
+  margin-left: 60px;
+  margin-bottom:20px;
+}
 
-  .example-container{
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  
-  .mat-nav-list{
-    direction: rtl;
-    justify-content: right;
-    flex-direction: row-reverse;
-  }
+.mat-card-image{
+  height: 195px; 
+}
 
-  .icon-menu-option{
-      margin-left: 4px;
-      color:#6e6a6a;
-  }
+.example-container{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 
-  .bar-option{
-      display:flex;
-  }
+.mat-nav-list{
+  direction: rtl;
+  justify-content: right;
+  flex-direction: row-reverse;
+}
 
-  .example-is-mobile .example-toolbar {
-    position: fixed;
-    background-color: white;
-    color: black;
-    z-index: 2;
-  }
-  
-  h1.example-app-name {
-    margin-left: 8px;
-    color:white;
-  }
-  
-  .mat-toolbar-single-row{
-      background-color: black;
-  }
-  
-  .example-sidenav-container {
-    flex: 1;
-  }
+.icon-menu-option{
+    margin-left: 4px;
+    color:#6e6a6a;
+}
 
-  .mat-drawer.mat-drawer-side {
-    background-color: #bab6b617;
-  }
+.bar-option{
+    display:flex;
+}
 
-  .mat-expansion-panel:not([class*=mat-elevation-z]){
-    box-shadow:none;
-  }
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  background-color: white;
+  color: black;
+  z-index: 2;
+}
 
-  .mat-expansion-panel{
-      display: contents;
-  }
+h1.example-app-name {
+  margin-left: 8px;
+  color:white;
+}
 
-  .mat-accordion .mat-expansion-panel:last-of-type {
-    background-color: #bab6b617;
-  }
+.mat-toolbar-single-row{
+    background-color: black;
+}
 
-  .mat-icon-outside {
-    color:white;
-  }
-  
-  .example-is-mobile .example-sidenav-container {
-    flex: 1 0 auto;
-  }
-  
-  table {
-    width: 100%;
-  }
+.example-sidenav-container {
+  flex: 1;
+}
 
-  .loader{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.mat-drawer.mat-drawer-side {
+  background-color: #bab6b617;
+}
 
-  .font{
-    font-family: system-ui;
-    font-weight: normal;
-  }
+.mat-expansion-panel:not([class*=mat-elevation-z]){
+  box-shadow:none;
+}
 
-  .title-comment{
-    color: #6471bd;
-    font-weight: bold;
-    font-size: smaller;
-    margin-top: 15px;
-  }
+.mat-expansion-panel{
+    display: contents;
+}
 
-  .test{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }  
+.mat-accordion .mat-expansion-panel:last-of-type {
+  background-color: #bab6b617;
+}
+
+.mat-icon-outside {
+  color:white;
+}
+
+.example-is-mobile .example-sidenav-container {
+  flex: 1 0 auto;
+}
+
+table {
+  width: 100%;
+}
+
+.loader{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.font{
+  font-family: system-ui;
+  font-weight: normal;
+}
+
+.title-comment{
+  color: #6471bd;
+  font-weight: bold;
+  font-size: smaller;
+  margin-top: 15px;
+}
+
+.test{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

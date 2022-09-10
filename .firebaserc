@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "auth-development-599b0": {
+      "hosting": {
+        "aphasia-app": [
+          "auth-development-599b0"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "auth-development-599b0"
+  }
+}
