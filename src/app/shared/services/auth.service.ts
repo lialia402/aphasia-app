@@ -56,7 +56,6 @@ export class AuthService {
         this.SetUserData(result.user);
       })
       .catch((error) => {
-        console.log(error.message);
         if(error.message.includes('password is invalid'))
         {
           window.alert('סיסמא אינה תקינה');
@@ -134,10 +133,20 @@ export class AuthService {
     return this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
       .then(() => {
-        window.alert('Password reset email sent, check your inbox.');
+        window.alert('מייל עבור איפוס הסיסמא נשלח, אנא בדוק את תיבת הדואר האלקטרוני');
       })
       .catch((error) => {
-        window.alert(error);
+        if(error.message.includes('email address is badly formatted'))
+        {
+          window.alert('כתובת האימייל אינה תקינה');
+        }
+        else if(error.message.includes('There is no user record'))
+        {
+          window.alert('כתובת האימייל אינה קיימת במערכת');
+        }
+        else{
+          window.alert(error.message);
+        }
       });
   }
 
@@ -152,6 +161,7 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
     );
+
 
     let userData: User;
     if(firstName!== undefined && lastName!== undefined && userID!== undefined)
@@ -174,6 +184,7 @@ export class AuthService {
         emailVerified: user.emailVerified,
       };
     }
+
     return userRef.set(userData, {
       merge: true,
     });
@@ -197,6 +208,7 @@ export class AuthService {
     userType: user.userType,
   };
     this.user= userData;
+    
     return userRef.set(userData, {
       merge: true,
     });
@@ -229,12 +241,6 @@ export class AuthService {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
       this.router.navigate(['sign-in']);
-    });
-  }
-
-  deleteUser(){
-    return this.afAuth.signOut().then(() => {
-      localStorage.removeItem('user');
     });
   }
 }

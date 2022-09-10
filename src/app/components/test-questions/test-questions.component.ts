@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TestResult } from 'src/app/shared/models/test-result.model';
@@ -12,6 +12,10 @@ import { EquizInfraService } from 'src/app/shared/services/equiz-infra.service';
   styleUrls: ['./test-questions.component.scss']
 })
 export class TestQuestionsComponent implements OnInit {
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   wrong:boolean;
   right:boolean;

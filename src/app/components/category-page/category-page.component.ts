@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
 import { Router } from '@angular/router';
@@ -40,6 +40,10 @@ export class CategoryPageComponent implements OnInit {
     public testService: EquizInfraService,
     public gameService: GameInfraService,
     public userService: UserInfaService) {}
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   // move to category's 'word's page. in addition increase the views
   public openCategoryWords(category: CategoryClass) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppInitService } from 'src/app/shared/services/app-init.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
@@ -21,9 +21,13 @@ export class DashboardComponent implements OnInit {
     {
       this.appBuilderProvider = new AppInitService(this.categoryInfra, this.wordInfra, this.authService);
     }
-    
+  
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
+  
   ngOnInit(): void {
-   if(!this.authService.user?.firstTime && this.authService.user?.userType !== "admin")
+   if(this.authService.user !== undefined && !this.authService.user?.firstTime && this.authService.user?.userType !== "admin")
     {
       setTimeout(async () => {
         this.appBuilderProvider?.newFillDB();

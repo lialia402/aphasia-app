@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CategoryInfraService } from 'src/app/shared/services/category-infra.service';
@@ -13,6 +13,11 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 export class PatientTherpistPageComponent implements OnInit {
     isLoading:boolean;
+
+    @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+      this.authService.SignOut();
+    }
+    
     constructor(
       public authService: AuthService,
       public categoryService: CategoryInfraService, 

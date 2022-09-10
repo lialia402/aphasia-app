@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
@@ -18,6 +18,10 @@ import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confir
 export class GameSettingsComponent implements OnInit {
   gameSetting: GameSettings;
   gamesInformation: GameInfo[];
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   constructor(
     public authService: AuthService,

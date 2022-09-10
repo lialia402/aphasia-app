@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
@@ -16,6 +16,10 @@ export class AboutMeComponent implements OnInit {
   firstName:string="";
   lastName:string="";
   id:string="";
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   constructor(
     public authService: AuthService,
