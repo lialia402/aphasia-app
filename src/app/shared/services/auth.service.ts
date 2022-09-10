@@ -47,17 +47,20 @@ export class AuthService {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
+        if(result.user?.emailVerified === false){
+          window.alert('עוד לא אישרת את הרשמתך, כנס לתיבת הדואר האלקטרוני');
+        }
         this.ngZone.run(() => {
           this.router.navigate(['home-page']);
         });
         this.SetUserData(result.user);
       })
       .catch((error) => {
+        console.log(error.message);
         if(error.message.includes('password is invalid'))
         {
           window.alert('סיסמא אינה תקינה');
         }
-        //email address is badly formatted
         else if(error.message.includes('email address is badly formatted'))
         {
           window.alert('כתובת האימייל אינה תקינה');
@@ -70,6 +73,17 @@ export class AuthService {
           window.alert(error.message);
         }
       });
+  }
+
+  firstSignIn(email: string, password: string) {
+    return this.afAuth
+      .signInWithEmailAndPassword(email, password)
+      .then((result) => {
+        this.ngZone.run(() => {
+          this.router.navigate(['home-page']);
+        });
+        this.SetUserData(result.user);
+      }).catch((error) => {});
   }
   
   // sign up with require details
