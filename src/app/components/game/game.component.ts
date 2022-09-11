@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 @Component({
@@ -10,6 +11,10 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 })
 export class GameComponent implements OnInit {
 
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
+
   isCustonExists=false;
   isRandomGameEnabled = false;
   CustomGames:GameInfo[] = [];
@@ -17,7 +22,8 @@ export class GameComponent implements OnInit {
 
   constructor(
     public router: Router,
-    public gameService: GameInfraService) {}
+    public gameService: GameInfraService,
+    public authService: AuthService) {}
 
   ngOnInit(): void {
     this.gameService.currentCustomGame = -1;

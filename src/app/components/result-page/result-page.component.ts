@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { GameInfraService } from 'src/app/shared/services/game-infra.service';
 
 @Component({
@@ -12,7 +13,12 @@ export class ResultPageComponent implements OnInit {
 
   constructor(
     public gameService: GameInfraService, 
-    public router: Router) { }
+    public router: Router,
+    public authService: AuthService) { }
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   ngOnInit(): void {
     if(this.gameService.finalScoreCurrentGame>=7)

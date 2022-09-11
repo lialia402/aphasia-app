@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -15,6 +15,10 @@ import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confir
   styleUrls: ['./test-settings.component.scss']
 })
 export class TestSettingsComponent implements OnInit {
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   currentTest:TestInfo;
   disableTests:TestInfo[];

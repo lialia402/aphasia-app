@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -48,6 +48,10 @@ export class WordPageComponent implements OnInit {
       this.category=categoryService.getCurrentCategory;
     }
 
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
+  
   ngOnInit() {
     this.getwords();
     this.getCategories(); 

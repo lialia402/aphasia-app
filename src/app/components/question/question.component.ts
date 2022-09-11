@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Game } from 'src/app/shared/models/game.model';
 import { WordClass } from 'src/app/shared/models/word-class.model';
@@ -19,6 +19,10 @@ export class QuestionComponent implements OnInit {
   public cardQuestion:WordClass;
   public cardAnswers:WordClass[];
   imageLoaded = false;
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   constructor(
     public gameService: GameInfraService,

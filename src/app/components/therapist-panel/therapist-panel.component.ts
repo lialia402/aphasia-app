@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { AddDialogPatientComponent } from '../utils/add-dialog-patient/add-dialog-patient.component';
 import {MatDialog} from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../utils/confirmation-dialog/confirmation-dialog.component';
@@ -21,6 +21,10 @@ export class TherapistPanelComponent implements OnInit {
   patientID: any;
   user:any;
   public patients: User[];
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
   constructor(
     public userService: UserInfaService, 
     public authService: AuthService, 

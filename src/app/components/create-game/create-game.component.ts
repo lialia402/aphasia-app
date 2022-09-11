@@ -7,7 +7,7 @@ import { GameSettings } from 'src/app/shared/models/game-settings.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 import { GameInfo } from 'src/app/shared/models/game-info.model';
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, HostListener, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { CategoryClass } from 'src/app/shared/models/category-class.model';
 
 @Component({
@@ -16,6 +16,9 @@ import { CategoryClass } from 'src/app/shared/models/category-class.model';
   styleUrls: ['./create-game.component.scss']
 })
 export class CreateGameComponent implements OnInit {
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   @ViewChildren ('checkBox') checkBox:QueryList<any>;
   checked:any[] = [];
