@@ -16,7 +16,7 @@ import { Observable } from 'rxjs-compat';
 
 export class AuthService {
   userData: any; // Save logged in user data
-  user:User | undefined;
+  user:User;
   patientOfTherapist:User;
   usersCollection: AngularFirestoreCollection<User> | undefined;
   users: Observable<User[]> = new Observable<User[]>()
