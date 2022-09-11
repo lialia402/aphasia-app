@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import Chart from 'chart.js/auto';
 import { AnalyticsInfraService } from 'src/app/shared/services/analytics-infra.service';
@@ -12,6 +12,10 @@ import { GameInfraService } from 'src/app/shared/services/game-infra.service';
   styleUrls: ['./analytics-page.component.scss']
 })
 export class AnalyticsPageComponent implements OnInit {
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.authService.SignOut();
+  }
 
   rightWrongType:number = 0;
   tenGamesType:number = 0;

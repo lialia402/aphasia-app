@@ -36,7 +36,7 @@
     <p *ngIf="this.testService.getDisactiveTest().length!==0" class="title-comment font" dir="rtl"> שים לב, על מנת להפעיל משחק מחדש, יש למחוק או להפוך ללא זמין את המבחן הנוכחי </p>
     <mat-expansion-panel *ngFor="let test of this.disableTests;">
         <mat-expansion-panel-header [ngClass]="{'played':wasPlayed(test), 'notPlayed': (!wasPlayed(test))}">
-            <mat-panel-title dir="rtl" style="max-width: 200px;min-width: 125px;" class="font">
+            <mat-panel-title dir="rtl" style="max-width: 200px;min-width: 200px;" class="font">
             {{test.nameOfTest}} 
             </mat-panel-title>
             <mat-panel-description  dir="rtl" class="font">
