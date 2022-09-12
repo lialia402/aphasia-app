@@ -164,7 +164,7 @@ this.chart4 = new Chart("myChart4", {
           label: 'תוצאות משחק',
           data: this.analytics.gameRightAnswers,
           fill: false,
-          borderColor: '#F16B5C',
+          borderColor: '#65E278',
           tension: 0.1
         }]
  } });
