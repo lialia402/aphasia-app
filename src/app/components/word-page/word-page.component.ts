@@ -223,7 +223,7 @@ export class WordPageComponent implements OnInit {
         // go to storage to edit category
         if((result.imagePath!==undefined || result.name!==undefined || result.audioPath!==undefined))
         {
-          newName= result.name===undefined? word.name:result.name;
+          newName= result.name===undefined || result.name==='' ? word.name:result.name;
           newImageLink=word.imageURL;
           if(result.imagePath!==undefined)
           {

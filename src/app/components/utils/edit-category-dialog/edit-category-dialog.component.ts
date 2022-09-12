@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ErrorInfra } from 'src/app/shared/services/error-infra.service';
 
 export interface DialogData {
   name: string;
@@ -24,7 +25,9 @@ export class EditCategoryDialogComponent implements OnInit {
   fileToUpload: any;
   imageUrl: any;
 
-  constructor(public dialogRef: MatDialogRef<EditCategoryDialogComponent>,
+  constructor(
+    public errorInfra: ErrorInfra,
+    public dialogRef: MatDialogRef<EditCategoryDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
   
   ngOnInit(): void {
@@ -36,13 +39,22 @@ export class EditCategoryDialogComponent implements OnInit {
     if (this.selectedFiles && this.selectedFiles[0]) {
       this.fileToUpload = this.selectedFiles[0];
 
-      // show image preview
-      let reader = new FileReader();
-      reader.onload = (event: any) => {
-        this.imageUrl = event.target.result;
-        this.data.imagePath = this.imageUrl;
+
+      let ext =  this.fileToUpload.name.match(/\.([^\.]+)$/)[1];
+
+      if(ext === 'jpg' || ext === 'PNG' || ext === 'jpeg')
+      {
+        // show image preview
+        let reader = new FileReader();
+        reader.onload = (event: any) => {
+          this.imageUrl = event.target.result;
+          this.data.imagePath = this.imageUrl;
+        }
+        reader.readAsDataURL(this.fileToUpload);
       }
-      reader.readAsDataURL(this.fileToUpload);
+      else{
+        this.errorInfra.openSimleSnackBar('סוג הקובץ אינו נתמך במערכת', 'סגור');
+      }
    }
   }
 } 

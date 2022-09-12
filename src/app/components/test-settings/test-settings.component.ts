@@ -186,6 +186,7 @@ export class TestSettingsComponent implements OnInit {
       return false;
     }
 
+    this.testService.testResult.sort((b, a) => new Date(a.answerDate).getTime() - new Date(b.answerDate).getTime());
     let testResult = this.testService.testResult.find(a => a.testId === test.id);
     return testResult?.wrongList.some(a=> a === word);
   }
@@ -197,6 +198,7 @@ export class TestSettingsComponent implements OnInit {
       return false;
     }
 
+    this.testService.testResult.sort((b, a) => new Date(a.answerDate).getTime() - new Date(b.answerDate).getTime());
     let testResult = this.testService.testResult.find(a => a.testId === test.id);
     return testResult?.rightList.some(a=> a === word);
   }
@@ -204,7 +206,7 @@ export class TestSettingsComponent implements OnInit {
   // get the duration it took the patient to complete the specific test 
   getTestDuration(testId: string){
     let minutes = "";
-    this.testService.testResult.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
+    this.testService.testResult.sort((b, a) => new Date(a.answerDate).getTime() - new Date(b.answerDate).getTime());
     let testResult = this.testService.testResult.find((test) => test.testId === testId);
 
     if(testResult !== undefined)
@@ -217,7 +219,7 @@ export class TestSettingsComponent implements OnInit {
   // get the grade of the specific test
   getTestGrade(testId: string){
     let grade = 0;
-    this.testService.testResult.sort((b, a) => new Date(b.answerDate).getTime() - new Date(a.answerDate).getTime());
+    this.testService.testResult.sort((b, a) => new Date(a.answerDate).getTime() - new Date(b.answerDate).getTime());
     let testResult = this.testService.testResult.find((test) => test.testId === testId);
     if(testResult !== undefined)
     {

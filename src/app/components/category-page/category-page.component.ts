@@ -303,7 +303,7 @@ export class CategoryPageComponent implements OnInit {
         // go to storage to edit category
         if((result.imagePath!==undefined || result.name!==undefined))
         {
-          newName= result.name===undefined? category.name:result.name;
+          newName= result.name===undefined || result.name===''? category.name:result.name;
           newImageLink=category.imageURL;
           if(result.imagePath!==undefined)
           {
