@@ -338,6 +338,7 @@ export class GameInfraService {
     }
   }
 
+  // add result of gmae to DB
   public addResult(result: GameResult, callFromAppBuilder = false) : Promise<any> {
     return new Promise((resolve, reject) => {
       this.firebaseInfraService.addGameResult(result)?.then(() => {
@@ -346,6 +347,7 @@ export class GameInfraService {
     })
   }
 
+  // add game settings to user
   public addGameSettings(result: GameSettings, callFromAppBuilder = false) : Promise<any> {
     if(this.gameSettings.length === 1)
     {
@@ -380,12 +382,14 @@ export class GameInfraService {
     })
   }
 
+  // add game info to game settings
   public addGameInfo(gameInfo:GameInfo){
     let gameSettings = this.gameSettings[0];
     gameSettings.listOfGames.push(gameInfo);
     this.firebaseInfraService.updateGameInfo(gameSettings);
   }
 
+  // delete game info from game settings
   public deleteGameInfo(gameInfo:GameInfo){
     let gameSettings = this.gameSettings[0];
     let newListOfGames = gameSettings.listOfGames.filter((e) => { return e.gameNum !== gameInfo.gameNum })
@@ -396,12 +400,14 @@ export class GameInfraService {
     this.firebaseInfraService.updateGameInfo(gameSettings);
   }
 
+  // edit game info in game settings
   public editGameInfo(gameInfo:GameInfo){
     let gameSettings = this.gameSettings[0];
     gameSettings.listOfGames[gameInfo.gameNum] = gameInfo;
     this.firebaseInfraService.updateGameInfo(gameSettings);
   }
 
+  // update game info in game settings
   public updateGameInfo(score:number){
     let gameSettings = this.gameSettings[0];
     gameSettings.listOfGames[this.currentCustomGame].isPlayed = true;
@@ -410,15 +416,18 @@ export class GameInfraService {
     this.firebaseInfraService.updateGameInfo(gameSettings);
   }
 
+  // toggle random game
   public changeRandomGame(GameSetting: GameSettings) {
     GameSetting.enableRandomGame = !GameSetting.enableRandomGame;
     this.firebaseInfraService.updateGameSettings(GameSetting);
   }
 
+  // get list of all game from game settings
   public getAllGames(){
     return this.gameSettings[0]?.listOfGames;
   }
 
+  // delete game related to deleted category
   public deleteGamesRealtedToCategory(category:CategoryClass){
     let allGames = this.getAllGames();
     let wordsArray = this.categoryInfraService.getAllUserPhrases.filter(word => word.categoryID === category.id).map(word => word.name);
@@ -431,6 +440,7 @@ export class GameInfraService {
     }
   }
 
+  // delete game related to deleted word
   public deleteGamesRealtedToWord(word:WordClass){
     let allGames = this.getAllGames();
     let wordsArray = this.categoryInfraService.getAllUserPhrases.filter(a => a.categoryID === word.categoryID).map(a => a.name);

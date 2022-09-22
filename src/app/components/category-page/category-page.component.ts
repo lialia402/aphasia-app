@@ -55,6 +55,8 @@ export class CategoryPageComponent implements OnInit {
     }
     this.router.navigate(['word-page']);
   }
+
+  // log out
   public exitApp(){
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, { data: {name: "להתנתק"}});
     dialogRef.afterClosed().subscribe(result => {
@@ -102,6 +104,7 @@ export class CategoryPageComponent implements OnInit {
       this.isCategoryDisabled = this.categories.some(checkDisabledCat);
   }
 
+  // check if to show super admin categories
   checkSuperCategoriesVisability(){
     const checkSuperAdminCat =  (obj: CategoryClass) => obj.visibility === false 
     && obj.name !== 'אוכל'
@@ -155,6 +158,7 @@ export class CategoryPageComponent implements OnInit {
     }, 1000)
   }
 
+  // get the relevant delete message
   getDeleteMessage(needToDisableActiveTest:boolean, needToDeleteActiveGame: boolean)
   {
     if(needToDisableActiveTest && needToDeleteActiveGame)

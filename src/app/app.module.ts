@@ -23,7 +23,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 // service
 import { AuthService } from './shared/services/auth.service';
-import { CategoryCardComponent } from './components/utils/category-card/category-card.component';
 import { CategoryPageComponent } from './components/category-page/category-page.component';
 import { WordPageComponent } from './components/word-page/word-page.component';
 import { MaterialModule } from './material/material.module';
@@ -61,7 +60,6 @@ import { TestQuestionsComponent } from './components/test-questions/test-questio
         SignUpComponent,
         ForgotPasswordComponent,
         VerifyEmailComponent,
-        CategoryCardComponent,
         CategoryPageComponent,
         WordPageComponent,
         ConfirmationDialogComponent,

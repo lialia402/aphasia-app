@@ -199,82 +199,63 @@ this.chart6 = new Chart("myChart6", {
     } });
   }
 
+  // get relevent categories for analytics and results
   public async getCategories()
   {
     await this.categoryService.updateCategoriesArrayByEmail(this.authService.patientOfTherapist.email);
     await this.gameService.getGameResultsByEmail(this.authService.patientOfTherapist.email);
   }
 
-  // get the appropriate data for the desired date range- chart 2
-  filterByDataCategory(){
-    if(this.rangeChart2.value.start !== undefined && this.rangeChart2.value.start !== null && this.rangeChart2.value.end !== undefined && this.rangeChart2.value.end !== null){
-      this.analytics.getSortedCategoriesListByStartAndEndDate(this.analytics.topFiveCategoriesNames,
-        this.analytics.topFiveCategoriesViews,this.rangeChart2.value.start,this.rangeChart2.value.end);
+  // reset graphs
+  resetGraph(chart:any, range:any, graphNum: number)
+  {
+    switch(graphNum)
+    {
+      case 1:
+        this.analytics.getSortedWordsListByViewsDesc();
+        break;
+      case 2:
+        this.analytics.getSortedCategoriesListByViewsDesc();
+        break;
+      case 3:
+        this.analytics.getGameAnswers(this.rightWrongType);
+        break;
+      case 5:
+        this.analytics.getTestDuration();
+        break;
+      case 6:
+        this.analytics.getTestImprovemnt();
     }
-    this.chart2.update();
+    range.reset();
+    chart.update();
   }
 
-  // get the appropriate data for the desired date range- chart 1
-  filterByDataWords(){
-  if(this.rangeChart1.value.start !== undefined && this.rangeChart1.value.start !== null && 
-    this.rangeChart1.value.end !== undefined && this.rangeChart1.value.end !== null){
-      this.analytics.getSortedWordsListByStartAndEndDate(this.analytics.topTenWordsNames,
-        this.analytics.topTenWordsViews,this.rangeChart1.value.start,this.rangeChart1.value.end);
+  // filter relevent graph per date
+  filterGraphByDate(chart:any, range:any, graphNum: number)
+  {
+    if(range.value.start !== undefined && range.value.start !== null && range.value.end !== undefined && range.value.end !== null){
+      this.updateValues(range.value.start, range.value.end ,graphNum);
     }
-    this.chart1.update();
+    chart.update();
   }
 
-  // return to the default filter for the entire time range- chart 1
-  resetWords(){
-    this.analytics.getSortedWordsListByViewsDesc();
-    this.rangeChart1.reset();
-    this.chart1.update();
-  }
-
-  // get the appropriate data for the desired date range- chart 5
-  filterTestDuration(){
-    if(this.rangeChart5.value.start !== undefined && this.rangeChart5.value.start !== null && 
-      this.rangeChart5.value.end !== undefined && this.rangeChart5.value.end !== null){
-        this.analytics.getSortedTestDurationByStartAndEndDate(this.rangeChart5.value.start,this.rangeChart5.value.end);
-      }
-    this.chart5.update();
-  }
-
-  // return to the default filter for the entire time range- chart 5
-  resetTestDuration(){
-    this.analytics.getTestDuration();
-    this.rangeChart5.reset();
-    this.chart5.update();
-  }
-
-  // get the appropriate data for the desired date range- chart 6
-  filterTestGrade(){
-    if(this.rangeChart6.value.start !== undefined && this.rangeChart6.value.start !== null && 
-      this.rangeChart6.value.end !== undefined && this.rangeChart6.value.end !== null){
-        this.analytics.getSortedTestGradeByStartAndEndDate(this.rangeChart6.value.start,this.rangeChart6.value.end);
-      }
-    this.chart6.update();
-  }
-
-  // return to the default filter for the entire time range- chart 6
-  resetTestGrade(){
-    this.analytics.getTestImprovemnt();
-    this.rangeChart6.reset();
-    this.chart6.update();
-  }
-
-  // return to the default filter for the entire time range- chart 2
-  resetCategory(){
-    this.analytics.getSortedCategoriesListByViewsDesc();
-    this.rangeChart2.reset();
-    this.chart2.update();
-  }
-
-  // return to the default filter for the entire time range- chart 3
-  resetWrongRight(){
-    this.analytics.getGameAnswers(this.rightWrongType);
-    this.rangeChart3.reset();
-    this.chart3.update();
+  // update values of relevamt graph
+  updateValues(start:any, end:any, graphNum: number)
+  {
+    switch(graphNum)
+    {
+      case 1:
+        this.analytics.getSortedWordsListByStartAndEndDate(this.analytics.topTenWordsNames,this.analytics.topTenWordsViews,start,end);
+        break;
+      case 2:
+        this.analytics.getSortedCategoriesListByStartAndEndDate(this.analytics.topFiveCategoriesNames,this.analytics.topFiveCategoriesViews, start,end);
+        break;
+      case 5:
+        this.analytics.getSortedTestDurationByStartAndEndDate(start,end);
+        break;
+      case 6:
+        this.analytics.getSortedTestGradeByStartAndEndDate(start,end);
+    }
   }
 
   // get the appropriate data for the desired date range- chart 3
@@ -309,4 +290,5 @@ this.chart6 = new Chart("myChart6", {
     this.analytics.filterAllGameByType(0);
     this.chart4.update();
   }
+
 }
