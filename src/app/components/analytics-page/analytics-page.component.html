@@ -27,8 +27,8 @@
               <mat-date-range-picker #picker1></mat-date-range-picker>
             </mat-form-field>
             <div class="button-row">
-              <button class="button" mat-raised-button (click)="filterByDataWords()">סנן</button>
-              <button class="button" mat-raised-button (click)="resetWords()">אתחל</button>
+              <button class="button" mat-raised-button (click)="filterGraphByDate(chart1,rangeChart1,1)">סנן</button>
+              <button class="button" mat-raised-button (click)="resetGraph(chart1,rangeChart1,1)">אתחל</button>
             </div>
           </mat-card-actions>
       </mat-card>
@@ -50,8 +50,8 @@
           <mat-date-range-picker #picker2></mat-date-range-picker>
         </mat-form-field>
         <div class="button-row">
-          <button class="button" mat-raised-button (click)="filterByDataCategory()">סנן</button>
-          <button class="button" mat-raised-button (click)="resetCategory()">אתחל</button>
+          <button class="button" mat-raised-button (click)="filterGraphByDate(chart2,rangeChart2,2)">סנן</button>
+          <button class="button" mat-raised-button (click)="resetGraph(chart2,rangeChart2,2)">אתחל</button>
         </div>
       </mat-card-actions>
   </mat-card>
@@ -79,7 +79,7 @@
         </mat-form-field>
         <div class="button-row">
           <button class="button" mat-raised-button (click)="filterByDataWrongRight()">סנן</button>
-          <button class="button" mat-raised-button (click)="resetWrongRight()">אתחל</button>
+          <button class="button" mat-raised-button (click)="resetGraph(chart3,rangeChart3,3)">אתחל</button>
         </div>
       </mat-card-actions>
   </mat-card>
@@ -114,8 +114,8 @@
           <mat-date-range-picker #picker5></mat-date-range-picker>
         </mat-form-field>
         <div class="button-row">
-          <button class="button" mat-raised-button (click)="filterTestDuration()">סנן</button>
-          <button class="button" mat-raised-button (click)="resetTestDuration()">אתחל</button>
+          <button class="button" mat-raised-button (click)="filterGraphByDate(chart5,rangeChart5,5)">סנן</button>
+          <button class="button" mat-raised-button (click)="resetGraph(chart5,rangeChart5,5)">אתחל</button>
         </div>
       </mat-card-actions>
   </mat-card>
@@ -137,8 +137,8 @@
           <mat-date-range-picker #picker6></mat-date-range-picker>
         </mat-form-field>
         <div class="button-row">
-          <button class="button" mat-raised-button (click)="filterTestGrade()">סנן</button>
-          <button class="button" mat-raised-button (click)="resetTestGrade()">אתחל</button>
+          <button class="button" mat-raised-button (click)="filterGraphByDate(chart6,rangeChart6,6)">סנן</button>
+          <button class="button" mat-raised-button (click)="resetGraph(chart6,rangeChart6,6)">אתחל</button>
         </div>
       </mat-card-actions>
   </mat-card>
